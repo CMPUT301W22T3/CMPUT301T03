@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">QRHunt1</string>
+    <string name="title_gallery">Gallery</string>
+    <string name="title_map">Map</string>
+    <string name="title_Players">Players</string>
+    <string name="title_My_Profile">My Profile</string>
+    <string name="title_User_Profile">User\'s Profile</string>
+    <string name="gallery_add_comment">Add Comment</string>
+    <string name="gallery_delete">Delete</string>
+</resources>
