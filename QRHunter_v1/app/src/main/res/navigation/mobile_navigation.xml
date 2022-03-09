@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_gallery">
+
+    <fragment
+        android:id="@+id/navigation_gallery"
+        android:name="com.example.qrhunt1.ui.gallery.GalleryFragment"
+        android:label="@string/title_gallery"
+        tools:layout="@layout/fragment_gallery" />
+
+    <fragment
+        android:id="@+id/navigation_map"
+        android:name="com.example.qrhunt1.ui.map.MapFragment"
+        android:label="@string/title_map"
+        tools:layout="@layout/fragment_map" />
+
+    <fragment
+        android:id="@+id/navigation_players"
+        android:name="com.example.qrhunt1.ui.players.PlayersFragment"
+        android:label="@string/title_Players"
+        tools:layout="@layout/fragment_players" />
+
+    <fragment
+        android:id="@+id/navigation_my_profile"
+        android:name="com.example.qrhunt1.ui.profile.MyProfileFragment"
+        android:label="@string/title_My_Profile"
+        tools:layout="@layout/fragment_my_profile" />
+</navigation>
