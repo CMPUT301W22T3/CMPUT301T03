@@ -1,5 +1,8 @@
 package com.example.qrhunt1.ui.map;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
@@ -33,9 +37,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         View root = inflater.inflate(R.layout.fragment_map, container, false);
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getParentFragmentManager()
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this::onMapReady);
+        mapFragment.getMapAsync(this);
 
         return root;
     }
@@ -47,6 +51,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         LatLng Hub = new LatLng(53.525728, -113.520359);
         map.addMarker(new MarkerOptions().position(Hub).title("HUB MALL"));
-        map.moveCamera(CameraUpdateFactory.newLatLng(Hub));
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(Hub,15));
     }
 }

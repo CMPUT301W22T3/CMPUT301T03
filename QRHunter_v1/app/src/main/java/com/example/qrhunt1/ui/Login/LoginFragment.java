@@ -19,11 +19,11 @@ public class LoginFragment extends Fragment {
 
     CallbackFragment callbackFragment;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
+//    @Override
+//    public void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//
+//    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -50,7 +50,7 @@ public class LoginFragment extends Fragment {
             public void onClick(View view) {
 
 //                if (callbackFragment != null){
-                callbackFragment.toSignupFragment();
+                //callbackFragment.toSignupFragment();
             }
 
         });
