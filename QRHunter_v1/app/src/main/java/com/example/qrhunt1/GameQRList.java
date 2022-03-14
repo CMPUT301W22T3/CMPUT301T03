@@ -33,18 +33,14 @@ public class GameQRList extends ArrayAdapter<GameQRCode> {
         if (view == null) {
             view = LayoutInflater.from(context).inflate(R.layout.item_gallerylist, parent, false);
         }
-        GameQRCode code = null;
-        if (codes.size() != 0){
-            code = codes.get(position);
 
-        }
-        if (code == null) {
-            return view;
-        }
+        GameQRCode code = codes.get(position);
+
 
         TextView gameQRCodeScore = view.findViewById(R.id.qr_score);
         TextView gameQRCodeLocation = view.findViewById(R.id.qr_location);
         TextView gameQRCodeComment = view.findViewById(R.id.qr_comment);
+
 
         gameQRCodeScore.setText("Score: " + code.getScore());
         gameQRCodeLocation.setText("Location: " + code.getLocation());
@@ -52,6 +48,5 @@ public class GameQRList extends ArrayAdapter<GameQRCode> {
 
         return view;
     }
-
 
 }
