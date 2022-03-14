@@ -7,31 +7,46 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.qrhunt1.R;
 import com.example.qrhunt1.databinding.FragmentMapBinding;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapFragment extends Fragment {
+public class MapFragment extends Fragment implements OnMapReadyCallback {
 
-    private FragmentMapBinding binding;
+    GoogleMap map;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         MapViewModel mapViewModel =
                 new ViewModelProvider(this).get(MapViewModel.class);
 
-        binding = FragmentMapBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+        View root = inflater.inflate(R.layout.fragment_map, container, false);
 
-        final TextView textView = binding.textMap;
-        mapViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        SupportMapFragment mapFragment = (SupportMapFragment) getParentFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this::onMapReady);
+
         return root;
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+
+        map = googleMap;
+
+        LatLng Hub = new LatLng(53.525728, -113.520359);
+        map.addMarker(new MarkerOptions().position(Hub).title("HUB MALL"));
+        map.moveCamera(CameraUpdateFactory.newLatLng(Hub));
     }
 }
