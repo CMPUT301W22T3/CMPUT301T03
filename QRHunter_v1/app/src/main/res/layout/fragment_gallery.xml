@@ -8,22 +8,24 @@
 
     <Button
         android:id="@+id/add_comment"
-        android:layout_width="170dp"
+        android:layout_width="160dp"
         android:layout_height="60dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="36dp"
-        android:text="@string/gallery_add_comment">
-    </Button>
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="12dp"
+        android:gravity="center"
+        android:text="@string/gallery_add_comment"></Button>
 
     <Button
         android:id="@+id/delete"
         android:layout_width="110dp"
         android:layout_height="60dp"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="58dp"
+        android:layout_marginLeft="55dp"
+        android:layout_marginTop="12dp"
         android:layout_toRightOf="@id/add_comment"
-        android:gravity="center_vertical"
+        android:gravity="center"
         android:text="@string/gallery_delete">
 
     </Button>
@@ -36,6 +38,16 @@
         android:orientation="vertical">
 
     </ListView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:src="@drawable/ic_add_icon"
+        android:layout_margin="16dp" />
 
 
 </RelativeLayout>
