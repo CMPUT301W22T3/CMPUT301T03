@@ -10,11 +10,17 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.qrhunt1.MainActivity;
+import com.example.qrhunt1.R;
 import com.example.qrhunt1.databinding.FragmentMyProfileBinding;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class MyProfileFragment extends Fragment {
 
     private FragmentMyProfileBinding binding;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         MyProfileViewModel MyProfileViewModel =
@@ -23,15 +29,13 @@ public class MyProfileFragment extends Fragment {
         binding = FragmentMyProfileBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textMyProfile;
-        MyProfileViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+//        final TextView textView = binding.textProfile;
+//        MyProfileViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
-
 }
