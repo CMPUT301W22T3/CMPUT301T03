@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.Login.LoginFragment">
+
+
+    <RelativeLayout
+        android:id="@+id/rl_login_top"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="#FFBCD4"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:layout_editor_absoluteY="0dp"
+        tools:ignore="MissingConstraints">
+
+        <TextView
+            android:id="@+id/tv_login_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="55dp"
+            android:fontFamily="@font/crimson_text"
+            android:text="Sign In"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="30sp" />
+
+        <ImageView
+            android:id="@+id/iv_login_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+
+            app:srcCompat="@drawable/icons8_login_30" />
+
+        <ImageView
+            android:id="@+id/iv_login_scan"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:clickable="true"
+            app:srcCompat="@drawable/scan" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/qrhunter"
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"
+        android:fontFamily="@font/crimson_text"
+        android:text="QR Hunter"
+        android:textAlignment="center"
+        android:textColor="@color/pink1"
+        android:textSize="60sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/rl_login_top"
+        app:layout_constraintVertical_bias="0.2" />
+
+    <EditText
+        android:id="@+id/input_username"
+        android:layout_width="240dp"
+        android:layout_height="50dp"
+        android:background="@drawable/inpout_bg"
+        android:ems="10"
+        android:fontFamily="@font/crimson_text"
+        android:gravity="center"
+        android:hint="Username"
+        android:inputType="textPersonName"
+        android:textColorHint="#455A64"
+        android:textCursorDrawable="@drawable/cursor"
+        android:textSize="28dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/qrhunter"
+        app:layout_constraintVertical_bias="0.16" />
+
+    <EditText
+        android:id="@+id/input_password"
+        android:layout_width="240dp"
+        android:layout_height="50dp"
+        android:background="@drawable/inpout_bg"
+        android:ems="10"
+        android:fontFamily="@font/crimson_text"
+        android:gravity="center"
+        android:hint="Password"
+        android:inputType="textPersonName"
+        android:textColorHint="#455A64"
+        android:textCursorDrawable="@drawable/cursor"
+        android:textSize="28dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/qrhunter"
+        app:layout_constraintVertical_bias="0.336" />
+
+    <CheckBox
+        android:id="@+id/rememberme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/crimson_text"
+        android:text="Remember Me"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/input_password" />
+
+    <TextView
+        android:id="@+id/reg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="84dp"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/crimson_text"
+        android:text="Don't Have an Account?"
+        android:textAlignment="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rememberme" />
+
+    <TextView
+        android:id="@+id/createnew"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="92dp"
+        android:clickable="true"
+        android:fontFamily="@font/crimson_text"
+        android:minHeight="48dp"
+        android:text="Create Here"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rememberme" />
+
+    <Button
+        android:id="@+id/login_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:clickable="true"
+        android:fontFamily="@font/crimson_text"
+        android:text="Sign In"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rememberme" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

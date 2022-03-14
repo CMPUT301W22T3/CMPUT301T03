@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.Login.SignupFragment">
+
+    <RelativeLayout
+        android:id="@+id/rl_signup_top"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="#FFBCD4"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:layout_editor_absoluteY="0dp"
+        tools:ignore="MissingConstraints">
+
+        <TextView
+            android:id="@+id/tv_signup_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="55dp"
+            android:fontFamily="@font/crimson_text"
+            android:text="Sign Up"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="30sp" />
+
+        <ImageView
+            android:id="@+id/iv_signup_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:clickable="true"
+            app:srcCompat="@drawable/icons8_login_30" />
+
+
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/input_su_username"
+        android:layout_width="240dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="28dp"
+        android:background="@drawable/inpout_bg"
+        android:ems="10"
+        android:fontFamily="@font/crimson_text"
+        android:gravity="center"
+        android:hint="Enter a Unique Username"
+        android:inputType="textPersonName"
+        android:textColorHint="#455A64"
+        android:textCursorDrawable="@drawable/cursor"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/input_su_password"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rl_signup_top"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <EditText
+        android:id="@+id/input_su_password"
+        android:layout_width="240dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="448dp"
+        android:background="@drawable/inpout_bg"
+        android:ems="10"
+        android:fontFamily="@font/crimson_text"
+        android:gravity="center"
+        android:hint="Enter Your Password"
+        android:inputType="textPersonName"
+        android:textColorHint="#455A64"
+        android:textCursorDrawable="@drawable/cursor"
+        android:textSize="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/input_con_password"
+        android:layout_width="240dp"
+        android:layout_height="50dp"
+        android:background="@drawable/inpout_bg"
+        android:ems="10"
+        android:fontFamily="@font/crimson_text"
+        android:gravity="center"
+        android:hint="Confirm Password"
+        android:inputType="textPersonName"
+        android:textColorHint="#455A64"
+        android:textCursorDrawable="@drawable/cursor"
+        android:textSize="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/input_su_password"
+        app:layout_constraintVertical_bias="0.078" />
+
+    <Button
+        android:id="@+id/signup_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:fontFamily="@font/crimson_text"
+        android:text="Sign Up"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/input_con_password"
+        app:layout_constraintVertical_bias="0.327" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
