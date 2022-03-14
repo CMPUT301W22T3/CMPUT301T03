@@ -13,31 +13,26 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.qrhunt1.R;
 import com.example.qrhunt1.databinding.FragmentPlayersBinding;
 
 public class PlayersFragment extends Fragment {
 
-    private FragmentPlayersBinding binding;
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        PlayersViewModel playersViewModel =
-                new ViewModelProvider(this).get(PlayersViewModel.class);
-
-        binding = FragmentPlayersBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+        View view = inflater.inflate(R.layout.fragment_players,container,false);
 
         //final EditText editText = binding.editText;
         //playersViewModel.getText().observe(getViewLifecycleOwner(), editText::setText);
 
-        Button searchButton = binding.searchButton;
-        EditText searchUser = binding.editText;
-        Button bestQRButton = binding.bestQR;
-        Button totalQRsButton = binding.totalQRs;
-        Button totalScoreButton = binding.totalScore;
-        ListView bestQRList = binding.bestQRList;
-        ListView totalQRsList = binding.totalQRsList;
-        ListView totalScoreList = binding.totalScoreList;
+        Button searchButton = view.findViewById(R.id.search_button);
+        EditText searchUser = view.findViewById(R.id.editText);
+        Button bestQRButton = view.findViewById(R.id.bestQR);
+        Button totalQRsButton = view.findViewById(R.id.totalQRs);
+        Button totalScoreButton = view.findViewById(R.id.totalScore);
+        ListView bestQRList = view.findViewById(R.id.bestQRList);
+        ListView totalQRsList = view.findViewById(R.id.totalQRsList);
+        ListView totalScoreList = view.findViewById(R.id.totalScoreList);
 
         String username = searchUser.getText().toString();
         //click this button
@@ -78,13 +73,13 @@ public class PlayersFragment extends Fragment {
             }
         });
 
-        return root;
+        return view;
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null;
+
     }
 }
 
