@@ -16,15 +16,15 @@ public class GameQRCode {
     /**
      * Initialize Game QR code class。
      */
-    public GameQRCode(String hashcode){
+    GameQRCode(String hashcode){
         //comment = "A QR code on a store poster";    //testing
-        score = calculateScore(hashcode);
+        score = calculateScore();
     }
 
     /**
      * Needs to be done: Calculate the score of the game QR code.
      */
-    private int calculateScore(String hashcode){
+    private int calculateScore(){
 
         return 0;
     }
@@ -38,7 +38,7 @@ public class GameQRCode {
      * Add a comment to a game QR code.
      */
     public void addComment(String theComment) {
-        comment = "Comment: " + theComment;
+        comment = theComment;
     }
     /**
      * Delete a comment to a game QR code.
