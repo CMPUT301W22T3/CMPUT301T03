@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.qrhunt1.ui.gallery.GalleryFragment;
+
 import java.util.ArrayList;
 
 public class GameQRList extends ArrayAdapter<GameQRCode> {
@@ -18,11 +20,12 @@ public class GameQRList extends ArrayAdapter<GameQRCode> {
     private Context context;
 
 
-    public GameQRList( Context context, int resource, ArrayList<GameQRCode> codes) {
+    public GameQRList(Context context, ArrayList<GameQRCode> codes) {
         super(context,0, codes);
         this.codes = codes;
         this.context = context;
     }
+
 
     @NonNull
     @Override
@@ -33,25 +36,18 @@ public class GameQRList extends ArrayAdapter<GameQRCode> {
         if (view == null) {
             view = LayoutInflater.from(context).inflate(R.layout.item_gallerylist, parent, false);
         }
-        GameQRCode code = null;
-        if (codes.size() != 0){
-            code = codes.get(position);
 
-        }
-        if (code == null) {
-            return view;
-        }
+        GameQRCode code = codes.get(position);
+
 
         TextView gameQRCodeScore = view.findViewById(R.id.qr_score);
         TextView gameQRCodeLocation = view.findViewById(R.id.qr_location);
-        TextView gameQRCodeComment = view.findViewById(R.id.qr_comment);
+
 
         gameQRCodeScore.setText("Score: " + code.getScore());
         gameQRCodeLocation.setText("Location: " + code.getLocation());
-        gameQRCodeComment.setText(code.getComments());
 
         return view;
     }
-
 
 }

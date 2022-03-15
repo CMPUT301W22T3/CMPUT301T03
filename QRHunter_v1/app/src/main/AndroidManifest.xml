@@ -14,9 +14,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.QRHunt1">
         <activity
+<<<<<<< HEAD
             android:name=".Sign_up"
             android:exported="false" />
         <activity
+=======
+>>>>>>> 3db3f4dbfce39ea1e828e149541f3898f3e05016
             android:name=".NaviTest"
             android:exported="false" />
         <activity
