@@ -7,6 +7,9 @@
     <string name="title_User_Profile">User\'s Profile</string>
     <string name="gallery_add_comment">Add Comment</string>
     <string name="gallery_delete">Delete</string>
+    <string name="ok">OK</string>
+    <string name="cancel">CANCEL</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

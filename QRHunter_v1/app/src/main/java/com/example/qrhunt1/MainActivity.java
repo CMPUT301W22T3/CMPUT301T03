@@ -23,7 +23,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.qrhunt1.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
-//tesing pull!
+//tesing pull! Again
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
