@@ -22,7 +22,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.qrhunt1.databinding.ActivityMainBinding;
 
-public class MainActivity extends AppCompatActivity {// implements CallbackFragment {
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +33,11 @@ public class MainActivity extends AppCompatActivity {// implements CallbackFragm
     }
 
     public void loginTest() {
+
+        // Todo - Try to block the MainActivity Once Login Successful
+        // Todo - In Create Account Activity back to MainActivity is possible.
+        // Todo - Click On Login Button, Compare With DataBase. Fail: Re prompt Users
+
         Button loginButton = findViewById(R.id.login_btn);
         TextView create = findViewById(R.id.createnew);
 
