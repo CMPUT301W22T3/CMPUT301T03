@@ -21,7 +21,7 @@ public class GalleryFragment extends Fragment {
     ListView codeList;
     ArrayAdapter<GameQRCode> codeArrayAdapter;
     ArrayList<GameQRCode> codeArrayList;
-    Button addCommentButtom;
+    Button addCommentButton;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -33,7 +33,7 @@ public class GalleryFragment extends Fragment {
 
         codeArrayList = new ArrayList<>();
 
-        addCommentButtom = view.findViewById(R.id.add_comment);
+        addCommentButton = view.findViewById(R.id.add_comment);
 
 
 
