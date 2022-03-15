@@ -21,16 +21,7 @@
         android:gravity="right"
         android:text="Location:None"
         android:textSize="15sp" />
-
-    <TextView
-        android:id="@+id/qr_comment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/qr_location"
-        android:layout_marginStart="80dp"
-        android:gravity="right"
-        android:text="Comment:None"
-        android:textSize="15sp" />
+    
 
     <TextView
         android:id="@+id/qr_score"
