@@ -6,17 +6,102 @@
     android:layout_height="match_parent"
     tools:context=".ui.players.PlayersFragment">
 
-    <TextView
-        android:id="@+id/text_players"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="270dp"
+        android:layout_height="61dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="6dp"
+        android:background="@drawable/rounded_edittext"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:hint="Enter a username to browse"
+        android:inputType="textPersonName"
         android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="#000000"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toStartOf="@+id/search_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/search_button"
+        android:layout_width="125dp"
+        android:layout_height="61dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="6dp"
+        android:background="@drawable/rounded_button"
+        android:backgroundTint="#C4C4C4"
+        android:text="SEARCH"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        app:backgroundTint="@null"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/editText"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ListView
+        android:id="@+id/bestQRList"
+        android:layout_width="match_parent"
+        android:layout_height="604dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:orientation="vertical"/>
+
+    <ListView
+        android:id="@+id/totalQRsList"
+        android:layout_width="match_parent"
+        android:layout_height="604dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:orientation="vertical"/>
+
+    <ListView
+        android:id="@+id/totalScoreList"
+        android:layout_width="match_parent"
+        android:layout_height="604dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:orientation="vertical" />
+
+    <Button
+        android:id="@+id/bestQR"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:text="Best QR"
+        android:textColor="#000000"
+        android:background="@drawable/rounded_tab"
+        app:backgroundTint="@null"
+        app:layout_constraintBottom_toTopOf="@+id/bestQRList"
+        app:layout_constraintEnd_toStartOf="@+id/totalQRs"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText" />
+
+    <Button
+        android:id="@+id/totalQRs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:text="Total QRs"
+        android:textColor="#000000"
+        android:background="@drawable/rounded_tab"
+        app:backgroundTint="@null"
+        app:layout_constraintBottom_toTopOf="@+id/bestQRList"
+        app:layout_constraintEnd_toStartOf="@+id/totalScore"
+        app:layout_constraintStart_toEndOf="@+id/bestQR"
+        app:layout_constraintTop_toBottomOf="@+id/editText" />
+
+    <Button
+        android:id="@+id/totalScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:text="Total Score"
+        android:textColor="#000000"
+        android:background="@drawable/rounded_tab"
+        app:backgroundTint="@null"
+        app:layout_constraintBottom_toTopOf="@+id/bestQRList"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/totalQRs"
+        app:layout_constraintTop_toBottomOf="@+id/search_button" />
 </androidx.constraintlayout.widget.ConstraintLayout>
