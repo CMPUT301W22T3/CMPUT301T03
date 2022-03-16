@@ -22,6 +22,7 @@ public class PlayersFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_players,container,false);
 
         //final EditText editText = binding.editText;
@@ -29,9 +30,9 @@ public class PlayersFragment extends Fragment {
 
         Button searchButton = view.findViewById(R.id.search_button);
         EditText searchUser = view.findViewById(R.id.editText);
-        Button bestQRButton = view.findViewById(R.id.bestQR);
-        Button totalQRsButton = view.findViewById(R.id.totalQRs);
-        Button totalScoreButton = view.findViewById(R.id.totalScore);
+        Button bestQRButton = view.findViewById(R.id.bestQRButton);
+        Button totalQRsButton = view.findViewById(R.id.totalQRsButton);
+        Button totalScoreButton = view.findViewById(R.id.totalScoreButton);
         ListView bestQRList = view.findViewById(R.id.bestQRList);
         ListView totalQRsList = view.findViewById(R.id.totalQRsList);
         ListView totalScoreList = view.findViewById(R.id.totalScoreList);
