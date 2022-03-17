@@ -130,6 +130,20 @@ public class MyProfileFragment extends Fragment {
         });
 
         return view;
+
+        //the code for the back button in other users' profile fragment
+        /*
+        Button backButton = (Button) getView().findViewById(
+            R.id.backButton);
+        backButton.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().popBackStack();
+            }
+         });
+         */
+
     }
     @Override
     public void onDestroyView() {

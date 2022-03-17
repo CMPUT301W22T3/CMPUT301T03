@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -11,13 +12,21 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.qrhunt1.GameQRCode;
 import com.example.qrhunt1.databinding.FragmentPlayersBinding;
 import com.example.qrhunt1.R;
+import com.example.qrhunt1.ui.Login.CallbackFragment;
+import com.example.qrhunt1.ui.profile.MyProfileFragment;
+
+import java.util.ArrayList;
 
 public class PlayersFragment extends Fragment {
 
+    CallbackFragment callbackFragment;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -33,12 +42,26 @@ public class PlayersFragment extends Fragment {
         ListView totalQRsList = view.findViewById(R.id.totalQRsList);
         ListView totalScoreList = view.findViewById(R.id.totalScoreList);
 
+
+        ArrayAdapter<?> bestQRArrayAdapter;
+        ArrayList<?> bestQRArrayList;
+        ArrayAdapter<?> totalQRsArrayAdapter;
+        ArrayList<?> totalQRsArrayList;
+        ArrayAdapter<?> totalScoreArrayAdapter;
+        ArrayList<?> totalScoreArrayList;
+
         String username = searchUser.getText().toString();
         //click this button
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //to searched user's profile
+                //direct to searched user's profile
+                Fragment fragment = new MyProfileFragment();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.container, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
             }
         });
 
