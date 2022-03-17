@@ -63,7 +63,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         return root;
     }
 
-    @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
 
@@ -74,7 +73,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         //LatLng Hub = new LatLng(53.525728, -113.520359);
         //map.addMarker(new MarkerOptions().position(Hub).title("HUB MALL"));
         //map.animateCamera(CameraUpdateFactory.newLatLngZoom(Hub, 15));
-        enableMyLocation();
+        //enableMyLocation();
 
     }
 

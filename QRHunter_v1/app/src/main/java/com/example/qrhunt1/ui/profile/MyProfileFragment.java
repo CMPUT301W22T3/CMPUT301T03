@@ -124,8 +124,14 @@ public class MyProfileFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                QR1.setVisibility(View.INVISIBLE);
-                QR2.setVisibility(View.VISIBLE);
+                if(QR1.getVisibility()==View.VISIBLE) {
+                    QR1.setVisibility(View.INVISIBLE);
+                    QR2.setVisibility(View.VISIBLE);
+                }
+                else{
+                    QR1.setVisibility(View.VISIBLE);
+                    QR2.setVisibility(View.INVISIBLE);
+                }
             }
         });
 
