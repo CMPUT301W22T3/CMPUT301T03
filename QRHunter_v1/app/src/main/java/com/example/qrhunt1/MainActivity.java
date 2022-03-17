@@ -1,8 +1,11 @@
 package com.example.qrhunt1;
 
+import static android.content.ContentValues.TAG;
+
 import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -10,8 +13,11 @@ import android.widget.TextView;
 import com.example.qrhunt1.ui.Login.CallbackFragment;
 import com.example.qrhunt1.ui.Login.LoginFragment;
 import com.example.qrhunt1.ui.Login.SignupFragment;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
@@ -23,7 +29,12 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.qrhunt1.databinding.ActivityMainBinding;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,9 +44,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_login);
-
-        db = FirebaseFirestore.getInstance();
-
+        
         loginTest();
     }
 
