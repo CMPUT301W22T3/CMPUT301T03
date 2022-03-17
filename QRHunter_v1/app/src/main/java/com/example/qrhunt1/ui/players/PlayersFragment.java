@@ -18,15 +18,11 @@ import com.example.qrhunt1.R;
 
 public class PlayersFragment extends Fragment {
 
-    private FragmentPlayersBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_players,container,false);
-
-        //final EditText editText = binding.editText;
-        //playersViewModel.getText().observe(getViewLifecycleOwner(), editText::setText);
 
         Button searchButton = view.findViewById(R.id.search_button);
         EditText searchUser = view.findViewById(R.id.editText);
@@ -51,8 +47,8 @@ public class PlayersFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 bestQRList.setVisibility(View.VISIBLE);
-                totalQRsList.setVisibility(View.GONE);
-                totalScoreList.setVisibility(View.GONE);
+                totalQRsList.setVisibility(View.INVISIBLE);
+                totalScoreList.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -60,9 +56,9 @@ public class PlayersFragment extends Fragment {
         totalQRsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                bestQRList.setVisibility(View.GONE);
+                bestQRList.setVisibility(View.INVISIBLE);
                 totalQRsList.setVisibility(View.VISIBLE);
-                totalScoreList.setVisibility(View.GONE);
+                totalScoreList.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -70,8 +66,8 @@ public class PlayersFragment extends Fragment {
         totalScoreButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                bestQRList.setVisibility(View.GONE);
-                totalQRsList.setVisibility(View.GONE);
+                bestQRList.setVisibility(View.INVISIBLE);
+                totalQRsList.setVisibility(View.INVISIBLE);
                 totalScoreList.setVisibility(View.VISIBLE);
             }
         });
