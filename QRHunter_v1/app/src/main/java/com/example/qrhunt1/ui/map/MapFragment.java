@@ -63,7 +63,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         return root;
     }
 
-    @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
 
