@@ -22,6 +22,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
@@ -70,9 +71,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         // Todo - MapViews OnResume?
 
         map = googleMap;
-        //LatLng Hub = new LatLng(53.525728, -113.520359);
-        //map.addMarker(new MarkerOptions().position(Hub).title("HUB MALL"));
-        //map.animateCamera(CameraUpdateFactory.newLatLngZoom(Hub, 15));
+        LatLng Hub = new LatLng(53.525728, -113.520359);
+        map.addMarker(new MarkerOptions().position(Hub).title("HUB MALL"));
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(Hub, 15));
         //enableMyLocation();
 
     }
