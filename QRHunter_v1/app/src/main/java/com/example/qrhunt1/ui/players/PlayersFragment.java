@@ -21,6 +21,7 @@ import com.example.qrhunt1.databinding.FragmentPlayersBinding;
 import com.example.qrhunt1.R;
 import com.example.qrhunt1.ui.Login.CallbackFragment;
 import com.example.qrhunt1.ui.profile.MyProfileFragment;
+import com.example.qrhunt1.ui.profile.OtherProfileFragment;
 
 import java.util.ArrayList;
 
@@ -57,7 +58,7 @@ public class PlayersFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 //direct to searched user's profile
-                Fragment fragment = new MyProfileFragment();
+                Fragment fragment = new OtherProfileFragment();
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.container, fragment);
