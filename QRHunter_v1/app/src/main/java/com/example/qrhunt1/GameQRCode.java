@@ -16,7 +16,7 @@ public class GameQRCode {
     /**
      * Initialize Game QR code class。
      */
-    GameQRCode(String hashcode){
+    public GameQRCode(String hashcode){
         //comment = "A QR code on a store poster";    //testing
         score = calculateScore();
     }
