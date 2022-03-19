@@ -12,14 +12,25 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+
 import com.example.qrhunt1.MainActivity;
 import com.example.qrhunt1.R;
-import com.example.qrhunt1.databinding.FragmentMyProfileBinding;
+import com.google.firebase.firestore.CollectionReference;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class MyProfileFragment extends Fragment {
+
+//    FirebaseDatabase database;
+//    FirebaseFirestore db = FirebaseFirestore.getInstance();
+
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -41,12 +52,13 @@ public class MyProfileFragment extends Fragment {
 
 
 //  Input username
-        String user = "Username: John";
+        String user = "John";
         text1.setText(user);
 
 //  Input Contact info
-        String phoneNumber = "Address: Tree Street";
+        String phoneNumber = "Tree Street";
         text2.setText(phoneNumber);
+//        CollectionReference collectionReference = db.collection("users");
 
 //  Highest QR code
         ArrayList<Integer> list = new ArrayList<>();
@@ -137,18 +149,6 @@ public class MyProfileFragment extends Fragment {
 
         return view;
 
-        //the code for the back button in other users' profile fragment
-        /*
-        Button backButton = (Button) getView().findViewById(
-            R.id.backButton);
-        backButton.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                getFragmentManager().popBackStack();
-            }
-         });
-         */
 
     }
     @Override

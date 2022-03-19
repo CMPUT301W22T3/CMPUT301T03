@@ -41,11 +41,11 @@ public class OtherProfileFragment extends Fragment {
 
 
 //  Input username
-        String user = "Username: John";
+        String user = "John";
         text1.setText(user);
 
 //  Input Contact info
-        String phoneNumber = "Address: Tree Street";
+        String phoneNumber = "Tree Street";
         text2.setText(phoneNumber);
 
 //  Highest QR code
