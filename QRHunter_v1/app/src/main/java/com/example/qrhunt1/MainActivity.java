@@ -49,34 +49,39 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_login);
-
         // For Real-time database
 //        database = FirebaseDatabase.getInstance();
 //        DatabaseReference myRef = database.getReference("message");
 //        myRef.setValue("Hello, World!2");
 
         // For Firestore add info
-        Map<String, Object> user = new HashMap<>();
-        user.put("First", "Ada");
-        user.put("Last","lovelace");
-        user.put("born",1815);
+        CollectionReference collectionReference = db.collection("users");
+        Map<String, String> user = new HashMap<>();
+        user.put("DisplayName", "user 2 UserName Test");
+        user.put("PassWord","user 2 PassWord Test");
+        user.put("ContactInfo","user 2 Hub mall");
 
-        db.collection("users")
-                .add(user)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                          @Override
-                                          public void onSuccess(DocumentReference documentReference) {
-                                              Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                                          }
-                                      })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG,"Error adding document",e);
-                    }
-                });
+        String userName = "User2";
 
-                        loginTest();
+        collectionReference.document(userName)
+                .set(user);
+
+//        db.collection("users")
+//                .add(user)
+//                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//                                          @Override
+//                                          public void onSuccess(DocumentReference documentReference) {
+//                                              Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+//                                          }
+//                                      })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Log.w(TAG,"Error adding document",e);
+//                    }
+//                });
+
+        loginTest();
     }
 
     public void loginTest() {
