@@ -33,6 +33,7 @@ public class PlayersFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_players,container,false);
 
+        TextView noResult = view.findViewById(R.id.noResults);
         Button searchButton = view.findViewById(R.id.search_button);
         EditText searchUser = view.findViewById(R.id.editText);
         Button bestQRButton = view.findViewById(R.id.bestQRButton);
@@ -72,6 +73,7 @@ public class PlayersFragment extends Fragment {
                 bestQRList.setVisibility(View.VISIBLE);
                 totalQRsList.setVisibility(View.INVISIBLE);
                 totalScoreList.setVisibility(View.INVISIBLE);
+                noResult.setVisibility(View.GONE);
             }
         });
 
@@ -82,6 +84,7 @@ public class PlayersFragment extends Fragment {
                 bestQRList.setVisibility(View.INVISIBLE);
                 totalQRsList.setVisibility(View.VISIBLE);
                 totalScoreList.setVisibility(View.INVISIBLE);
+                noResult.setVisibility(View.GONE);
             }
         });
 
@@ -92,6 +95,7 @@ public class PlayersFragment extends Fragment {
                 bestQRList.setVisibility(View.INVISIBLE);
                 totalQRsList.setVisibility(View.INVISIBLE);
                 totalScoreList.setVisibility(View.VISIBLE);
+                noResult.setVisibility(View.GONE);
             }
         });
 
