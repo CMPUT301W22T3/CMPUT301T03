@@ -6,16 +6,23 @@ import android.Manifest;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.qrhunt1.ui.Login.CallbackFragment;
 import com.example.qrhunt1.ui.Login.LoginFragment;
 import com.example.qrhunt1.ui.Login.SignupFragment;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
@@ -29,6 +36,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -40,11 +48,26 @@ import java.util.HashMap;
 import java.util.Map;
 
 
+// For Real-time database
+//        database = FirebaseDatabase.getInstance();
+//        DatabaseReference myRef = database.getReference("message");
+//        myRef.setValue("Hello, World!2");
+
+
 public class MainActivity extends AppCompatActivity {
 
     FirebaseDatabase database;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseAuth mAuth;
 
+    ImageView scan;
+    EditText loginUsername;
+    EditText loginPassword;
+    CheckBox remember;
+    TextView create;
+    Button login;
+    String string = "@gmail.com";
+    String email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,13 +75,71 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.fragment_login);
 
         //Initialize Firebase Auth
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+
+        scan = findViewById(R.id.iv_login_scan);
+        loginUsername = findViewById(R.id.input_username);
+        loginPassword = findViewById(R.id.input_password);
+        remember = findViewById(R.id.rememberme);
+        create = findViewById(R.id.createnew);
+        login = findViewById(R.id.login_btn);
+
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String username = loginUsername.getText().toString().trim();
+                String password = loginPassword.getText().toString().trim();
 
 
-        // For Real-time database
-//        database = FirebaseDatabase.getInstance();
-//        DatabaseReference myRef = database.getReference("message");
-//        myRef.setValue("Hello, World!2");
+                //Username Conditions
+                if (TextUtils.isEmpty(username)){
+                    Toast.makeText(MainActivity.this, "Username can not be Empty!", Toast.LENGTH_SHORT).show();
+                    loginUsername.setError("Username can not be Empty!");
+                    return;
+                }
+                if (username.indexOf(" ") != -1){
+                    Toast.makeText(MainActivity.this, "Username can not contain space!!", Toast.LENGTH_SHORT).show();
+                    loginUsername.setError("Username can not contain space!");
+                    //return;
+                }else {
+                    email = username.concat(string);
+                    //username = username + string;
+                }
+
+                //Password Conditions
+                if (TextUtils.isEmpty(password)){
+                    Toast.makeText(MainActivity.this, "Password can not be Empty!", Toast.LENGTH_SHORT).show();
+                    loginPassword.setError("Password can not be Empty!");
+                    //return;
+                } else if(password.length() < 6){
+                    Toast.makeText(MainActivity.this, "Password must be at least 6 characters!", Toast.LENGTH_SHORT).show();
+                    loginPassword.setError("Password must be at least 6 characters!");
+                }
+
+                // authenticate the user
+                mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()){
+                            Toast.makeText(MainActivity.this, "Login Successful!", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(getApplicationContext(), NaviTest.class));
+                            finish();
+                            //清除输入内容
+                        }else{
+                            Toast.makeText(MainActivity.this, "Error!" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        });
+
+        create.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, Sign_up.class);
+                startActivity(intent);
+            }
+        });
 
         // For Firestore add info
         CollectionReference collectionReference = db.collection("users");
@@ -87,32 +168,8 @@ public class MainActivity extends AppCompatActivity {
 //                    }
 //                });
 
-        login();
     }
 
-    public void login() {
-
-        // Todo - Try to block the MainActivity Once Login Successful
-        // Todo - In Create Account Activity back to MainActivity is possible.
-        // Todo - Click On Login Button, Compare With DataBase. Fail: Re prompt Users
-
-        Button loginButton = findViewById(R.id.login_btn);
-        TextView create = findViewById(R.id.createnew);
-
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, NaviTest.class);
-                startActivity(intent);
-            }
-        });
-
-        create.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, Sign_up.class);
-                startActivity(intent);
-            }
-        });
-    }
 }
+
+

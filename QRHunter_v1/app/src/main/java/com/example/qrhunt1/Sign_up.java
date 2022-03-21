@@ -92,7 +92,7 @@ public class Sign_up extends AppCompatActivity {
                             Toast.makeText(Sign_up.this,"User Create Successful!", Toast.LENGTH_SHORT).show();
 
                             //Intent intent = new Intent(Sign_up.this, MainActivity.class);
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            startActivity(new Intent(getApplicationContext(), Log_in.class));
 
                         }else {
                             Toast.makeText(Sign_up.this, "Error!" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
