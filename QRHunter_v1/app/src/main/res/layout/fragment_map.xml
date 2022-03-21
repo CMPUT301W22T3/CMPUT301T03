@@ -13,5 +13,12 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         />
 
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center"
+        android:text="Button" />
+
 
 </FrameLayout>

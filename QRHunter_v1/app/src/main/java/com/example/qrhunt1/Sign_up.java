@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -26,6 +27,7 @@ public class Sign_up extends AppCompatActivity {
     FirebaseAuth mAuth;
     String string = "@gmail.com";
     String email;
+    ImageView back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,7 @@ public class Sign_up extends AppCompatActivity {
         su_password = findViewById(R.id.input_su_password);
         conf_password = findViewById(R.id.input_con_password);
         signupButton = findViewById(R.id.signup_btn);
+        back = findViewById(R.id.iv_signup_icon);
 
 
 //        if(mAuth.getCurrentUser() != null){
@@ -103,6 +106,14 @@ public class Sign_up extends AppCompatActivity {
 
 
 
+            }
+        });
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Sign_up.this, MainActivity.class);
+                startActivity(intent);
             }
         });
     }
