@@ -44,12 +44,17 @@ public class MainActivity extends AppCompatActivity {
 
     FirebaseDatabase database;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_login);
+
+        //Initialize Firebase Auth
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
+
         // For Real-time database
 //        database = FirebaseDatabase.getInstance();
 //        DatabaseReference myRef = database.getReference("message");
@@ -82,10 +87,10 @@ public class MainActivity extends AppCompatActivity {
 //                    }
 //                });
 
-        loginTest();
+        login();
     }
 
-    public void loginTest() {
+    public void login() {
 
         // Todo - Try to block the MainActivity Once Login Successful
         // Todo - In Create Account Activity back to MainActivity is possible.

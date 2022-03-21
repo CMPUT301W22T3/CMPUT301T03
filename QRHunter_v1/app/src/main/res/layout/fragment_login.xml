@@ -94,7 +94,7 @@
         android:fontFamily="@font/crimson_text"
         android:gravity="center"
         android:hint="Password"
-        android:inputType="textPersonName"
+        android:inputType="textPassword"
         android:textColorHint="#455A64"
         android:textCursorDrawable="@drawable/cursor"
         android:textSize="28dp"
