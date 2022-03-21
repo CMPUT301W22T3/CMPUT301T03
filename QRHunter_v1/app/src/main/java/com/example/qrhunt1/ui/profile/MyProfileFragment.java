@@ -7,14 +7,18 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 
@@ -22,6 +26,8 @@ import com.example.qrhunt1.MainActivity;
 import com.example.qrhunt1.R;
 import com.google.firebase.firestore.CollectionReference;
 
+
+import org.w3c.dom.Document;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,16 +56,42 @@ public class MyProfileFragment extends Fragment {
         TextView text16 = view.findViewById(R.id.textView16);
         Button button = view.findViewById(R.id.button);
 
+        FirebaseDatabase database;
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String user1 = "User1";
+        DocumentReference dbQR = db.collection("users/").document(user1);
+        dbQR.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists())
+                {
+                    text1.setText(documentSnapshot.getString("DisplayName"));
+                    text2.setText(documentSnapshot.getString(("ContactInfo")));
+                }
+                else{
+                    Toast.makeText(getActivity().getApplicationContext(),"Not Found",Toast.LENGTH_LONG).show();
+                }
+            }
+        })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getActivity().getApplicationContext(),"Error",Toast.LENGTH_LONG).show();
+                    }
+                });
 
-//  Input username
-        String user = "John";
-        text1.setText(user);
 
-//  Input Contact info
-        String phoneNumber = "Tree Street";
-        text2.setText(phoneNumber);
-//        CollectionReference collectionReference = db.collection("users");
 
+////  Input username
+//        String user = "John";
+//        text1.setText(user);
+//
+////  Input Contact info
+//        String phoneNumber = "Tree Street";
+//        text2.setText(phoneNumber);
+////        CollectionReference collectionReference = db.collection("users");
+//
+        
 //  Highest QR code
         ArrayList<Integer> list = new ArrayList<>();
         list.add(1);
