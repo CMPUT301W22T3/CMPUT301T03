@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
+        ActivityCompat.requestPermissions(this,new String[] {Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},101);
 
         scan = findViewById(R.id.iv_login_scan);
         loginUsername = findViewById(R.id.input_username);
