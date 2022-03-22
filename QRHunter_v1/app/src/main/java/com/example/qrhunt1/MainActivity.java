@@ -160,16 +160,16 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // For Firestore add info
-        CollectionReference collectionReference = db.collection("users");
-        Map<String, String> user = new HashMap<>();
-        user.put("DisplayName", "user 2 UserName Test");
-        user.put("PassWord","user 2 PassWord Test");
-        user.put("ContactInfo","user 2 Hub mall");
-
-        String userName = "User2";
-
-        collectionReference.document(userName)
-                .set(user);
+//        CollectionReference collectionReference = db.collection("users");
+//        Map<String, String> user = new HashMap<>();
+//        user.put("DisplayName", "user 2 UserName Test");
+//        user.put("PassWord","user 2 PassWord Test");
+//        user.put("ContactInfo","user 2 Hub mall");
+//
+//        String userName = "User2";
+//
+//        collectionReference.document(userName)
+//                .set(user);
 
 //        db.collection("users")
 //                .add(user)
