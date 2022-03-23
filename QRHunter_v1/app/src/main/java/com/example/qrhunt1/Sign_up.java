@@ -101,38 +101,37 @@ public class Sign_up extends AppCompatActivity {
 
 
                 //register the user in firebase
-                mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()){
-                            Toast.makeText(Sign_up.this,"User Create Successful!", Toast.LENGTH_SHORT).show();
+                if (password.equals(passwordAgain)) {
+                    mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(Sign_up.this, "User Create Successful!", Toast.LENGTH_SHORT).show();
 
-                            Map<String, String> user = new HashMap<>();
-                            user.put("UserName", username);
-                            user.put("PassWord",password);
-                            user.put("ContactInfo",null);
-                            collectionReference.document(username).set(user);
-                            db.collection("users").document(username)
-                            .set(user)
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.w(TAG,"Error adding document",e);
-                                }
-                            });
+                                Map<String, String> user = new HashMap<>();
+                                user.put("UserName", username);
+                                user.put("PassWord", password);
+                                user.put("ContactInfo", null);
+                                collectionReference.document(username).set(user);
+                                db.collection("users").document(username)
+                                        .set(user)
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.w(TAG, "Error adding document", e);
+                                            }
+                                        });
 
-                            //Intent intent = new Intent(Sign_up.this, MainActivity.class);
-                            startActivity(new Intent(getApplicationContext(), Log_in.class));
+                                //Intent intent = new Intent(Sign_up.this, MainActivity.class);
+                                startActivity(new Intent(getApplicationContext(), Log_in.class));
 
-                        }else {
-                            Toast.makeText(Sign_up.this, "Error!" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(Sign_up.this, "Error!" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
 
+                            }
                         }
-                    }
-                });
-
-
-
+                    });
+                }
             }
         });
 

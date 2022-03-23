@@ -63,6 +63,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
+        onStart();
+
         View root = inflater.inflate(R.layout.fragment_map, container, false);
 
         mapFragment = (SupportMapFragment) getChildFragmentManager()
@@ -72,6 +74,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         client = LocationServices.getFusedLocationProviderClient(getActivity());
         return root;
+
     }
 
     @Override
@@ -83,6 +86,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         map = googleMap;
 //        ActivityCompat.requestPermissions(getActivity(),new String[] {Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},REQUEST_CODE);
         enableMyLocation();
+
         addMarker();
     }
 
@@ -96,7 +100,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     for (int i=1;i<=count;i++) {
                         GeoPoint geoPoint = documentSnapshot.getGeoPoint("g" + i);
                         LatLng location = new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude());
-                        map.addMarker(new MarkerOptions().position(location).title("QR HERE"));
+                        DocumentReference QRScore = db.collection("QRCODE/").document("score");
+                        int finalI = i;
+                        QRScore.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                String score = documentSnapshot.getString("g" + finalI);
+                                map.addMarker(new MarkerOptions().position(location).title("QR Score: " + score));
+
+                            }
+                        });
+                        //map.addMarker(new MarkerOptions().position(location).title("QR HERE"));
                     }
                 }
             }
