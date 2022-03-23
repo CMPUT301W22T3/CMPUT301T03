@@ -110,7 +110,7 @@ public class Sign_up extends AppCompatActivity {
                             Map<String, String> user = new HashMap<>();
                             user.put("UserName", username);
                             user.put("PassWord",password);
-                            user.put("ContactInfo",email);
+                            user.put("ContactInfo",null);
                             collectionReference.document(username).set(user);
                             db.collection("users").document(username)
                             .set(user)
