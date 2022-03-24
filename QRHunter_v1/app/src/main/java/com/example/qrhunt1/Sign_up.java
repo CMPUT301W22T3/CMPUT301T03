@@ -68,7 +68,17 @@ public class Sign_up extends AppCompatActivity {
                 if (username.indexOf(" ") != -1){
                     Toast.makeText(Sign_up.this, "Username can not contain space!!", Toast.LENGTH_SHORT).show();
                     su_username.setError("Username can not contain space!");
-                    //return;
+                    return;
+                }
+                if(username.indexOf("@") != -1){
+                    Toast.makeText(Sign_up.this, "Username can not contain @!!", Toast.LENGTH_SHORT).show();
+                    su_username.setError("Username can not contain @!");
+                    return;
+                }
+                if(username.indexOf(".") != -1){
+                    Toast.makeText(Sign_up.this, "Username can not contain .!!", Toast.LENGTH_SHORT).show();
+                    su_username.setError("Username can not contain .!");
+                    return;
                 }else {
                     email = username.concat(string);
                     //username = username + string;
@@ -77,13 +87,15 @@ public class Sign_up extends AppCompatActivity {
                 if (TextUtils.isEmpty(password)){
                     Toast.makeText(Sign_up.this, "Password can not be Empty!", Toast.LENGTH_SHORT).show();
                     su_password.setError("Password can not be Empty!");
-                    //return;
+                    return;
                 } else if(password.length() < 6){
                     Toast.makeText(Sign_up.this, "Password must be at least 6 characters!", Toast.LENGTH_SHORT).show();
                     su_password.setError("Password must be at least 6 characters!");
+                    return;
                 } else if (!password.equals(passwordAgain)){
                     Toast.makeText(Sign_up.this,"Confirm Password does not same as Password!", Toast.LENGTH_SHORT).show();
                     conf_password.setError("Confirm Password does not same as Password!");
+                    return;
                 }
 
 
@@ -98,7 +110,7 @@ public class Sign_up extends AppCompatActivity {
                             startActivity(new Intent(getApplicationContext(), Log_in.class));
 
                         }else {
-                            Toast.makeText(Sign_up.this, "Error!" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Sign_up.this, "Error! The username is already in use by another account!", Toast.LENGTH_SHORT).show();
 
                         }
                     }
