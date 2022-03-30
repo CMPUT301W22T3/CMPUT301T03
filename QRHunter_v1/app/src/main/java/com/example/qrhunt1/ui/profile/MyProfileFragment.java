@@ -15,6 +15,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -36,6 +38,7 @@ public class MyProfileFragment extends Fragment {
 
 //    FirebaseDatabase database;
 //    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
 
 
@@ -59,13 +62,16 @@ public class MyProfileFragment extends Fragment {
         FirebaseDatabase database;
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         String user1 = "User1";
+        String currentUser = mAuth.getCurrentUser().getEmail();
+        currentUser = currentUser.replace("@gmail.com","");
+        text1.setText(currentUser);
         DocumentReference dbQR = db.collection("users/").document(user1);
         dbQR.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if (documentSnapshot.exists())
                 {
-                    text1.setText(documentSnapshot.getString("DisplayName"));
+                    //text1.setText(documentSnapshot.getString("DisplayName"));
                     text2.setText(documentSnapshot.getString(("ContactInfo")));
                 }
                 else{

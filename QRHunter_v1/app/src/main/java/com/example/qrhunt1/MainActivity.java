@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
+        ActivityCompat.requestPermissions(this,new String[] {Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},101);
 
         scan = findViewById(R.id.iv_login_scan);
         loginUsername = findViewById(R.id.input_username);
@@ -169,16 +170,16 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // For Firestore add info
-        CollectionReference collectionReference = db.collection("users");
-        Map<String, String> user = new HashMap<>();
-        user.put("DisplayName", "user 2 UserName Test");
-        user.put("PassWord","user 2 PassWord Test");
-        user.put("ContactInfo","user 2 Hub mall");
-
-        String userName = "User2";
-
-        collectionReference.document(userName)
-                .set(user);
+//        CollectionReference collectionReference = db.collection("users");
+//        Map<String, String> user = new HashMap<>();
+//        user.put("DisplayName", "user 2 UserName Test");
+//        user.put("PassWord","user 2 PassWord Test");
+//        user.put("ContactInfo","user 2 Hub mall");
+//
+//        String userName = "User2";
+//
+//        collectionReference.document(userName)
+//                .set(user);
 
 //        db.collection("users")
 //                .add(user)

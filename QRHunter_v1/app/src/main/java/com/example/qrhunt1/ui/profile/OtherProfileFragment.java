@@ -30,6 +30,7 @@ public class OtherProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_other_profile,container,false);
 
 
+
         //  My profile
         TextView text1 = view.findViewById(R.id.textView);
         TextView text2 = view.findViewById(R.id.textView2);
@@ -44,7 +45,9 @@ public class OtherProfileFragment extends Fragment {
 
 
 //  Input username
-        String user = "John";
+        //get the input username
+        String user = getArguments().getString("Username");
+        //String user = "John";
         text1.setText(user);
 
 //  Input Contact info
@@ -125,7 +128,12 @@ public class OtherProfileFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                Fragment fragment = new PlayersFragment();
+                fragmentTransaction.replace(R.id.container, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
             }
         });
 

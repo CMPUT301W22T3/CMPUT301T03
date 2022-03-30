@@ -1,5 +1,7 @@
 package com.example.qrhunt1;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +9,7 @@ import android.os.Bundle;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,9 +17,17 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Sign_up extends AppCompatActivity {
 
@@ -36,6 +47,8 @@ public class Sign_up extends AppCompatActivity {
 
         //Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference collectionReference = db.collection("users");
 
         su_username = findViewById(R.id.input_su_username);
         su_password = findViewById(R.id.input_su_password);
@@ -100,24 +113,42 @@ public class Sign_up extends AppCompatActivity {
 
 
                 //register the user in firebase
-                mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()){
-                            Toast.makeText(Sign_up.this,"User Create Successful!", Toast.LENGTH_SHORT).show();
+                if (password.equals(passwordAgain)) {
+                    mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(Sign_up.this, "User Create Successful!", Toast.LENGTH_SHORT).show();
 
-                            //Intent intent = new Intent(Sign_up.this, MainActivity.class);
-                            startActivity(new Intent(getApplicationContext(), Log_in.class));
+                                Map<String, String> user = new HashMap<>();
+                                user.put("UserName", username);
+                                user.put("PassWord", password);
+                                user.put("ContactInfo", null);
+                                collectionReference.document(username).set(user);
+                                db.collection("users").document(username)
+                                        .set(user)
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.w(TAG, "Error adding document", e);
+                                            }
+                                        });
 
-                        }else {
-                            Toast.makeText(Sign_up.this, "Error! The username is already in use by another account!", Toast.LENGTH_SHORT).show();
 
+                            }else {
+                                Toast.makeText(Sign_up.this, "Error! The username is already in use by another account!", Toast.LENGTH_SHORT).show();
+
+                                //Intent intent = new Intent(Sign_up.this, MainActivity.class);
+                                startActivity(new Intent(getApplicationContext(), Log_in.class));
+
+
+//                            } else {
+//                                Toast.makeText(Sign_up.this, "Error!" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+
+                            }
                         }
-                    }
-                });
-
-
-
+                    });
+                }
             }
         });
 

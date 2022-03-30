@@ -17,7 +17,6 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.qrhunt1.GameQRCode;
-import com.example.qrhunt1.databinding.FragmentPlayersBinding;
 import com.example.qrhunt1.R;
 import com.example.qrhunt1.ui.Login.CallbackFragment;
 import com.example.qrhunt1.ui.profile.MyProfileFragment;
@@ -52,15 +51,19 @@ public class PlayersFragment extends Fragment {
         ArrayAdapter<?> totalScoreArrayAdapter;
         ArrayList<?> totalScoreArrayList;
 
-        String username = searchUser.getText().toString();
         //click this button
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //direct to searched user's profile
-                Fragment fragment = new OtherProfileFragment();
+                String username = searchUser.getText().toString();
+                Bundle args = new Bundle();
+                args.putString("Username", username);
+
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                Fragment fragment = new OtherProfileFragment();
+                fragment.setArguments(args);
                 fragmentTransaction.replace(R.id.container, fragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
