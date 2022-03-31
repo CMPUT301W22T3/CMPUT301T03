@@ -71,13 +71,13 @@ public class MyProfileFragment extends Fragment {
         TextView text18 = view.findViewById(R.id.textView18);
 
 
+
         FirebaseDatabase database;
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        String user1 = "User1";
         String currentUser = mAuth.getCurrentUser().getEmail();
         currentUser = currentUser.replace("@gmail.com", "");
         text1.setText(currentUser);
-        DocumentReference dbQR = db.collection("users/").document(user1);
+        DocumentReference dbQR = db.collection("users/").document(currentUser);
         dbQR.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -85,6 +85,7 @@ public class MyProfileFragment extends Fragment {
                     //text1.setText(documentSnapshot.getString("DisplayName"));
                     text2.setText(documentSnapshot.getString(("ContactInfo")));
                     text18.setText(documentSnapshot.getString(("PassWord")));
+
 
                 } else {
                     Toast.makeText(getActivity().getApplicationContext(), "Not Found", Toast.LENGTH_LONG).show();
@@ -193,8 +194,8 @@ public class MyProfileFragment extends Fragment {
             //Create bitmap of the code
             Bitmap bitmap = encoder.createBitmap(matrix);
             QR1.setImageBitmap(bitmap);
-        } catch (WriterException e) {
-            e.printStackTrace();
+        } catch (WriterException l) {
+            l.printStackTrace();
         }
 
         //generate QR code for login contain username and password.
@@ -213,6 +214,7 @@ public class MyProfileFragment extends Fragment {
         } catch (WriterException e) {
             e.printStackTrace();
         }
+        text18.setVisibility(View.INVISIBLE);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override

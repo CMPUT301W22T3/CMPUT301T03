@@ -1,5 +1,6 @@
 package com.example.qrhunt1.ui.profile;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -17,6 +19,16 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.qrhunt1.MainActivity;
 import com.example.qrhunt1.R;
 import com.example.qrhunt1.ui.players.PlayersFragment;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 
 import java.util.ArrayList;
@@ -42,13 +54,38 @@ public class OtherProfileFragment extends Fragment {
         TextView text15 = view.findViewById(R.id.textView15);
         TextView text16 = view.findViewById(R.id.textView16);
         Button button = view.findViewById(R.id.button);
+        ImageView imageView = view.findViewById(R.id.imageView2);
 
-
-//  Input username
+        //  Input username
         //get the input username
         String user = getArguments().getString("Username");
         //String user = "John";
         text1.setText(user);
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference dbQR = db.collection("users/").document(user);
+        dbQR.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    //text1.setText(documentSnapshot.getString("DisplayName"));
+                    text2.setText(documentSnapshot.getString(("ContactInfo")));
+
+
+                } else {
+                    Toast.makeText(getActivity().getApplicationContext(), "Not Found", Toast.LENGTH_LONG).show();
+                }
+            }
+        })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+
+
 
 //  Input Contact info
         String phoneNumber = "Tree Street";
@@ -94,8 +131,8 @@ public class OtherProfileFragment extends Fragment {
         Collections.sort(list1);
         Collections.reverse(list1);
         Integer index = list1.indexOf(11)+1;
-        String e = Integer.toString(index);
-        text14.setText(e);
+        String j = Integer.toString(index);
+        text14.setText(j);
 
 //  Ranking in Total QRs
         ArrayList<Integer> list2 = new ArrayList<>();
@@ -136,6 +173,22 @@ public class OtherProfileFragment extends Fragment {
                 fragmentTransaction.commit();
             }
         });
+
+        //generate QR code base on username (use for Profile)
+        String sText = text1.getText().toString().trim();
+        //Initialize multi format writer
+        MultiFormatWriter writer = new MultiFormatWriter();
+        try {
+            //Initialize bit matrix
+            BitMatrix matrix = writer.encode(sText, BarcodeFormat.QR_CODE, 158, 151);
+            //Initialize barcode encoder
+            BarcodeEncoder encoder = new BarcodeEncoder();
+            //Create bitmap of the code
+            Bitmap bitmap = encoder.createBitmap(matrix);
+            imageView.setImageBitmap(bitmap);
+        } catch (WriterException e) {
+            e.printStackTrace();
+        }
 
         return view;
 

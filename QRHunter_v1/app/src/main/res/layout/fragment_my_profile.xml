@@ -106,17 +106,17 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toTopOf="@+id/guideline10" />
 
+
     <TextView
         android:id="@+id/textView18"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ranking in Total Score: "
+        android:text="TextView"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline11"
-        app:layout_constraintEnd_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toTopOf="@+id/guideline10"
-        tools:visibility="invisible" />
-
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline11" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
