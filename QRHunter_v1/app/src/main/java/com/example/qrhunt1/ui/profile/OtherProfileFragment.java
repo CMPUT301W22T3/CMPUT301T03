@@ -162,14 +162,12 @@ public class OtherProfileFragment extends Fragment {
 
         Button backButton = view.findViewById(R.id.backButton);
         backButton.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Fragment fragment = new PlayersFragment();
                 fragmentTransaction.replace(R.id.container, fragment);
-                fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             }
         });
