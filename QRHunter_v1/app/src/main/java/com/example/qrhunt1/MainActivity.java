@@ -144,6 +144,21 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
+
+
+                remember.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                        if(compoundButton.isChecked()){
+                            SharedPreferences preferences = getSharedPreferences("checkbox", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putString("remember", "ture");
+                            editor.apply();
+                            Toast.makeText(MainActivity.this, "Remembered the Username and Password!", Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+                });
             }
         });
 

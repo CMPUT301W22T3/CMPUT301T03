@@ -2,9 +2,12 @@ package com.example.qrhunt1;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
@@ -20,6 +23,8 @@ public class Scan extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
 
+        ActivityCompat.requestPermissions(this,new String[] {Manifest.permission.CAMERA},101);
+
         CodeScannerView scannerView = findViewById(R.id.scanner_view);
         mCodeScanner = new CodeScanner(this, scannerView);
         mCodeScanner.setDecodeCallback(new DecodeCallback() {
@@ -28,7 +33,7 @@ public class Scan extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        //Toast.makeText(MainActivity.this, result.getText(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Scan.this, result.getText(), Toast.LENGTH_SHORT).show();
                     }
                 });
             }
