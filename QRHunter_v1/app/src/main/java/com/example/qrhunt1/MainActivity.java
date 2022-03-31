@@ -169,6 +169,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        scan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, Scan.class);
+                startActivity(intent);
+            }
+        });
+
         // For Firestore add info
 //        CollectionReference collectionReference = db.collection("users");
 //        Map<String, String> user = new HashMap<>();
