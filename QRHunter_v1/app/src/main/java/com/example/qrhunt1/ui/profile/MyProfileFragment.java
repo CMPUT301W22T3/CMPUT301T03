@@ -71,7 +71,6 @@ public class MyProfileFragment extends Fragment {
         TextView text18 = view.findViewById(R.id.textView18);
 
 
-
         FirebaseDatabase database;
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         String currentUser = mAuth.getCurrentUser().getEmail();
@@ -86,6 +85,39 @@ public class MyProfileFragment extends Fragment {
                     text2.setText(documentSnapshot.getString(("ContactInfo")));
                     text18.setText(documentSnapshot.getString(("PassWord")));
 
+                    //generate QR code base on username (use for Profile)
+                    String sText = text1.getText().toString().trim();
+                    //Initialize multi format writer
+                    MultiFormatWriter writer = new MultiFormatWriter();
+                    try {
+                        //Initialize bit matrix
+                        BitMatrix matrix = writer.encode(sText, BarcodeFormat.QR_CODE, 158, 151);
+                        //Initialize barcode encoder
+                        BarcodeEncoder encoder = new BarcodeEncoder();
+                        //Create bitmap of the code
+                        Bitmap bitmap = encoder.createBitmap(matrix);
+                        QR1.setImageBitmap(bitmap);
+                    } catch (WriterException l) {
+                        l.printStackTrace();
+                    }
+
+                    String loginPassword = text18.getText().toString();
+                    String login = sText + ' ' + loginPassword;
+                    //Initialize multi format writer
+                    MultiFormatWriter loginWriter = new MultiFormatWriter();
+                    try {
+                        //Initialize bit matrix
+                        BitMatrix loginMatrix = loginWriter.encode(login, BarcodeFormat.QR_CODE, 158, 151);
+                        //Initialize barcode encoder
+                        BarcodeEncoder loginEncoder = new BarcodeEncoder();
+                        //Create bitmap of the code
+                        Bitmap loginBitmap = loginEncoder.createBitmap(loginMatrix);
+                        QR2.setImageBitmap(loginBitmap);
+                    } catch (WriterException e) {
+                        e.printStackTrace();
+                    }
+                    text18.setVisibility(View.INVISIBLE);
+
 
                 } else {
                     Toast.makeText(getActivity().getApplicationContext(), "Not Found", Toast.LENGTH_LONG).show();
@@ -99,16 +131,6 @@ public class MyProfileFragment extends Fragment {
                     }
                 });
 
-
-////  Input username
-//        String user = "John";
-//        text1.setText(user);
-//
-////  Input Contact info
-//        String phoneNumber = "Tree Street";
-//        text2.setText(phoneNumber);
-////        CollectionReference collectionReference = db.collection("users");
-//
 
 //  Highest QR code
         ArrayList<Integer> list = new ArrayList<>();
@@ -179,42 +201,6 @@ public class MyProfileFragment extends Fragment {
         String g = Integer.toString(index2);
         text16.setText(g);
 
-//  Login QR button
-
-
-        //generate QR code base on username (use for Profile)
-        String sText = text1.getText().toString().trim();
-        //Initialize multi format writer
-        MultiFormatWriter writer = new MultiFormatWriter();
-        try {
-            //Initialize bit matrix
-            BitMatrix matrix = writer.encode(sText, BarcodeFormat.QR_CODE, 158, 151);
-            //Initialize barcode encoder
-            BarcodeEncoder encoder = new BarcodeEncoder();
-            //Create bitmap of the code
-            Bitmap bitmap = encoder.createBitmap(matrix);
-            QR1.setImageBitmap(bitmap);
-        } catch (WriterException l) {
-            l.printStackTrace();
-        }
-
-        //generate QR code for login contain username and password.
-        String loginPassword = text18.getText().toString().trim();
-        String login = sText + loginPassword;
-        //Initialize multi format writer
-        MultiFormatWriter loginWriter = new MultiFormatWriter();
-        try {
-            //Initialize bit matrix
-            BitMatrix loginMatrix = loginWriter.encode(login, BarcodeFormat.QR_CODE, 158, 151);
-            //Initialize barcode encoder
-            BarcodeEncoder loginEncoder = new BarcodeEncoder();
-            //Create bitmap of the code
-            Bitmap loginBitmap = loginEncoder.createBitmap(loginMatrix);
-            QR2.setImageBitmap(loginBitmap);
-        } catch (WriterException e) {
-            e.printStackTrace();
-        }
-        text18.setVisibility(View.INVISIBLE);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
