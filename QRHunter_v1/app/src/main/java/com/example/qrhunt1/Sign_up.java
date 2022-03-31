@@ -139,7 +139,7 @@ public class Sign_up extends AppCompatActivity {
                                 Toast.makeText(Sign_up.this, "Error! The username is already in use by another account!", Toast.LENGTH_SHORT).show();
 
                                 //Intent intent = new Intent(Sign_up.this, MainActivity.class);
-                                startActivity(new Intent(getApplicationContext(), Log_in.class));
+                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
 
 
 //                            } else {
