@@ -1,5 +1,6 @@
 package com.example.qrhunt1.ui.profile;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,9 +28,15 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.example.qrhunt1.MainActivity;
 import com.example.qrhunt1.R;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,7 +51,7 @@ public class MyProfileFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_my_profile,container,false);
+        View view = inflater.inflate(R.layout.fragment_my_profile, container, false);
 
 
         //  My profile
@@ -58,34 +65,38 @@ public class MyProfileFragment extends Fragment {
         TextView text15 = view.findViewById(R.id.textView15);
         TextView text16 = view.findViewById(R.id.textView16);
         Button button = view.findViewById(R.id.button);
+        Button button2 = view.findViewById(R.id.button2);
+        ImageView QR1 = view.findViewById(R.id.imageView);
+        ImageView QR2 = view.findViewById(R.id.imageView3);
+        TextView text18 = view.findViewById(R.id.textView18);
+
 
         FirebaseDatabase database;
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         String user1 = "User1";
         String currentUser = mAuth.getCurrentUser().getEmail();
-        currentUser = currentUser.replace("@gmail.com","");
+        currentUser = currentUser.replace("@gmail.com", "");
         text1.setText(currentUser);
         DocumentReference dbQR = db.collection("users/").document(user1);
         dbQR.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists())
-                {
+                if (documentSnapshot.exists()) {
                     //text1.setText(documentSnapshot.getString("DisplayName"));
                     text2.setText(documentSnapshot.getString(("ContactInfo")));
-                }
-                else{
-                    Toast.makeText(getActivity().getApplicationContext(),"Not Found",Toast.LENGTH_LONG).show();
+                    text18.setText(documentSnapshot.getString(("PassWord")));
+
+                } else {
+                    Toast.makeText(getActivity().getApplicationContext(), "Not Found", Toast.LENGTH_LONG).show();
                 }
             }
         })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getActivity().getApplicationContext(),"Error",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
                     }
                 });
-
 
 
 ////  Input username
@@ -97,7 +108,7 @@ public class MyProfileFragment extends Fragment {
 //        text2.setText(phoneNumber);
 ////        CollectionReference collectionReference = db.collection("users");
 //
-        
+
 //  Highest QR code
         ArrayList<Integer> list = new ArrayList<>();
         list.add(1);
@@ -106,18 +117,18 @@ public class MyProfileFragment extends Fragment {
         list.add(11);
         list.add(2);
         Collections.sort(list);
-        Integer a = list.get(list.size()-1);
+        Integer a = list.get(list.size() - 1);
         String d = Integer.toString(a);
         text10.setText(d);
 
 //  lowest QR code
         Collections.reverse(list);
-        String b = list.get(list.size()-1).toString();
+        String b = list.get(list.size() - 1).toString();
         text11.setText(b);
 
 //  Sum of Scores #
         int i;
-        int sum=0;
+        int sum = 0;
         for (i = 0; i < list.size(); i++)
             sum += list.get(i);
         String c = Integer.toString(sum);
@@ -137,9 +148,9 @@ public class MyProfileFragment extends Fragment {
         list1.add(15);
         Collections.sort(list1);
         Collections.reverse(list1);
-        Integer index = list1.indexOf(11)+1;
-        String e = Integer.toString(index);
-        text14.setText(e);
+        Integer index = list1.indexOf(11) + 1;
+        String j = Integer.toString(index);
+        text14.setText(j);
 
 //  Ranking in Total QRs
         ArrayList<Integer> list2 = new ArrayList<>();
@@ -150,7 +161,7 @@ public class MyProfileFragment extends Fragment {
         list2.add(0);
         Collections.sort(list2);
         Collections.reverse(list2);
-        Integer index1 = list2.indexOf(5)+1;
+        Integer index1 = list2.indexOf(5) + 1;
         String f = Integer.toString(index1);
         text15.setText(f);
 
@@ -163,31 +174,61 @@ public class MyProfileFragment extends Fragment {
         list3.add(60);
         Collections.sort(list3);
         Collections.reverse(list3);
-        Integer index2 = list3.indexOf(27)+1;
+        Integer index2 = list3.indexOf(27) + 1;
         String g = Integer.toString(index2);
         text16.setText(g);
 
 //  Login QR button
-        ImageView QR1 = view.findViewById(R.id.imageView);
-        ImageView QR2 = view.findViewById(R.id.imageView3);
+
+
+        //generate QR code base on username (use for Profile)
+        String sText = text1.getText().toString().trim();
+        //Initialize multi format writer
+        MultiFormatWriter writer = new MultiFormatWriter();
+        try {
+            //Initialize bit matrix
+            BitMatrix matrix = writer.encode(sText, BarcodeFormat.QR_CODE, 158, 151);
+            //Initialize barcode encoder
+            BarcodeEncoder encoder = new BarcodeEncoder();
+            //Create bitmap of the code
+            Bitmap bitmap = encoder.createBitmap(matrix);
+            QR1.setImageBitmap(bitmap);
+        } catch (WriterException e) {
+            e.printStackTrace();
+        }
+
+        //generate QR code for login contain username and password.
+        String loginPassword = text18.getText().toString().trim();
+        String login = sText + loginPassword;
+        //Initialize multi format writer
+        MultiFormatWriter loginWriter = new MultiFormatWriter();
+        try {
+            //Initialize bit matrix
+            BitMatrix loginMatrix = loginWriter.encode(login, BarcodeFormat.QR_CODE, 158, 151);
+            //Initialize barcode encoder
+            BarcodeEncoder loginEncoder = new BarcodeEncoder();
+            //Create bitmap of the code
+            Bitmap loginBitmap = loginEncoder.createBitmap(loginMatrix);
+            QR2.setImageBitmap(loginBitmap);
+        } catch (WriterException e) {
+            e.printStackTrace();
+        }
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(QR1.getVisibility()==View.VISIBLE) {
+                if (QR1.getVisibility() == View.VISIBLE) {
                     QR1.setVisibility(View.INVISIBLE);
                     QR2.setVisibility(View.VISIBLE);
-                }
-                else{
+                } else {
                     QR1.setVisibility(View.VISIBLE);
                     QR2.setVisibility(View.INVISIBLE);
                 }
             }
         });
 
+
         return view;
-
-
     }
     @Override
     public void onDestroyView() {
