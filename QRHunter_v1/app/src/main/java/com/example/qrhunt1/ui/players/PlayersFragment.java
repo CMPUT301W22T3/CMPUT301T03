@@ -27,6 +27,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class PlayersFragment extends Fragment {
 
@@ -131,6 +132,57 @@ public class PlayersFragment extends Fragment {
         //show the search results for key word
 
 
+        /*
+        Mock calculating score
+
+        String hash = "8227ad000b504e39fe29393ce170908be2b1ea636554488fa86de5d9d6cd2c32";
+        //get a list with repeated digits strings
+        ArrayList<String> repeatedDigitsList = new ArrayList<>();
+        for (int i=0; i<hash.length();i++){
+            int n = i;
+            String temp = "";
+            char repeatedDigit = 'n';
+            for (int m=i+1; m<hash.length();m++){
+                if (hash.charAt(n) == hash.charAt(m) && n == m-1){
+                    repeatedDigit = hash.charAt(m);
+                    n++;
+                } else {
+                    n = i;
+                    i = m-1;
+                    break;
+                }
+            }
+            int repeatedDigitLength = i-n+1;
+            if (repeatedDigit != 'n'){
+                for (int t=0; t<repeatedDigitLength; t++){
+                    temp = temp + repeatedDigit;
+                }
+                repeatedDigitsList.add(temp);
+            }
+        }
+        //test
+        System.out.println(repeatedDigitsList);
+        //calculate the score for repeated digits
+        double score = 0;
+        for (int i=0; i<repeatedDigitsList.size();i++){
+            String repeatedDigits = repeatedDigitsList.get(i);
+            int repeatedDigitsLength = repeatedDigits.length();
+            String repeatedDigit = Character.toString(repeatedDigits.charAt(0));
+            int decimal = Integer.parseInt(repeatedDigit,16);
+            if (decimal == 0){
+                decimal = 20;
+            }
+            //convert int to double and calculate part score
+            double d = decimal;
+            double c = (repeatedDigitsLength-1);
+            double partScore = Math.pow(d,c);
+            //add the part score to total score
+            score = score + partScore;
+        }
+        int totalScore = (int) score;
+        System.out.println(totalScore);
+
+         */
 
         //click this button
         searchButton.setOnClickListener(new View.OnClickListener() {
