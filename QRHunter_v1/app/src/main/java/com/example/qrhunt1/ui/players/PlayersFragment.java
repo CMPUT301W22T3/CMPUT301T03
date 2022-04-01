@@ -26,6 +26,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class PlayersFragment extends Fragment {
 
@@ -86,27 +87,38 @@ public class PlayersFragment extends Fragment {
                     }
                 });
         */
-        String []rankings = {"1","2","3","4","5"};
 
+        //mock data
         String []bestQRUsers = {"user1","user2","user3","user4","user5"};
         String []totalQRsUsers = {"user6","user7","user8","user9","user10"};
         String []totalScoreUsers = {"user11","user12","user13","user14","user15"};
 
-        String []bestQRScores = {"20","23","55","34","56"};
-        String []totalQRsScores = {"3","12","106","368","0"};
-        String []totalScoreScores = {"26","34","68","99","101"};
+        int []bestQRScores = {20,23,55,34,56};
+        int []totalQRsScores = {3,12,106,368,0};
+        int []totalScoreScores = {26,34,68,99,101};
 
         bestQRDataList = new ArrayList<>();
         totalQRsDataList = new ArrayList<>();
         totalScoreDataList = new ArrayList<>();
 
+        //add data to corresponding ranking list
         for(int i=0;i<bestQRUsers.length;i++){
-            bestQRDataList.add((new Rank(rankings[i], bestQRUsers[i], bestQRScores[i])));
-            totalQRsDataList.add((new Rank(rankings[i], totalQRsUsers[i], totalQRsScores[i])));
-            totalScoreDataList.add((new Rank(rankings[i], totalScoreUsers[i], totalScoreScores[i])));
+            bestQRDataList.add((new Rank(bestQRUsers[i], bestQRScores[i])));
+            totalQRsDataList.add((new Rank(totalQRsUsers[i], totalQRsScores[i])));
+            totalScoreDataList.add((new Rank(totalScoreUsers[i], totalScoreScores[i])));
         }
 
+        //sort the top 5 players by ascending order
+        Collections.sort(bestQRDataList);
+        Collections.sort(totalQRsDataList);
+        Collections.sort(totalScoreDataList);
 
+        //set the rank for the top 5 players
+        for(int i=0;i<bestQRUsers.length;i++){
+            bestQRDataList.get(i).setUserRank(i+1);
+            totalQRsDataList.get(i).setUserRank(i+1);
+            totalScoreDataList.get(i).setUserRank(i+1);
+        }
 
         bestQRArrayAdapter = new CustomList(getActivity(),bestQRDataList);
         totalQRsArrayAdapter = new CustomList(getActivity(),totalQRsDataList);
@@ -115,14 +127,16 @@ public class PlayersFragment extends Fragment {
         bestQRList.setAdapter(bestQRArrayAdapter);
         totalQRsList.setAdapter(totalQRsArrayAdapter);
         totalScoreList.setAdapter(totalScoreArrayAdapter);
-        //bestQRArrayList.add("10");
+
+        //show the search results for key word
+
 
 
         //click this button
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //direct to searched user's profile
+                //pass the input username to profile fragment
                 String username = searchUser.getText().toString();
                 Bundle args = new Bundle();
                 args.putString("Username", username);

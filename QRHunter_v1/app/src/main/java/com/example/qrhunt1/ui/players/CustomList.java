@@ -15,6 +15,8 @@ import com.example.qrhunt1.R;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class CustomList extends ArrayAdapter<Rank> {
 
@@ -33,8 +35,8 @@ public class CustomList extends ArrayAdapter<Rank> {
 
         View view = convertView;
 
-        if(view == null){
-            view = LayoutInflater.from(context).inflate(R.layout.ranking_list, parent,false);
+        if (view == null) {
+            view = LayoutInflater.from(context).inflate(R.layout.ranking_list, parent, false);
         }
 
         Rank rank = ranks.get(position);
@@ -43,9 +45,13 @@ public class CustomList extends ArrayAdapter<Rank> {
         TextView userName = view.findViewById(R.id.username_text);
         TextView userScore = view.findViewById(R.id.user_score_text);
 
-        userRank.setText(rank.getUserRank());
+        //convert int to string
+        String userRankString = Integer.toString(rank.getUserRank());
+        String userScoreString = Integer.toString(rank.getUserScore());
+
+        userRank.setText(userRankString);
         userName.setText(rank.getUserName());
-        userScore.setText(rank.getUserScore());
+        userScore.setText(userScoreString);
 
         return view;
 

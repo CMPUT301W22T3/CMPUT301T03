@@ -1,9 +1,9 @@
 package com.example.qrhunt1.ui.players;
 
 public class Rank implements Comparable<Rank>{
-    private String userRank;
+    private int userRank;
     private String userName;
-    private String userScore;
+    private int userScore;
 
     /**
      * This is the constructor of the Rank class
@@ -12,8 +12,8 @@ public class Rank implements Comparable<Rank>{
      * @param userScore
      * This is the user score
      */
-    Rank(String userRank, String userName, String userScore){
-        this.userRank = userRank;
+    Rank(String userName, int userScore){
+        this.userRank = 0;
         this.userName = userName;
         this.userScore = userScore;
     }
@@ -22,14 +22,14 @@ public class Rank implements Comparable<Rank>{
      * @return
      * Returns ranking of the user
      */
-    String getUserRank(){
+    int getUserRank(){
         return this.userRank;
     }
 
     /**
      * This sets the user's ranking
      */
-    public void setUserRank(String userRank) {
+    public void setUserRank(int userRank) {
         this.userRank = userRank;
     }
 
@@ -47,19 +47,26 @@ public class Rank implements Comparable<Rank>{
      * @return
      * Returns score of the user
      */
-    String getUserScore(){
+    int getUserScore(){
         return this.userScore;
     }
+
     /**
-     * This compares city with city and returns an int
+     * This compares rank score with rank score and returns an int
      * @param rank
-     * This is the city we want to compare with
+     * This is the rank we want to compare with
      * @return
      * Returns an int
      */
     @Override
     public int compareTo(Rank rank) {
-        return this.userScore.compareTo(rank.getUserScore());
+        if (this.userScore == rank.getUserScore()){
+            return 0;
+        } else if (this.userScore < rank.getUserScore()){
+            return 1;
+        } else {
+            return -1;
+        }
     }
 
 }
