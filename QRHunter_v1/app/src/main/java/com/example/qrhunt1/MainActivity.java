@@ -172,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
                     editor.apply();
                     Toast.makeText(MainActivity.this, "Remembered the Username and Password!", Toast.LENGTH_SHORT).show();
 
+
                 }
             }
         });
@@ -183,6 +184,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, Scan.class);
                 intent.putExtra("mode",mode);
                 startActivity(intent);
+                finish();
             }
         });
     }

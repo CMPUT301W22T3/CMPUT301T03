@@ -7,23 +7,34 @@ import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
 import com.budiyev.android.codescanner.ScanMode;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.zxing.Result;
 import com.himanshurawat.hasher.HashType;
 import com.himanshurawat.hasher.Hasher;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class Scan extends AppCompatActivity {
 
     private CodeScanner mCodeScanner;
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +59,23 @@ public class Scan extends AppCompatActivity {
                     public void run() {
                         if (mode.equals("login")) {
                             // TODO - Do Something With Login
-                            Toast.makeText(Scan.this, result.getText(), Toast.LENGTH_SHORT).show();
+                            List<String> loginInfo = new ArrayList<String>(Arrays.asList(String.valueOf(result).split(",")));
+                            String userName = loginInfo.get(0).concat("@gmail.com");
+                            String passWord = loginInfo.get(1);
+                            //Toast.makeText(Scan.this, "userName: "+userName+" Password: "+ passWord, Toast.LENGTH_SHORT).show();
+
+                            mAuth.signInWithEmailAndPassword(userName,passWord).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()){
+                                        Toast.makeText(Scan.this, "Login Successful!", Toast.LENGTH_SHORT).show();
+                                        startActivity(new Intent(getApplicationContext(), NaviTest.class));
+                                        finish();
+                                    }else{
+                                        Toast.makeText(Scan.this, "Error!" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
                         } else if (mode.equals("hunt")) {
                             // TODO - Do something with hunt qr code
                             String hash = Hasher.Companion.hash(String.valueOf(result), HashType.SHA_256);
