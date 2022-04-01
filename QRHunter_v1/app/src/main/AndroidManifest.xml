@@ -22,9 +22,6 @@
             android:name=".Scan"
             android:exported="false" />
         <activity
-            android:name=".Log_in"
-            android:exported="false" />
-        <activity
             android:name=".Sign_up"
             android:exported="false" />
         <activity

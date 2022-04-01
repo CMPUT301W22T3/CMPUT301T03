@@ -1,17 +1,22 @@
 package com.example.qrhunt1;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.Layout;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
+import com.budiyev.android.codescanner.ScanMode;
 import com.google.zxing.Result;
 
 public class Scan extends AppCompatActivity {
@@ -27,13 +32,25 @@ public class Scan extends AppCompatActivity {
 
         CodeScannerView scannerView = findViewById(R.id.scanner_view);
         mCodeScanner = new CodeScanner(this, scannerView);
+
+        mCodeScanner.setScanMode(ScanMode.CONTINUOUS);
+
+        // Two mode for scan - login - hunt
+        String mode = getIntent().getStringExtra("mode");
+
         mCodeScanner.setDecodeCallback(new DecodeCallback() {
             @Override
             public void onDecoded(@NonNull final Result result) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(Scan.this, result.getText(), Toast.LENGTH_SHORT).show();
+                        if (mode.equals("login")) {
+                            // TODO - Do Something With Login
+                            Toast.makeText(Scan.this, result.getText(), Toast.LENGTH_SHORT).show();
+                        } else if (mode.equals("hunt")) {
+                            // TODO - Do something with hunt qr code
+                            
+                        }
                     }
                 });
             }

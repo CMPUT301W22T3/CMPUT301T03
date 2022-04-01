@@ -22,6 +22,8 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.qrhunt1.GameQRCode;
 import com.example.qrhunt1.GameQRList;
 import com.example.qrhunt1.R;
+import com.example.qrhunt1.Scan;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -30,6 +32,7 @@ public class GalleryFragment extends Fragment{
     ArrayAdapter<GameQRCode> codeArrayAdapter;
     ArrayList<GameQRCode> codeArrayList;
     Button addCommentButtom;
+    FloatingActionButton scanButton;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -38,6 +41,8 @@ public class GalleryFragment extends Fragment{
         View view = inflater.inflate(R.layout.fragment_gallery,container,false);
         Context thisContext = container.getContext();
         codeList = view.findViewById(R.id.gallery_list);
+
+        scanButton = view.findViewById(R.id.fab);
 
         codeArrayList = new ArrayList<>();
         codeArrayList.add(new GameQRCode("2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824"));
@@ -68,8 +73,18 @@ public class GalleryFragment extends Fragment{
                 builder.create().show();
                 return false;
             }
-
         });
+
+        scanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), Scan.class);
+                intent.putExtra("mode","hunt");
+                startActivity(intent);
+            }
+        });
+
+
 
 
         return view;

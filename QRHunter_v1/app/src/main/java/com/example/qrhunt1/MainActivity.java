@@ -49,13 +49,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
-
-// For Real-time database
-//        database = FirebaseDatabase.getInstance();
-//        DatabaseReference myRef = database.getReference("message");
-//        myRef.setValue("Hello, World!2");
-
-
 public class MainActivity extends AppCompatActivity {
 
     FirebaseDatabase database;
@@ -145,7 +138,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-
                 remember.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -187,40 +179,13 @@ public class MainActivity extends AppCompatActivity {
         scan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String mode = "login";
                 Intent intent = new Intent(MainActivity.this, Scan.class);
+                intent.putExtra("mode",mode);
                 startActivity(intent);
             }
         });
-
-        // For Firestore add info
-//        CollectionReference collectionReference = db.collection("users");
-//        Map<String, String> user = new HashMap<>();
-//        user.put("DisplayName", "user 2 UserName Test");
-//        user.put("PassWord","user 2 PassWord Test");
-//        user.put("ContactInfo","user 2 Hub mall");
-//
-//        String userName = "User2";
-//
-//        collectionReference.document(userName)
-//                .set(user);
-
-//        db.collection("users")
-//                .add(user)
-//                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-//                                          @Override
-//                                          public void onSuccess(DocumentReference documentReference) {
-//                                              Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-//                                          }
-//                                      })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Log.w(TAG,"Error adding document",e);
-//                    }
-//                });
-
     }
-
 }
 
 
