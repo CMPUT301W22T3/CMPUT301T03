@@ -18,6 +18,8 @@ import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
 import com.budiyev.android.codescanner.ScanMode;
 import com.google.zxing.Result;
+import com.himanshurawat.hasher.HashType;
+import com.himanshurawat.hasher.Hasher;
 
 public class Scan extends AppCompatActivity {
 
@@ -49,7 +51,9 @@ public class Scan extends AppCompatActivity {
                             Toast.makeText(Scan.this, result.getText(), Toast.LENGTH_SHORT).show();
                         } else if (mode.equals("hunt")) {
                             // TODO - Do something with hunt qr code
-                            
+                            String hash = Hasher.Companion.hash(String.valueOf(result), HashType.SHA_256);
+                            Toast.makeText(Scan.this, hash, Toast.LENGTH_SHORT).show();
+
                         }
                     }
                 });

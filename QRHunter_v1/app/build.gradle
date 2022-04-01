@@ -51,4 +51,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation 'com.journeyapps:zxing-android-embedded:4.1.0'
     implementation 'com.github.yuriy-budiyev:code-scanner:2.1.2'
+    implementation 'com.github.1AboveAll:Hasher:1.2'
 }
