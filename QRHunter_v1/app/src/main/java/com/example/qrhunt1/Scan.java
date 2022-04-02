@@ -1,5 +1,6 @@
 package com.example.qrhunt1;
 
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -59,23 +60,16 @@ public class Scan extends AppCompatActivity {
                     public void run() {
                         if (mode.equals("login")) {
                             // TODO - Do Something With Login
+                            mCodeScanner.setScanMode(ScanMode.SINGLE);
                             List<String> loginInfo = new ArrayList<String>(Arrays.asList(String.valueOf(result).split(",")));
                             String userName = loginInfo.get(0).concat("@gmail.com");
                             String passWord = loginInfo.get(1);
                             //Toast.makeText(Scan.this, "userName: "+userName+" Password: "+ passWord, Toast.LENGTH_SHORT).show();
-
-                            mAuth.signInWithEmailAndPassword(userName,passWord).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if (task.isSuccessful()){
-                                        Toast.makeText(Scan.this, "Login Successful!", Toast.LENGTH_SHORT).show();
-                                        startActivity(new Intent(getApplicationContext(), NaviTest.class));
-                                        finish();
-                                    }else{
-                                        Toast.makeText(Scan.this, "Error!" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
+                            Intent intent = new Intent();
+                            intent.putExtra("userName",userName);
+                            intent.putExtra("passWord",passWord);
+                            setResult(RESULT_OK,intent);
+                            finish();
                         } else if (mode.equals("hunt")) {
                             // TODO - Do something with hunt qr code
                             String hash = Hasher.Companion.hash(String.valueOf(result), HashType.SHA_256);
