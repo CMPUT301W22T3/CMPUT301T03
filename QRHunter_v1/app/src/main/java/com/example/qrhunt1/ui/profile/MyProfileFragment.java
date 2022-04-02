@@ -1,11 +1,17 @@
 package com.example.qrhunt1.ui.profile;
 
+import static android.content.ContentValues.TAG;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +34,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.example.qrhunt1.MainActivity;
 import com.example.qrhunt1.R;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.SetOptions;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
@@ -40,6 +47,8 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MyProfileFragment extends Fragment {
 
@@ -212,6 +221,49 @@ public class MyProfileFragment extends Fragment {
                     QR1.setVisibility(View.VISIBLE);
                     QR2.setVisibility(View.INVISIBLE);
                 }
+            }
+        });
+
+// Edit Contact info.
+        AlertDialog dialog;
+        EditText editText;
+
+        dialog = new AlertDialog.Builder(getActivity()).create();
+        editText = new EditText(getContext());
+
+        dialog.setTitle("Edit the Contact Info");
+        dialog.setView(editText);
+        String finalCurrentUser = currentUser;
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE, "SAVE INFO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                text2.setText(editText.getText());
+                Map<String, Object> info = new HashMap<>();
+                String str = editText.getText().toString();
+                info.put("ContactInfo", str);
+
+                db.collection("users").document(finalCurrentUser)
+                        .set(info, SetOptions.merge())
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d(TAG, "DocumentSnapshot successfully written!");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(TAG, "Error writing document", e);
+                            }
+                        });
+            }
+        });
+
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                editText.setText(text2.getText());
+                dialog.show();
             }
         });
 
