@@ -11,26 +11,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.qrhunt1.MainActivity;
 import com.example.qrhunt1.R;
 import com.example.qrhunt1.ui.profile.OtherProfileFragment;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 public class PlayersFragment extends Fragment {
 
@@ -44,7 +36,7 @@ public class PlayersFragment extends Fragment {
     private ArrayList<String> searchResultDataList;
     private ArrayAdapter<String> searchResultAdapter;
 
-    TextView noResult;
+    TextView hint;
     Button searchButton;
     EditText searchUser;
     Button bestQRButton;
@@ -62,7 +54,7 @@ public class PlayersFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_players,container,false);
 
-        noResult = view.findViewById(R.id.noResults);
+        hint = view.findViewById(R.id.hint);
         searchButton = view.findViewById(R.id.search_button);
         searchUser = view.findViewById(R.id.editText);
         bestQRButton = view.findViewById(R.id.bestQRButton);
@@ -95,6 +87,7 @@ public class PlayersFragment extends Fragment {
                     }
                 });
         */
+
         String []mockUserName = {"promise","wenxin","wencin","emma","emmapixiv"};
         userDataList = new ArrayList<>();
 
@@ -123,19 +116,44 @@ public class PlayersFragment extends Fragment {
                             searchResultDataList.add(userDataList.get(v));
                         }
                     }
+                    //show the search result matching list
                     searchResultListview.setVisibility(View.VISIBLE);
+                    //set shown buttons and lists to invisible
                     bestQRButton.setVisibility(View.INVISIBLE);
                     totalQRsButton.setVisibility(View.INVISIBLE);
                     totalScoreButton.setVisibility(View.INVISIBLE);
-
+                    hint.setVisibility(View.GONE);
+                    if (bestQRList.getVisibility() == View.VISIBLE || totalQRsList.getVisibility() == View.VISIBLE || totalScoreList.getVisibility() == View.VISIBLE) {
+                        if (bestQRList.getVisibility() == View.VISIBLE){
+                            bestQRList.setVisibility(View.GONE);
+                        } else if (totalQRsList.getVisibility() == View.VISIBLE) {
+                            totalQRsList.setVisibility(View.GONE);
+                        } else {
+                            totalScoreList.setVisibility(View.GONE);
+                        }
+                    }
                     //update searchResultDataList
                     searchResultListview.setAdapter(searchResultAdapter);
 
                 } else if (charSequence.toString().length()==0){//empty edit text view
+                    //let search result list be invisible
                     searchResultListview.setVisibility(View.INVISIBLE);
+                    //reshow the hidden buttons and list/hint
                     bestQRButton.setVisibility(View.VISIBLE);
                     totalQRsButton.setVisibility(View.VISIBLE);
                     totalScoreButton.setVisibility(View.VISIBLE);
+                    if (bestQRList.getVisibility() == View.GONE || totalQRsList.getVisibility() == View.GONE || totalScoreList.getVisibility() == View.GONE) {
+                        hint.setVisibility(View.GONE);
+                        if (bestQRList.getVisibility() == View.GONE){
+                            bestQRList.setVisibility(View.VISIBLE);
+                        } else if (totalQRsList.getVisibility() == View.GONE) {
+                            totalQRsList.setVisibility(View.VISIBLE);
+                        } else {
+                            totalScoreList.setVisibility(View.VISIBLE);
+                        }
+                    } else {
+                        hint.setVisibility(View.VISIBLE);
+                    }
                 }
             }
 
@@ -144,6 +162,16 @@ public class PlayersFragment extends Fragment {
 
             }
         });
+
+        //set the text in edit text with the matching result we chose from the search result list
+       /* searchResultListview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        */
 
         //mock data
         String []bestQRUsers = {"user1","user2","user3","user4","user5"};
@@ -188,59 +216,45 @@ public class PlayersFragment extends Fragment {
         //show the search results for key word
 
 
-
-
         //click three buttons to show three ranking lists
         //click this button
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //pass the input username to profile fragment
-                String username = searchUser.getText().toString();
-                Bundle args = new Bundle();
-                args.putString("Username", username);
+        searchButton.setOnClickListener(view1 -> {
+            //pass the input username to profile fragment
+            String username = searchUser.getText().toString();
+            Bundle args = new Bundle();
+            args.putString("Username", username);
 
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                Fragment fragment = new OtherProfileFragment();
-                fragment.setArguments(args);
-                fragmentTransaction.replace(R.id.container, fragment, "Players");
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-            }
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            Fragment fragment = new OtherProfileFragment();
+            fragment.setArguments(args);
+            fragmentTransaction.replace(R.id.container, fragment, "Players");
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
         });
 
         //click this button and show the ranking for best QR
-        bestQRButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                bestQRList.setVisibility(View.VISIBLE);
-                totalQRsList.setVisibility(View.INVISIBLE);
-                totalScoreList.setVisibility(View.INVISIBLE);
-                noResult.setVisibility(View.GONE);
-            }
+        bestQRButton.setOnClickListener(view12 -> {
+            bestQRList.setVisibility(View.VISIBLE);
+            totalQRsList.setVisibility(View.INVISIBLE);
+            totalScoreList.setVisibility(View.INVISIBLE);
+            hint.setVisibility(View.GONE);
         });
 
         //click this button and show the ranking for Total QRs
-        totalQRsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                bestQRList.setVisibility(View.INVISIBLE);
-                totalQRsList.setVisibility(View.VISIBLE);
-                totalScoreList.setVisibility(View.INVISIBLE);
-                noResult.setVisibility(View.GONE);
-            }
+        totalQRsButton.setOnClickListener(view13 -> {
+            bestQRList.setVisibility(View.INVISIBLE);
+            totalQRsList.setVisibility(View.VISIBLE);
+            totalScoreList.setVisibility(View.INVISIBLE);
+            hint.setVisibility(View.GONE);
         });
 
         //click this button and show the ranking for Total QRs
-        totalScoreButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                bestQRList.setVisibility(View.INVISIBLE);
-                totalQRsList.setVisibility(View.INVISIBLE);
-                totalScoreList.setVisibility(View.VISIBLE);
-                noResult.setVisibility(View.GONE);
-            }
+        totalScoreButton.setOnClickListener(view14 -> {
+            bestQRList.setVisibility(View.INVISIBLE);
+            totalQRsList.setVisibility(View.INVISIBLE);
+            totalScoreList.setVisibility(View.VISIBLE);
+            hint.setVisibility(View.GONE);
         });
 
         return view;
