@@ -114,9 +114,10 @@ public class MyProfileFragment extends Fragment {
                     } catch (WriterException l) {
                         l.printStackTrace();
                     }
+
 //generate login QR
                     String loginPassword = text18.getText().toString();
-                    String login = sText + ' ' + loginPassword;
+                    String login = sText + ',' + loginPassword;
                     //Initialize multi format writer
                     MultiFormatWriter loginWriter = new MultiFormatWriter();
                     try {
