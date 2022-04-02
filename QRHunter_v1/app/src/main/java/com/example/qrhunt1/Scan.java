@@ -80,7 +80,6 @@ public class Scan extends AppCompatActivity {
                             // TODO - Do something with hunt qr code
                             String hash = Hasher.Companion.hash(String.valueOf(result), HashType.SHA_256);
                             Toast.makeText(Scan.this, hash, Toast.LENGTH_SHORT).show();
-
                         }
                     }
                 });

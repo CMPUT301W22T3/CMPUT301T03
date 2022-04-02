@@ -51,7 +51,6 @@ public class GameQRCode {
             }
         }
         //calculate the score for repeated digits
-        //calculate the score for repeated digits
         double score = 0;
         for (int i=0; i<repeatedDigitsList.size();i++){
             String repeatedDigits = repeatedDigitsList.get(i);
