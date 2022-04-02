@@ -7,13 +7,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.budiyev.android.codescanner.CodeScanner;
@@ -47,7 +51,7 @@ public class Scan extends AppCompatActivity {
         CodeScannerView scannerView = findViewById(R.id.scanner_view);
         mCodeScanner = new CodeScanner(this, scannerView);
 
-        mCodeScanner.setScanMode(ScanMode.CONTINUOUS);
+        //mCodeScanner.setScanMode(ScanMode.CONTINUOUS);
 
         // Two mode for scan - login - hunt
         String mode = getIntent().getStringExtra("mode");
@@ -74,6 +78,42 @@ public class Scan extends AppCompatActivity {
                             // TODO - Do something with hunt qr code
                             String hash = Hasher.Companion.hash(String.valueOf(result), HashType.SHA_256);
                             Toast.makeText(Scan.this, hash, Toast.LENGTH_SHORT).show();
+
+                            Dialog qrUploadDialog = new Dialog(Scan.this);
+                            qrUploadDialog.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT,
+                                    WindowManager.LayoutParams.WRAP_CONTENT);
+                            qrUploadDialog.getWindow().getAttributes().windowAnimations
+                                    = android.R.style.Animation_Dialog;
+                            qrUploadDialog.setContentView(R.layout.qrhunt_layout);
+
+                            Button takePhoto = qrUploadDialog.findViewById(R.id.takePhoto);
+                            Button recordLocation = qrUploadDialog.findViewById(R.id.recordLocation);
+                            Button addButton = qrUploadDialog.findViewById(R.id.qrInfoAdd);
+
+                            takePhoto.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    // TODO
+                                }
+                            });
+
+                            recordLocation.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    // TODO
+                                }
+                            });
+
+                            addButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    // TODO
+                                }
+                            });
+
+
+                            qrUploadDialog.show();
+
                         }
                     }
                 });

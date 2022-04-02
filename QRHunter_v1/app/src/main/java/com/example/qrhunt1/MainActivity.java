@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
     Button login;
     String string = "@gmail.com";
     String email;
+
     ActivityResultLauncher<Intent> startForResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
         @Override
