@@ -6,6 +6,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -164,14 +165,15 @@ public class PlayersFragment extends Fragment {
         });
 
         //set the text in edit text with the matching result we chose from the search result list
-       /* searchResultListview.setOnClickListener(new View.OnClickListener() {
+        searchResultListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View view) {
-
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String selectedResult = searchResultListview.getItemAtPosition(i).toString();
+                searchUser.setText(selectedResult);
             }
         });
 
-        */
+
 
         //mock data
         String []bestQRUsers = {"user1","user2","user3","user4","user5"};
