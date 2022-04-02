@@ -75,11 +75,13 @@ public class MyProfileFragment extends Fragment {
         TextView text16 = view.findViewById(R.id.textView16);
         Button button = view.findViewById(R.id.button);
         Button button2 = view.findViewById(R.id.button2);
+        Button button3 = view.findViewById(R.id.button3);
         ImageView QR1 = view.findViewById(R.id.imageView);
         ImageView QR2 = view.findViewById(R.id.imageView3);
         TextView text18 = view.findViewById(R.id.textView18);
 
 
+//get data from firebase
         FirebaseDatabase database;
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         String currentUser = mAuth.getCurrentUser().getEmail();
@@ -94,9 +96,12 @@ public class MyProfileFragment extends Fragment {
                     text2.setText(documentSnapshot.getString(("ContactInfo")));
                     text18.setText(documentSnapshot.getString(("PassWord")));
 
+
                     //generate QR code base on username (use for Profile)
+
                     String sText = text1.getText().toString().trim();
                     //Initialize multi format writer
+
                     MultiFormatWriter writer = new MultiFormatWriter();
                     try {
                         //Initialize bit matrix
@@ -109,7 +114,7 @@ public class MyProfileFragment extends Fragment {
                     } catch (WriterException l) {
                         l.printStackTrace();
                     }
-
+//generate login QR
                     String loginPassword = text18.getText().toString();
                     String login = sText + ' ' + loginPassword;
                     //Initialize multi format writer
@@ -211,16 +216,28 @@ public class MyProfileFragment extends Fragment {
         text16.setText(g);
 
 
+//switch button
+        button3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(QR1.getVisibility() == View.INVISIBLE){
+                    QR1.setVisibility(View.VISIBLE);
+                    QR2.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (QR1.getVisibility() == View.VISIBLE) {
                     QR1.setVisibility(View.INVISIBLE);
                     QR2.setVisibility(View.VISIBLE);
-                } else {
-                    QR1.setVisibility(View.VISIBLE);
-                    QR2.setVisibility(View.INVISIBLE);
                 }
+//                } else {
+//                    QR1.setVisibility(View.VISIBLE);
+//                    QR2.setVisibility(View.INVISIBLE);
+//                }
             }
         });
 
