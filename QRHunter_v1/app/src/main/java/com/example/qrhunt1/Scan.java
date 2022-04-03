@@ -9,13 +9,10 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,29 +22,29 @@ import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
 import com.budiyev.android.codescanner.ScanMode;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.zxing.Result;
 import com.himanshurawat.hasher.HashType;
 import com.himanshurawat.hasher.Hasher;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 public class Scan extends AppCompatActivity {
 
     private CodeScanner mCodeScanner;
-    FirebaseAuth mAuth = FirebaseAuth.getInstance();
     FusedLocationProviderClient fusedLocationProviderClient;
+    double lat;
+    double longitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
+
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         ActivityCompat.requestPermissions(this,new String[] {Manifest.permission.CAMERA},101);
 
@@ -108,7 +105,23 @@ public class Scan extends AppCompatActivity {
                                 @Override
                                 public void onClick(View view) {
                                     // TODO
-                                    getLocation();
+                                    if (ContextCompat.checkSelfPermission(Scan.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                                            && ContextCompat.checkSelfPermission(Scan.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                                        fusedLocationProviderClient.getLastLocation()
+                                                .addOnSuccessListener(new OnSuccessListener<Location>() {
+                                                    @Override
+                                                    public void onSuccess(Location location) {
+                                                        if (location != null) {
+                                                            lat = location.getLatitude();
+                                                            longitude = location.getLongitude();
+                                                            Toast.makeText(Scan.this,String.valueOf(lat) + ", "+String.valueOf(longitude), Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+                                                });
+                                    } else {
+                                        ActivityCompat.requestPermissions(Scan.this,new String[] {Manifest.permission.ACCESS_FINE_LOCATION,
+                                                Manifest.permission.ACCESS_COARSE_LOCATION},101);
+                                    }
                                 }
                             });
 
@@ -130,33 +143,6 @@ public class Scan extends AppCompatActivity {
                 mCodeScanner.startPreview();
             }
         });
-    }
-
-    private void getLocation() {
-        if (ContextCompat.checkSelfPermission(Scan.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(Scan.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
-                @Override
-                public void onComplete(@NonNull Task<Location> task) {
-                    Location location = task.getResult();
-                    if (location != null) {
-                        try {
-                            Geocoder geocoder = new Geocoder(Scan.this,
-                                    Locale.getDefault());
-                            List<Address> addresses = geocoder.getFromLocation(
-                                    location.getLatitude(),location.getLongitude(),1
-                            );
-                            return addresses;
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            });
-        } else {
-            ActivityCompat.requestPermissions(Scan.this,new String[] {Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},101);
-        }
-
     }
 
     private int calculateScore(String hash) {
