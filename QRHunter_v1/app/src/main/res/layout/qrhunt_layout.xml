@@ -13,9 +13,8 @@
         android:layout_centerHorizontal="true"
         android:gravity="center"
         android:layout_marginTop="20dp"
-        android:text="QR Score: 100"
         android:textAlignment="center"
-        android:textSize="40dp" />
+        android:textSize="30dp" />
 
     <Button
         android:id="@+id/takePhoto"
