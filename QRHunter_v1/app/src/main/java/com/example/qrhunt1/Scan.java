@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -112,18 +113,18 @@ public class Scan extends AppCompatActivity {
                                     });
 
                             Dialog qrUploadDialog = new Dialog(Scan.this);
-<<<<<<< HEAD
+
                             qrUploadDialog.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT,
                                     WindowManager.LayoutParams.WRAP_CONTENT);
                             qrUploadDialog.getWindow().getAttributes().windowAnimations
                                     = android.R.style.Animation_Dialog;
                             
-=======
+
 //                            qrUploadDialog.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT,
 //                                    WindowManager.LayoutParams.WRAP_CONTENT);
 //                            qrUploadDialog.getWindow().getAttributes().windowAnimations
 //                                    = android.R.style.Animation_Dialog;
->>>>>>> 16226dc7ec0ad4218912f8ce8b2789ac14e8f84e
+
                             qrUploadDialog.setContentView(R.layout.qrhunt_layout);
 //                            qrUploadDialog.setBackground(R.drawable.scan_bg);
 //                            qrUploadDialog.setClipToOutline();
