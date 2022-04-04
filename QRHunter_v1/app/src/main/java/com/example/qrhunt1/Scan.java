@@ -1,5 +1,7 @@
 package com.example.qrhunt1;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -12,6 +14,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -23,14 +26,20 @@ import com.budiyev.android.codescanner.DecodeCallback;
 import com.budiyev.android.codescanner.ScanMode;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 import com.google.zxing.Result;
 import com.himanshurawat.hasher.HashType;
 import com.himanshurawat.hasher.Hasher;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Scan extends AppCompatActivity {
 
@@ -38,6 +47,7 @@ public class Scan extends AppCompatActivity {
     FusedLocationProviderClient fusedLocationProviderClient;
     double lat;
     double longitude;
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +89,28 @@ public class Scan extends AppCompatActivity {
                             String hash = Hasher.Companion.hash(String.valueOf(result), HashType.SHA_256);
                             //Toast.makeText(Scan.this, hash, Toast.LENGTH_SHORT).show();
                             String qrScore = String.valueOf(calculateScore(hash));
+
+                            //upload the value to database
+                            FirebaseFirestore db = FirebaseFirestore.getInstance();
+                            String currentUser = mAuth.getCurrentUser().getEmail();
+                            currentUser = currentUser.replace("@gmail.com", "");
+                            Map<String, Object> info = new HashMap<>();
+                            info.put("QRScore", qrScore);
+                            db.collection("users").document(currentUser)
+                                    .set(info, SetOptions.merge())
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Log.d(TAG, "DocumentSnapshot successfully written!");
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.w(TAG, "Error writing document", e);
+                                        }
+                                    });
+
                             Dialog qrUploadDialog = new Dialog(Scan.this);
 //                            qrUploadDialog.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT,
 //                                    WindowManager.LayoutParams.WRAP_CONTENT);
