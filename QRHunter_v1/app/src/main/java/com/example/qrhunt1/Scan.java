@@ -11,7 +11,6 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.shapes.Shape;
 import android.location.Location;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -19,7 +18,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,8 +44,6 @@ import java.util.Map;
 
 public class Scan extends AppCompatActivity {
 
-    public Shape scan_bg;
-    private RelativeLayout scan_layout;
     private CodeScanner mCodeScanner;
     FusedLocationProviderClient fusedLocationProviderClient;
     double lat;
@@ -58,8 +54,6 @@ public class Scan extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
-
-
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
