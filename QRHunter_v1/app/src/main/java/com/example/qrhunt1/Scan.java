@@ -84,7 +84,10 @@ public class Scan extends AppCompatActivity {
                                     WindowManager.LayoutParams.WRAP_CONTENT);
                             qrUploadDialog.getWindow().getAttributes().windowAnimations
                                     = android.R.style.Animation_Dialog;
+                            
                             qrUploadDialog.setContentView(R.layout.qrhunt_layout);
+//                            qrUploadDialog.setBackground(R.drawable.scan_bg);
+//                            qrUploadDialog.setClipToOutline();
 
                             Button takePhoto = qrUploadDialog.findViewById(R.id.takePhoto);
                             Button recordLocation = qrUploadDialog.findViewById(R.id.recordLocation);
