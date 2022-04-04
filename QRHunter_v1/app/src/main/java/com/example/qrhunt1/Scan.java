@@ -1,55 +1,63 @@
+
+
 package com.example.qrhunt1;
 
-import static android.content.ContentValues.TAG;
+        import static android.content.ContentValues.TAG;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
+        import androidx.annotation.NonNull;
+        import androidx.appcompat.app.AppCompatActivity;
+        import androidx.core.app.ActivityCompat;
+        import androidx.core.content.ContextCompat;
 
-import android.Manifest;
-import android.app.Dialog;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
-import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.Log;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
+        import android.Manifest;
+        import android.app.Activity;
+        import android.app.Dialog;
+        import android.content.ContentResolver;
+        import android.content.Intent;
+        import android.content.pm.PackageManager;
+        import android.graphics.Bitmap;
+        import android.location.Address;
+        import android.location.Geocoder;
+        import android.location.Location;
+        import android.net.Uri;
+        import android.os.Bundle;
+        import android.os.Environment;
+        import android.provider.MediaStore;
+        import android.util.Log;
+        import android.view.View;
+        import android.view.WindowManager;
+        import android.widget.Button;
+        import android.widget.TextView;
+        import android.widget.Toast;
 
-import com.budiyev.android.codescanner.CodeScanner;
-import com.budiyev.android.codescanner.CodeScannerView;
-import com.budiyev.android.codescanner.DecodeCallback;
-import com.budiyev.android.codescanner.ScanMode;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.GeoPoint;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.SetOptions;
-import com.google.zxing.Result;
-import com.himanshurawat.hasher.HashType;
-import com.himanshurawat.hasher.Hasher;
+        import com.budiyev.android.codescanner.CodeScanner;
+        import com.budiyev.android.codescanner.CodeScannerView;
+        import com.budiyev.android.codescanner.DecodeCallback;
+        import com.budiyev.android.codescanner.ScanMode;
+        import com.google.android.gms.location.FusedLocationProviderClient;
+        import com.google.android.gms.location.LocationServices;
+        import com.google.android.gms.tasks.OnCompleteListener;
+        import com.google.android.gms.tasks.OnFailureListener;
+        import com.google.android.gms.tasks.OnSuccessListener;
+        import com.google.android.gms.tasks.Task;
+        import com.google.firebase.auth.FirebaseAuth;
+        import com.google.firebase.firestore.CollectionReference;
+        import com.google.firebase.firestore.FirebaseFirestore;
+        import com.google.firebase.firestore.GeoPoint;
+        import com.google.firebase.firestore.QueryDocumentSnapshot;
+        import com.google.firebase.firestore.QuerySnapshot;
+        import com.google.firebase.firestore.SetOptions;
+        import com.google.zxing.Result;
+        import com.himanshurawat.hasher.HashType;
+        import com.himanshurawat.hasher.Hasher;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+        import java.io.File;
+        import java.util.ArrayList;
+        import java.util.Arrays;
+        import java.util.HashMap;
+        import java.util.List;
+        import java.util.Locale;
+        import java.util.Map;
 
 public class Scan extends AppCompatActivity {
 
@@ -110,7 +118,7 @@ public class Scan extends AppCompatActivity {
                                     WindowManager.LayoutParams.WRAP_CONTENT);
                             qrUploadDialog.getWindow().getAttributes().windowAnimations
                                     = android.R.style.Animation_Dialog;
-                            
+
 
 //                            qrUploadDialog.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT,
 //                                    WindowManager.LayoutParams.WRAP_CONTENT);
@@ -131,8 +139,7 @@ public class Scan extends AppCompatActivity {
                                 @Override
                                 public void onClick(View view) {
                                     // TODO
-                                    Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                    startActivity(cameraIntent);
+                                    takePhotoFunction(view);
                                 }
                             });
 
@@ -191,6 +198,7 @@ public class Scan extends AppCompatActivity {
         qr.put("Hashcode",hash);
         qr.put("Score",qrScore);
         qr.put("Location",geoPoint);
+        qr.put("Image",imageUri);
 
         db.collection("users")
                 .document(currentUser)
@@ -213,6 +221,47 @@ public class Scan extends AppCompatActivity {
                 });
         lat = 0;
         longitude = 0;
+    }
+
+    // From Stackoverflow
+    // Source: https://stackoverflow.com/questions/2729267/android-camera-intent
+    // By: Alexander Oleynikov https://stackoverflow.com/users/218783/alexander-oleynikov
+
+    private static final int TAKE_PICTURE = 1;
+    private Uri imageUri;
+    public void takePhotoFunction(View view) {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File photo = new File(Environment.getExternalStorageDirectory(),  "Pic.jpg");
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
+        imageUri = Uri.fromFile(photo);
+        startActivityForResult(intent, TAKE_PICTURE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case TAKE_PICTURE:
+                if (resultCode == Activity.RESULT_OK) {
+                    Uri selectedImage = imageUri;
+                    getContentResolver().notifyChange(selectedImage, null);
+                    //ImageView imageView = (ImageView) findViewById(R.id.ImageView);
+                    ContentResolver cr = getContentResolver();
+                    Bitmap bitmap;
+                    try {
+                        bitmap = android.provider.MediaStore.Images.Media
+                                .getBitmap(cr, selectedImage);
+
+                        //imageView.setImageBitmap(bitmap);
+                        Toast.makeText(this, selectedImage.toString(),
+                                Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(this, "Failed to load", Toast.LENGTH_SHORT)
+                                .show();
+                        Log.e("Camera", e.toString());
+                    }
+                }
+        }
     }
 
     private int calculateScore(String hash) {
@@ -272,4 +321,3 @@ public class Scan extends AppCompatActivity {
         mCodeScanner.releaseResources();
         super.onPause();
     }
-}

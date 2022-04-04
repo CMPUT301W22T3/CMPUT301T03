@@ -134,7 +134,7 @@ public class PlayersFragment extends Fragment {
                             //update searchResultDataList
                             searchResultListview.setAdapter(searchResultAdapter);
 
-                        } else if (charSequence.toString().length()==0){//empty edit text view
+                        } else if (charSequence.toString().length()==0){//no input username
                             //let search result list be invisible
                             searchResultListview.setVisibility(View.INVISIBLE);
                             //reshow the hidden buttons and list/hint
@@ -162,7 +162,6 @@ public class PlayersFragment extends Fragment {
                     }
                 });
 
-
             }
         }) .addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -170,7 +169,6 @@ public class PlayersFragment extends Fragment {
                         Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
                     }
                 });
-
 
         //set the text in edit text with the matching result we chose from the search result list
         searchResultListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -180,12 +178,6 @@ public class PlayersFragment extends Fragment {
                 searchUser.setText(selectedResult);
             }
         });
-
-        String []mockUserName = {"promise","wenxin","wencin","emma","emmapixiv"};
-
-
-
-
 
         //mock data
         String []bestQRUsers = {"user1","user2","user3","user4","user5"};
@@ -243,7 +235,7 @@ public class PlayersFragment extends Fragment {
             Fragment fragment = new OtherProfileFragment();
             fragment.setArguments(args);
             fragmentTransaction.replace(R.id.container, fragment, "Players");
-            fragmentTransaction.addToBackStack(null);
+            //fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         });
 
