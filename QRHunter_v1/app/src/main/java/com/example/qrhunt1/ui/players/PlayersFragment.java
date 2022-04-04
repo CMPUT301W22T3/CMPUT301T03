@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -20,10 +21,18 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.qrhunt1.R;
 import com.example.qrhunt1.ui.profile.OtherProfileFragment;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 public class PlayersFragment extends Fragment {
 
@@ -65,104 +74,103 @@ public class PlayersFragment extends Fragment {
         totalQRsList = view.findViewById(R.id.totalQRsList);
         totalScoreList = view.findViewById(R.id.totalScoreList);
         searchResultListview = view.findViewById(R.id.searchResultList);
-        /*
+
+        userDataList = new ArrayList<>();
+        searchResultDataList = new ArrayList<>();
+        //update the listview
+        searchResultAdapter = new ArrayAdapter<>(getActivity(),R.layout.search_result_list,searchResultDataList);
+        searchResultListview.setAdapter(searchResultAdapter);
+
+        //retrieve data from fire store
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference dbQR = db.collection("users/").document(user);
-        dbQR.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        CollectionReference dbQR = db.collection("users/");
+        dbQR.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()) {
-                    //text1.setText(documentSnapshot.getString("DisplayName"));
-                    text2.setText(documentSnapshot.getString(("ContactInfo")));
-
-
-                } else {
-                    Toast.makeText(getActivity().getApplicationContext(), "Not Found", Toast.LENGTH_LONG).show();
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                List<DocumentSnapshot> snapshotList = queryDocumentSnapshots.getDocuments();
+                for (DocumentSnapshot snapshot: snapshotList) {
+                    if (snapshot.exists()){
+                        userDataList.add(snapshot.getString("UserName"));
+                    } else {
+                        Toast.makeText(getActivity().getApplicationContext(), "Not Found", Toast.LENGTH_LONG).show();
+                    }
                 }
+
+                //show matching search result list
+                searchUser.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                        //once enter text in edit text
+                        if (charSequence.toString().length()>0) {
+                            //clear previous list
+                            searchResultDataList.clear();
+                            //add all matching search result to searchResultDataList
+                            for (int v=0; v<userDataList.size();v++){
+                                if (userDataList.get(v).contains(charSequence.toString())) {
+                                    searchResultDataList.add(userDataList.get(v));
+                                }
+                            }
+                            //show the search result matching list
+                            searchResultListview.setVisibility(View.VISIBLE);
+                            //set shown buttons and lists to invisible
+                            bestQRButton.setVisibility(View.INVISIBLE);
+                            totalQRsButton.setVisibility(View.INVISIBLE);
+                            totalScoreButton.setVisibility(View.INVISIBLE);
+                            hint.setVisibility(View.GONE);
+                            if (bestQRList.getVisibility() == View.VISIBLE || totalQRsList.getVisibility() == View.VISIBLE || totalScoreList.getVisibility() == View.VISIBLE) {
+                                if (bestQRList.getVisibility() == View.VISIBLE){
+                                    bestQRList.setVisibility(View.GONE);
+                                } else if (totalQRsList.getVisibility() == View.VISIBLE) {
+                                    totalQRsList.setVisibility(View.GONE);
+                                } else {
+                                    totalScoreList.setVisibility(View.GONE);
+                                }
+                            }
+                            //update searchResultDataList
+                            searchResultListview.setAdapter(searchResultAdapter);
+
+                        } else if (charSequence.toString().length()==0){//empty edit text view
+                            //let search result list be invisible
+                            searchResultListview.setVisibility(View.INVISIBLE);
+                            //reshow the hidden buttons and list/hint
+                            bestQRButton.setVisibility(View.VISIBLE);
+                            totalQRsButton.setVisibility(View.VISIBLE);
+                            totalScoreButton.setVisibility(View.VISIBLE);
+                            if (bestQRList.getVisibility() == View.GONE || totalQRsList.getVisibility() == View.GONE || totalScoreList.getVisibility() == View.GONE) {
+                                hint.setVisibility(View.GONE);
+                                if (bestQRList.getVisibility() == View.GONE){
+                                    bestQRList.setVisibility(View.VISIBLE);
+                                } else if (totalQRsList.getVisibility() == View.GONE) {
+                                    totalQRsList.setVisibility(View.VISIBLE);
+                                } else {
+                                    totalScoreList.setVisibility(View.VISIBLE);
+                                }
+                            } else {
+                                hint.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {
+
+                    }
+                });
+
+
             }
-        })
-                .addOnFailureListener(new OnFailureListener() {
+        }) .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
                     }
                 });
-        */
 
-        String []mockUserName = {"promise","wenxin","wencin","emma","emmapixiv"};
-        userDataList = new ArrayList<>();
-
-        userDataList.addAll(Arrays.asList(mockUserName));
-
-        searchResultDataList = new ArrayList<>();
-        //update the listview
-        searchResultAdapter = new ArrayAdapter<>(getActivity(),R.layout.search_result_list,searchResultDataList);
-        searchResultListview.setAdapter(searchResultAdapter);
-        //show matching search result list
-        searchUser.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                //once enter text in edit text
-                if (charSequence.toString().length()>0) {
-                    //clear previous list
-                    searchResultDataList.clear();
-                    //add all matching search result to searchResultDataList
-                    for (int v=0; v<userDataList.size();v++){
-                        if (userDataList.get(v).contains(charSequence.toString())) {
-                            searchResultDataList.add(userDataList.get(v));
-                        }
-                    }
-                    //show the search result matching list
-                    searchResultListview.setVisibility(View.VISIBLE);
-                    //set shown buttons and lists to invisible
-                    bestQRButton.setVisibility(View.INVISIBLE);
-                    totalQRsButton.setVisibility(View.INVISIBLE);
-                    totalScoreButton.setVisibility(View.INVISIBLE);
-                    hint.setVisibility(View.GONE);
-                    if (bestQRList.getVisibility() == View.VISIBLE || totalQRsList.getVisibility() == View.VISIBLE || totalScoreList.getVisibility() == View.VISIBLE) {
-                        if (bestQRList.getVisibility() == View.VISIBLE){
-                            bestQRList.setVisibility(View.GONE);
-                        } else if (totalQRsList.getVisibility() == View.VISIBLE) {
-                            totalQRsList.setVisibility(View.GONE);
-                        } else {
-                            totalScoreList.setVisibility(View.GONE);
-                        }
-                    }
-                    //update searchResultDataList
-                    searchResultListview.setAdapter(searchResultAdapter);
-
-                } else if (charSequence.toString().length()==0){//empty edit text view
-                    //let search result list be invisible
-                    searchResultListview.setVisibility(View.INVISIBLE);
-                    //reshow the hidden buttons and list/hint
-                    bestQRButton.setVisibility(View.VISIBLE);
-                    totalQRsButton.setVisibility(View.VISIBLE);
-                    totalScoreButton.setVisibility(View.VISIBLE);
-                    if (bestQRList.getVisibility() == View.GONE || totalQRsList.getVisibility() == View.GONE || totalScoreList.getVisibility() == View.GONE) {
-                        hint.setVisibility(View.GONE);
-                        if (bestQRList.getVisibility() == View.GONE){
-                            bestQRList.setVisibility(View.VISIBLE);
-                        } else if (totalQRsList.getVisibility() == View.GONE) {
-                            totalQRsList.setVisibility(View.VISIBLE);
-                        } else {
-                            totalScoreList.setVisibility(View.VISIBLE);
-                        }
-                    } else {
-                        hint.setVisibility(View.VISIBLE);
-                    }
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
 
         //set the text in edit text with the matching result we chose from the search result list
         searchResultListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -172,6 +180,10 @@ public class PlayersFragment extends Fragment {
                 searchUser.setText(selectedResult);
             }
         });
+
+        String []mockUserName = {"promise","wenxin","wencin","emma","emmapixiv"};
+
+
 
 
 
