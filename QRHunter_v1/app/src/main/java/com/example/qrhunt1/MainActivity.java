@@ -55,6 +55,7 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String FILE_NAME = "myFile";
     FirebaseDatabase database;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseAuth mAuth;
@@ -98,14 +99,27 @@ public class MainActivity extends AppCompatActivity {
         remember = findViewById(R.id.rememberme);
         create = findViewById(R.id.createnew);
         login = findViewById(R.id.login_btn);
-//        SharedPreferences preferences = getSharedPreferences("checkbox", MODE_PRIVATE);
-//        preferences.getString();
+
+        SharedPreferences preferences = getSharedPreferences(FILE_NAME, MODE_PRIVATE);
+        String username = preferences.getString("username", "");
+        String password = preferences.getString("password", "");
+
+        loginUsername.setText(username);
+        loginPassword.setText(password);
+
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String username = loginUsername.getText().toString().trim();
                 String password = loginPassword.getText().toString().trim();
+
+                if(remember.isChecked()){
+                    StoredDataUsingSharedPref(username, password);
+                    Toast.makeText(MainActivity.this, "Remembered the Username and Password!", Toast.LENGTH_SHORT).show();
+
+                }
+
 
 
                 //Username Conditions
@@ -141,6 +155,9 @@ public class MainActivity extends AppCompatActivity {
                     loginPassword.setError("Password must be at least 6 characters!");
                     return;
                 }
+
+
+
 
                 // authenticate the user
                 startLogin(email,password);
@@ -182,20 +199,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        remember.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(compoundButton.isChecked()){
-                    SharedPreferences preferences = getSharedPreferences("checkbox", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putString("remember", "ture");
-                    editor.apply();
-                    Toast.makeText(MainActivity.this, "Remembered the Username and Password!", Toast.LENGTH_SHORT).show();
-
-
-                }
-            }
-        });
 
         scan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -206,6 +209,14 @@ public class MainActivity extends AppCompatActivity {
                 startForResult.launch(intent);
             }
         });
+    }
+
+    private void StoredDataUsingSharedPref(String username, String password) {
+        SharedPreferences.Editor editor = getSharedPreferences(FILE_NAME, MODE_PRIVATE).edit();
+        editor.putString("username", username);
+        editor.putString("password", password);
+        editor.apply();
+        
     }
 
     private void startLogin(String userName, String passWord) {

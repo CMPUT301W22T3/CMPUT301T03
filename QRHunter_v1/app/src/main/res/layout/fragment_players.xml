@@ -40,10 +40,10 @@
 
     <Button
         android:id="@+id/bestQRButton"
-        android:layout_width="110dp"
-        android:layout_height="55dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@id/editText"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="12dp"
         android:background="@drawable/rounded_tab"
         android:text="Best QR"
@@ -52,12 +52,11 @@
 
     <Button
         android:id="@+id/totalQRsButton"
-        android:layout_width="110dp"
-        android:layout_height="55dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@id/editText"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="12dp"
-        android:layout_marginEnd="16dp"
         android:layout_toRightOf="@id/bestQRButton"
         android:background="@drawable/rounded_tab"
         android:text="Total QRs"
@@ -66,15 +65,16 @@
 
     <Button
         android:id="@+id/totalScoreButton"
-        android:layout_width="110dp"
-        android:layout_height="55dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@id/editText"
         android:layout_alignParentEnd="false"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="12dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginEnd="16dp"
         android:layout_toRightOf="@id/totalQRsButton"
         android:background="@drawable/rounded_tab"
-        android:text="Total Score"
+        android:text="Total #"
         android:textColor="#000000"
         app:backgroundTint="@null" />
 
