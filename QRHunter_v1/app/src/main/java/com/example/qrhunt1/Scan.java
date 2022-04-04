@@ -11,6 +11,8 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -27,10 +29,16 @@ import com.budiyev.android.codescanner.DecodeCallback;
 import com.budiyev.android.codescanner.ScanMode;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.google.zxing.Result;
 import com.himanshurawat.hasher.HashType;
@@ -40,6 +48,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class Scan extends AppCompatActivity {
@@ -48,7 +57,11 @@ public class Scan extends AppCompatActivity {
     FusedLocationProviderClient fusedLocationProviderClient;
     double lat;
     double longitude;
+    String hash;
+    String qrScore;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,30 +100,9 @@ public class Scan extends AppCompatActivity {
                             finish();
                         } else if (mode.equals("hunt")) {
                             // TODO - Do something with hunt qr code
-                            String hash = Hasher.Companion.hash(String.valueOf(result), HashType.SHA_256);
+                            hash = Hasher.Companion.hash(String.valueOf(result), HashType.SHA_256);
                             //Toast.makeText(Scan.this, hash, Toast.LENGTH_SHORT).show();
-                            String qrScore = String.valueOf(calculateScore(hash));
-
-                            //upload the value to database
-                            FirebaseFirestore db = FirebaseFirestore.getInstance();
-                            String currentUser = mAuth.getCurrentUser().getEmail();
-                            currentUser = currentUser.replace("@gmail.com", "");
-                            Map<String, Object> info = new HashMap<>();
-                            info.put("QRScore", qrScore);
-                            db.collection("users").document(currentUser)
-                                    .set(info, SetOptions.merge())
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            Log.d(TAG, "DocumentSnapshot successfully written!");
-                                        }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Log.w(TAG, "Error writing document", e);
-                                        }
-                                    });
+                            qrScore = String.valueOf(calculateScore(hash));
 
                             Dialog qrUploadDialog = new Dialog(Scan.this);
 
@@ -158,6 +150,7 @@ public class Scan extends AppCompatActivity {
                                                             lat = location.getLatitude();
                                                             longitude = location.getLongitude();
                                                             Toast.makeText(Scan.this,String.valueOf(lat) + ", "+String.valueOf(longitude), Toast.LENGTH_SHORT).show();
+
                                                         }
                                                     }
                                                 });
@@ -172,6 +165,9 @@ public class Scan extends AppCompatActivity {
                                 @Override
                                 public void onClick(View view) {
                                     // TODO
+                                    uploadToUser();
+                                    //uploadToMap();
+
                                 }
                             });
                             qrUploadDialog.show();
@@ -186,6 +182,37 @@ public class Scan extends AppCompatActivity {
                 mCodeScanner.startPreview();
             }
         });
+    }
+
+    private void uploadToUser() {
+        String currentUser = mAuth.getCurrentUser().getEmail().replace("@gmail.com","");
+        GeoPoint geoPoint = new GeoPoint(lat,longitude);
+        Map<String, Object> qr = new HashMap<>();
+        qr.put("Hashcode",hash);
+        qr.put("Score",qrScore);
+        qr.put("Location",geoPoint);
+
+        db.collection("users")
+                .document(currentUser)
+                .collection("QR")
+                .document(hash)
+                .set(qr)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                        Toast.makeText(Scan.this,"Successful!", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing document", e);
+                        Toast.makeText(Scan.this,"Fail! "+e, Toast.LENGTH_SHORT).show();
+                    }
+                });
+        lat = 0;
+        longitude = 0;
     }
 
     private int calculateScore(String hash) {
