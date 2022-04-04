@@ -321,3 +321,4 @@ public class Scan extends AppCompatActivity {
         mCodeScanner.releaseResources();
         super.onPause();
     }
+}
