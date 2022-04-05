@@ -34,8 +34,8 @@ import java.util.ArrayList;
 
 public class GalleryFragment extends Fragment{
     ListView codeList;
-    ArrayAdapter<GameQRCode> codeArrayAdapter;
-    ArrayList<GameQRCode> codeArrayList;
+    static ArrayAdapter<GameQRCode> codeArrayAdapter;
+    static ArrayList<GameQRCode> codeArrayList = new ArrayList<>();;
     FloatingActionButton scanButton;
     FirebaseFirestore db;
 
@@ -48,7 +48,7 @@ public class GalleryFragment extends Fragment{
         codeList = view.findViewById(R.id.gallery_list);
 
         scanButton = view.findViewById(R.id.fab);
-        codeArrayList = new ArrayList<>();
+
         codeArrayList.add(new GameQRCode("2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824"));
         codeArrayList.add(new GameQRCode("91e9240f415223982edc345532630710e94a7f52cd5f48f5ee1afc555078f0ab"));
         codeArrayList.add(new GameQRCode("87298cc2f31fba73181ea2a9e6ef10dce21ed95e98bdac9c4e1504ea16f486e4"));
@@ -88,7 +88,8 @@ public class GalleryFragment extends Fragment{
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String comment = commentText.getText().toString();
-                        //codeArrayList.get(position).editComment(comment);
+                        codeArrayList.get(position).editComment(comment);
+                        codeArrayAdapter.notifyDataSetChanged();
                         Toast.makeText(thisContext,"Done! You edited your comment.",Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -127,6 +128,11 @@ public class GalleryFragment extends Fragment{
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+    }
+    // function to delete an item given its index in the list.
+    public static void deleteItem(int i) {
+        codeArrayList.remove(i);
+        codeArrayAdapter.notifyDataSetChanged();
 
     }
 }

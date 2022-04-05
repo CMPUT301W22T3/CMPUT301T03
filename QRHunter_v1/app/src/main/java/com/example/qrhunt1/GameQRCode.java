@@ -79,15 +79,10 @@ public class GameQRCode {
     /**
      * Add a comment to a game QR code.
      */
-    public void addComment(String theComment) {
+    public void editComment(String theComment) {
         comment = theComment;
     }
-    /**
-     * Delete a comment to a game QR code.
-     */
-    public void deleteComment(String theComment) {
-        comment = "";
-    }
+
     /**
      * return the comment of a game QR code.
      */
