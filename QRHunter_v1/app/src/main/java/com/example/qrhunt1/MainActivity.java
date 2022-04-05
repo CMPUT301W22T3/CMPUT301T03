@@ -197,6 +197,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    /**
+     *
+     * @param userName
+     * @param passWord
+     */
     private void startLogin(String userName, String passWord) {
         mAuth.signInWithEmailAndPassword(userName,passWord).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override

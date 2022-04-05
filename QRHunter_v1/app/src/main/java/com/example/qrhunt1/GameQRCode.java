@@ -90,6 +90,11 @@ public class GameQRCode {
         return comment;
     }
 
+
+    /**
+     *
+     * @param newlocation
+     */
     public void setLocation(String newlocation) { location = newlocation; }
 
     /**
@@ -100,9 +105,18 @@ public class GameQRCode {
     }
 
 
+    /**
+     *
+     * @param newImage
+     */
     public void setQRImage(Bitmap newImage) {
         QRImage = newImage;
     }
+
+    /**
+     *
+     * @return
+     */
     public Bitmap getQRImage() {
         return QRImage;
     }

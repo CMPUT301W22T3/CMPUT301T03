@@ -22,6 +22,11 @@ public class GameQRList extends ArrayAdapter<GameQRCode> {
     private Context context;
 
 
+    /**
+     *
+     * @param context
+     * @param codes
+     */
     public GameQRList(Context context, ArrayList<GameQRCode> codes) {
         super(context,0, codes);
         this.codes = codes;

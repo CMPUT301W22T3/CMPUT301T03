@@ -294,6 +294,11 @@ public class Scan extends AppCompatActivity {
 
     private static final int TAKE_PICTURE = 1;
     private Uri imageUri;
+
+    /**
+     *
+     * @param view
+     */
     public void takePhotoFunction(View view) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         ActivityCompat.requestPermissions(Scan.this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, 101);
@@ -330,6 +335,11 @@ public class Scan extends AppCompatActivity {
         }
     }
 
+    /**
+     *
+     * @param hash
+     * @return
+     */
     private int calculateScore(String hash) {
         //get a list with repeated digits strings
         ArrayList<String> repeatedDigitsList = new ArrayList<>();
