@@ -81,5 +81,4 @@ dependencies {
     implementation 'com.journeyapps:zxing-android-embedded:4.1.0'
     implementation 'com.github.yuriy-budiyev:code-scanner:2.1.2'
     implementation 'com.github.1AboveAll:Hasher:1.2'
-    //implementation 'com.google.firebase:firebase-admin:8.1.0'
 }
