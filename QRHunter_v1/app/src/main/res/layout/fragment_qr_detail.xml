@@ -7,14 +7,17 @@
     android:orientation="vertical">
 
     <EditText
-        android:id="@+id/comment_editText"
+        android:id="@+id/comment_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Comment"
-        android:inputType="textLongMessage">
+        android:hint="Edit Comment..."
+        android:gravity="top"
+        android:inputType="textMultiLine"
+        android:lines="5"
+        android:maxLines="3"
+        android:minLines="2">
     </EditText>
-
 
 
 </LinearLayout>
