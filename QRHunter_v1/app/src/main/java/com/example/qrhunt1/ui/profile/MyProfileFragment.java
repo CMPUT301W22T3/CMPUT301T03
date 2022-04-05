@@ -54,11 +54,8 @@ public class MyProfileFragment extends Fragment {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private ArrayList<String> QRStringDataList;
     private ArrayList<Integer> QRIntegerDataList;
-    private ArrayAdapter<Rank> bestQRArrayAdapter;
     private ArrayList<Rank> bestQRDataList;
-    private ArrayAdapter<Rank> totalQRsArrayAdapter;
     private ArrayList<Rank> totalQRsDataList;
-    private ArrayAdapter<Rank> totalScoreArrayAdapter;
     private ArrayList<Rank> totalScoreDataList;
     private ArrayList<String> userQRStringList;
     private ArrayList<Integer> userQRIntList;
