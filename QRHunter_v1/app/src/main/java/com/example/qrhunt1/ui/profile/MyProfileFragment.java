@@ -4,6 +4,7 @@ import static android.content.ContentValues.TAG;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.example.qrhunt1.Owner;
 import com.example.qrhunt1.ui.players.CustomList;
 import com.example.qrhunt1.ui.players.Rank;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -91,6 +93,7 @@ public class MyProfileFragment extends Fragment {
         ImageView QR1 = view.findViewById(R.id.imageView);
         ImageView QR2 = view.findViewById(R.id.imageView3);
         TextView text18 = view.findViewById(R.id.textView18);
+        Button button4 = view.findViewById(R.id.edit);
 
 
 //get data from firebase
@@ -377,6 +380,20 @@ public class MyProfileFragment extends Fragment {
                 dialog.show();
             }
         });
+
+        if(currentUser.equals("wen")) {
+            button4.setVisibility(View.VISIBLE);
+            button4.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getActivity(), Owner.class);
+                    startActivity(intent);
+                }
+            });
+        }
+        else{
+            button4.setVisibility(View.INVISIBLE);
+        }
 
 
         return view;
