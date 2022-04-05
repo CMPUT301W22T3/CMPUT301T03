@@ -42,6 +42,8 @@ package com.example.qrhunt1;
         import com.google.android.gms.tasks.Task;
         import com.google.firebase.auth.FirebaseAuth;
         import com.google.firebase.firestore.CollectionReference;
+        import com.google.firebase.firestore.DocumentReference;
+        import com.google.firebase.firestore.DocumentSnapshot;
         import com.google.firebase.firestore.FirebaseFirestore;
         import com.google.firebase.firestore.GeoPoint;
         import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -118,16 +120,7 @@ public class Scan extends AppCompatActivity {
                                     WindowManager.LayoutParams.WRAP_CONTENT);
                             qrUploadDialog.getWindow().getAttributes().windowAnimations
                                     = android.R.style.Animation_Dialog;
-
-
-//                            qrUploadDialog.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT,
-//                                    WindowManager.LayoutParams.WRAP_CONTENT);
-//                            qrUploadDialog.getWindow().getAttributes().windowAnimations
-//                                    = android.R.style.Animation_Dialog;
-
                             qrUploadDialog.setContentView(R.layout.qrhunt_layout);
-//                            qrUploadDialog.setBackground(R.drawable.scan_bg);
-//                            qrUploadDialog.setClipToOutline();
 
                             Button takePhoto = qrUploadDialog.findViewById(R.id.takePhoto);
                             Button recordLocation = qrUploadDialog.findViewById(R.id.recordLocation);
@@ -135,49 +128,69 @@ public class Scan extends AppCompatActivity {
                             TextView showScore = qrUploadDialog.findViewById(R.id.qr_score);
                             showScore.setText("QR Score: "+qrScore);
 
-                            takePhoto.setOnClickListener(new View.OnClickListener() {
+                            String currentUser = mAuth.getCurrentUser().getEmail().replace("@gmail.com","");
+                            DocumentReference docRef = db.collection("users")
+                                    .document(currentUser)
+                                    .collection("QR")
+                                    .document(hash);
+                            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                 @Override
-                                public void onClick(View view) {
-                                    // TODO
-                                    takePhotoFunction(view);
-                                }
-                            });
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        DocumentSnapshot document = task.getResult();
+                                        if (document.exists()) {
+                                            Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                                            Toast.makeText(Scan.this,"You Already Have This QR CODE!\n   Tap Screen To Keep Hunting!",Toast.LENGTH_LONG).show();
+                                        } else {
+                                            Log.d(TAG, "No such document");
 
-                            recordLocation.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    // TODO
-                                    if (ContextCompat.checkSelfPermission(Scan.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                                            && ContextCompat.checkSelfPermission(Scan.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                                        fusedLocationProviderClient.getLastLocation()
-                                                .addOnSuccessListener(new OnSuccessListener<Location>() {
-                                                    @Override
-                                                    public void onSuccess(Location location) {
-                                                        if (location != null) {
-                                                            lat = location.getLatitude();
-                                                            longitude = location.getLongitude();
-                                                            Toast.makeText(Scan.this,String.valueOf(lat) + ", "+String.valueOf(longitude), Toast.LENGTH_SHORT).show();
+                                            takePhoto.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+                                                    // TODO
+                                                    takePhotoFunction(view);
+                                                }
+                                            });
 
-                                                        }
+                                            recordLocation.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+                                                    // TODO
+                                                    if (ContextCompat.checkSelfPermission(Scan.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                                                            && ContextCompat.checkSelfPermission(Scan.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                                                        fusedLocationProviderClient.getLastLocation()
+                                                                .addOnSuccessListener(new OnSuccessListener<Location>() {
+                                                                    @Override
+                                                                    public void onSuccess(Location location) {
+                                                                        if (location != null) {
+                                                                            lat = location.getLatitude();
+                                                                            longitude = location.getLongitude();
+                                                                            Toast.makeText(Scan.this,String.valueOf(lat) + ", "+String.valueOf(longitude), Toast.LENGTH_SHORT).show();
+
+                                                                        }
+                                                                    }
+                                                                });
+                                                    } else {
+                                                        ActivityCompat.requestPermissions(Scan.this,new String[] {Manifest.permission.ACCESS_FINE_LOCATION,
+                                                                Manifest.permission.ACCESS_COARSE_LOCATION},101);
                                                     }
-                                                });
-                                    } else {
-                                        ActivityCompat.requestPermissions(Scan.this,new String[] {Manifest.permission.ACCESS_FINE_LOCATION,
-                                                Manifest.permission.ACCESS_COARSE_LOCATION},101);
+                                                }
+                                            });
+
+                                            addButton.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+                                                    // TODO
+                                                    uploadToUser();
+                                                }
+                                            });
+                                            qrUploadDialog.show();
+                                        }
+                                    }else{
+                                        Log.d(TAG, "get failed with ", task.getException());
                                     }
                                 }
                             });
-
-                            addButton.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    // TODO
-                                    uploadToUser();
-                                    //uploadToMap();
-
-                                }
-                            });
-                            qrUploadDialog.show();
                         }
                     }
                 });
@@ -189,6 +202,12 @@ public class Scan extends AppCompatActivity {
                 mCodeScanner.startPreview();
             }
         });
+    }
+
+    private void uploadToMap() {
+        GeoPoint geoPoint = new GeoPoint(lat,longitude);
+        Map<String, Object> qr = new HashMap<>();
+
     }
 
     private void uploadToUser() {
@@ -231,6 +250,7 @@ public class Scan extends AppCompatActivity {
     private Uri imageUri;
     public void takePhotoFunction(View view) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        ActivityCompat.requestPermissions(Scan.this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, 101);
         File photo = new File(Environment.getExternalStorageDirectory(),  "Pic.jpg");
         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
         imageUri = Uri.fromFile(photo);
