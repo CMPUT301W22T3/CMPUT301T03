@@ -164,9 +164,24 @@ public class MyProfileFragment extends Fragment {
                 }
                 Collections.sort(QRIntegerDataList);
                 Integer lastInt = QRIntegerDataList.get(QRIntegerDataList.size() - 1);
-                Integer firstInt = QRIntegerDataList.get(0);
                 text10.setText(lastInt.toString());
+
+                //lowest QR
+                Integer firstInt = QRIntegerDataList.get(0);
                 text11.setText(firstInt.toString());
+
+                //Sum of Scores
+                Integer sum = 0;
+                for(int i =0; i < QRIntegerDataList.size(); i++){
+                    sum += QRIntegerDataList.get(i);
+                }
+                String c = Integer.toString(sum);
+                text12.setText(c);
+
+                //Total number of QR codes
+                Integer num = QRIntegerDataList.size();
+                String str1 = Integer.toString(num);
+                text13.setText(str1);
 
             }
         }) .addOnFailureListener(new OnFailureListener() {
