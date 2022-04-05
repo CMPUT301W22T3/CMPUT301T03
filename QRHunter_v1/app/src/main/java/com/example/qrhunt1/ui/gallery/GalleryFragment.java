@@ -164,20 +164,7 @@ public class GalleryFragment extends Fragment{
         String hash = codeArrayList.get(position).getHashcode();
         //System.out.println(hash);
 
-        dbQR.document(hash)
-                .delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "QR Code successfully deleted!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error deleting", e);
-                    }
-                });
+        dbQR.document(hash).delete();
 
         codeArrayList.remove(position);
         codeArrayAdapter.notifyDataSetChanged();

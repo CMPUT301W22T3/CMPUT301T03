@@ -16,6 +16,7 @@ import com.example.qrhunt1.ui.gallery.GalleryFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
 
@@ -69,8 +70,14 @@ public class GameQRList extends ArrayAdapter<GameQRCode> {
 
 
         gameQRCodeScore.setText("Score: " + code.getScore());
+
         //"["+snapshot.getGeoPoint("Location").getLatitude()+", "+snapshot.getGeoPoint("Location").getLongitude()+"]"
-        gameQRCodeLocation.setText("Location: [" + code.getLocation().getLatitude()+", "+ code.getLocation().getLongitude()+"]");
+        if (code.getLocation().getLatitude()==0 && (code.getLocation().getLongitude()==0)){
+            gameQRCodeLocation.setText("Location: Null");
+
+        }else{
+            gameQRCodeLocation.setText("Location: [" + code.getLocation().getLatitude()+", "+ code.getLocation().getLongitude()+"]");
+        }
 
         return convertView;
     }
