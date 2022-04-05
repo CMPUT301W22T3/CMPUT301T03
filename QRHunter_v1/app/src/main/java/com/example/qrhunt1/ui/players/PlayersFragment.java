@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.qrhunt1.R;
@@ -504,6 +505,7 @@ public class PlayersFragment extends Fragment {
 
 
 }
+
 
         /*
         Mock calculating score

@@ -26,7 +26,7 @@ public class NaviTest extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_gallery, R.id.navigation_map, R.id.navigation_players)
+                R.id.navigation_gallery, R.id.navigation_map, R.id.navigation_players,R.id.navigation_my_profile)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
