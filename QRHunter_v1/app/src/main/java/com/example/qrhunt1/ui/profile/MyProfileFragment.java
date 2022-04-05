@@ -155,7 +155,6 @@ public class MyProfileFragment extends Fragment {
                     } else {
                         Toast.makeText(getActivity().getApplicationContext(), "Not Found", Toast.LENGTH_LONG).show();
                     }
-
                 }
 
                 for (int i = 0; i < QRStringDataList.size(); i++) {
