@@ -333,6 +333,7 @@ public class PlayersFragment extends Fragment {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             Boolean owner = document.getBoolean("Owner");
+
                             if (owner == true) {
                                 deletePlayerButton.setVisibility(View.VISIBLE);
 
@@ -344,7 +345,7 @@ public class PlayersFragment extends Fragment {
                                         dbDeleteCertainPlayer.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void unused) {
-                                                Toast.makeText(getActivity(), "Successfully delete this user!", Toast.LENGTH_SHORT).show();
+                                                //Toast.makeText(getActivity(), "Successfully delete this user!", Toast.LENGTH_SHORT).show();
                                                 otherPlayerProfile.dismiss();
                                             }
                                         }).addOnFailureListener(new OnFailureListener() {
