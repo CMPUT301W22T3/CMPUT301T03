@@ -176,6 +176,10 @@ public class MyProfileFragment extends Fragment {
                     text11.setText("N/A");
                     text12.setText("N/A");
                     text13.setText("N/A");
+                    text14.setText("N/A");
+                    text15.setText("N/A");
+                    text16.setText("N/A");
+
                 } else {
                     for (DocumentSnapshot snapshot : snapshotList) {
                         if (snapshot.exists()) {
@@ -247,71 +251,64 @@ public class MyProfileFragment extends Fragment {
                             @Override
                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                                 List<DocumentSnapshot> snapshotList = queryDocumentSnapshots.getDocuments();
-                                if (snapshotList.isEmpty()){
-                                    text14.setText("N/A");
-                                    text15.setText("N/A");
-                                    text16.setText("N/A");
-                                } else {
-                                    //add username to userNameList
-                                    userNameList.add(currentUser1);
-                                    //when this currentUser has QR codes in their gallery
-                                    if (!snapshotList.isEmpty()) {
-                                        userQRStringList.clear();
-                                        userQRIntList.clear();
-                                        for (DocumentSnapshot snapshot : snapshotList) {
-                                            if (snapshot.exists()) {
-                                                userQRStringList.add(snapshot.getString("Score"));
-                                            } else {
-                                                Toast.makeText(getActivity().getApplicationContext(), "Not Found", Toast.LENGTH_LONG).show();
-                                            }
+                                //add username to userNameList
+                                userNameList.add(currentUser1);
+                                //when this currentUser has QR codes in their gallery
+                                if (!snapshotList.isEmpty()) {
+                                    userQRStringList.clear();
+                                    userQRIntList.clear();
+                                    for (DocumentSnapshot snapshot : snapshotList) {
+                                        if (snapshot.exists()) {
+                                            userQRStringList.add(snapshot.getString("Score"));
+                                        } else {
+                                            Toast.makeText(getActivity().getApplicationContext(), "Not Found", Toast.LENGTH_LONG).show();
                                         }
+                                    }
 
-                                        Integer currUserTotalScore = 0;
-                                        //sort user QR score in descending order
-                                        for (int i = 0; i < userQRStringList.size(); i++) {
-                                            Integer number = Integer.valueOf(userQRStringList.get(i));
-                                            userQRIntList.add(number);
-                                            currUserTotalScore = currUserTotalScore + number;
-                                        }
-                                        Collections.sort(userQRIntList, Collections.reverseOrder());
+                                    Integer currUserTotalScore = 0;
+                                    //sort user QR score in descending order
+                                    for (int i = 0; i < userQRStringList.size(); i++) {
+                                        Integer number = Integer.valueOf(userQRStringList.get(i));
+                                        userQRIntList.add(number);
+                                        currUserTotalScore = currUserTotalScore + number;
+                                    }
+                                    Collections.sort(userQRIntList, Collections.reverseOrder());
 
-                                        //add the best QR data to current user
-                                        bestQRDataList.add(new Rank(currentUser1, userQRIntList.get(0)));
-                                        //add the total number of QR codes the current user scanned
-                                        totalQRsDataList.add(new Rank(currentUser1, userQRIntList.size()));
-                                        //add the total score for current user
-                                        totalScoreDataList.add(new Rank(currentUser1, currUserTotalScore));
+                                    //add the best QR data to current user
+                                    bestQRDataList.add(new Rank(currentUser1, userQRIntList.get(0)));
+                                    //add the total number of QR codes the current user scanned
+                                    totalQRsDataList.add(new Rank(currentUser1, userQRIntList.size()));
+                                    //add the total score for current user
+                                    totalScoreDataList.add(new Rank(currentUser1, currUserTotalScore));
 
-                                        //sort the top 5 players by ascending order
-                                        Collections.sort(bestQRDataList);
-                                        Collections.sort(totalQRsDataList);
-                                        Collections.sort(totalScoreDataList);
+                                    //sort the top 5 players by ascending order
+                                    Collections.sort(bestQRDataList);
+                                    Collections.sort(totalQRsDataList);
+                                    Collections.sort(totalScoreDataList);
 
-                                        //set the rank for the top 5 players
-                                        for (int i = 0; i < bestQRDataList.size(); i++) {
-                                            bestQRDataList.get(i).setUserRank(i + 1);
-                                            totalQRsDataList.get(i).setUserRank(i + 1);
-                                            totalScoreDataList.get(i).setUserRank(i + 1);
+                                    //set the rank for the top 5 players
+                                    for (int i = 0; i < bestQRDataList.size(); i++) {
+                                        bestQRDataList.get(i).setUserRank(i + 1);
+                                        totalQRsDataList.get(i).setUserRank(i + 1);
+                                        totalScoreDataList.get(i).setUserRank(i + 1);
+                                    }
+                                    for (int i = 0; i < bestQRDataList.size(); i++) {
+                                        String str2 = bestQRDataList.get(i).getUserName();
+                                        if (str2.equals(finalCurrentUser1)) {
+                                            text14.setText(bestQRDataList.get(i).getUserRank().toString());
                                         }
-                                        for (int i = 0; i < bestQRDataList.size(); i++) {
-                                            String str2 = bestQRDataList.get(i).getUserName();
-                                            if (str2.equals(finalCurrentUser1)) {
-                                                text14.setText(bestQRDataList.get(i).getUserRank().toString());
-                                            }
+                                    }
+                                    for (int i = 0; i < totalQRsDataList.size(); i++) {
+                                        String str2 = totalQRsDataList.get(i).getUserName();
+                                        if (str2.equals(finalCurrentUser1)) {
+                                            text15.setText(totalQRsDataList.get(i).getUserRank().toString());
                                         }
-                                        for (int i = 0; i < totalQRsDataList.size(); i++) {
-                                            String str2 = totalQRsDataList.get(i).getUserName();
-                                            if (str2.equals(finalCurrentUser1)) {
-                                                text15.setText(totalQRsDataList.get(i).getUserRank().toString());
-                                            }
+                                    }
+                                    for (int i = 0; i < totalScoreDataList.size(); i++) {
+                                        String str2 = totalScoreDataList.get(i).getUserName();
+                                        if (str2.equals(finalCurrentUser1)) {
+                                            text16.setText(totalScoreDataList.get(i).getUserRank().toString());
                                         }
-                                        for (int i = 0; i < totalScoreDataList.size(); i++) {
-                                            String str2 = totalScoreDataList.get(i).getUserName();
-                                            if (str2.equals(finalCurrentUser1)) {
-                                                text16.setText(totalScoreDataList.get(i).getUserRank().toString());
-                                            }
-                                        }
-
                                     }
                                 }
                             }
