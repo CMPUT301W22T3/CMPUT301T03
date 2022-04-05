@@ -5,11 +5,10 @@
     <string name="title_Players">Players</string>
     <string name="title_My_Profile">My Profile</string>
     <string name="title_User_Profile">User\'s Profile</string>
-    <string name="gallery_add_comment">Add Comment</string>
-    <string name="gallery_delete">Delete</string>
+
     <string name="ok">OK</string>
     <string name="cancel">CANCEL</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hint">Long press to see and edit a comment.</string>
 </resources>
