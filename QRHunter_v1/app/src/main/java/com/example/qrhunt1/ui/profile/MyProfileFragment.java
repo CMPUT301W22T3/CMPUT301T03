@@ -307,12 +307,12 @@ public class MyProfileFragment extends Fragment {
                         Toast.makeText(getActivity().getApplicationContext(), "Not Found", Toast.LENGTH_LONG).show();
                     }
                 }}
-            }) .addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
-                }
-            });
+        }) .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
+            }
+        });
 
 //switch button
         button3.setOnClickListener(new View.OnClickListener() {
