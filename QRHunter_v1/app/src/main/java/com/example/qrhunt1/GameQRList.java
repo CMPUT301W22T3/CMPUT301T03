@@ -42,9 +42,6 @@ public class GameQRList extends ArrayAdapter<GameQRCode> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        db = FirebaseFirestore.getInstance();
-        String currentUser = mAuth.getCurrentUser().getEmail();
-        final CollectionReference dbQR = db.collection("users/").document(currentUser).collection("QR/");
 
         if (convertView == null) {
             LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
@@ -55,7 +52,6 @@ public class GameQRList extends ArrayAdapter<GameQRCode> {
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
                     GalleryFragment.deleteItem(position);
 
                 }

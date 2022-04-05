@@ -97,7 +97,7 @@ public class GameQRCode {
      *
      */
     public void editComment(String theComment) {
-        comment = theComment;
+        this.comment = theComment;
     }
 
     /**

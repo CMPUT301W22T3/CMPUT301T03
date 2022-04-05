@@ -19,6 +19,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+
+import com.bumptech.glide.Glide;
 import com.example.qrhunt1.GameQRCode;
 import com.example.qrhunt1.GameQRList;
 import com.example.qrhunt1.R;
@@ -32,6 +34,8 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +44,7 @@ public class GalleryFragment extends Fragment{
     ListView codeList;
     TextView geoLocation;
     static ArrayAdapter<GameQRCode> codeArrayAdapter;
-    static ArrayList<GameQRCode> codeArrayList = new ArrayList<>();;
+    static ArrayList<GameQRCode> codeArrayList;
     FloatingActionButton scanButton;
     static FirebaseFirestore db;
     private static FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -51,39 +55,46 @@ public class GalleryFragment extends Fragment{
 
         View view = inflater.inflate(R.layout.fragment_gallery,container,false);
         Context thisContext = container.getContext();
+
         codeList = view.findViewById(R.id.gallery_list);
-
         scanButton = view.findViewById(R.id.fab);
-
         geoLocation = view.findViewById(R.id.qr_location);
-        codeArrayAdapter = new GameQRList(thisContext, codeArrayList);
-        codeList.setAdapter(codeArrayAdapter);
 
         // Access a Cloud Firestore instance from the Fragment
         db = FirebaseFirestore.getInstance();
 
+        codeArrayList = new ArrayList<>();
         String currentUser = mAuth.getCurrentUser().getEmail();
         currentUser = currentUser.replace("@gmail.com", "");
         CollectionReference dbQR = db.collection("users/").document(currentUser).collection("QR/");
-
         dbQR.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>(){
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 List<DocumentSnapshot> snapshotList = queryDocumentSnapshots.getDocuments();
+                // ImageView in your Activity
+                //ImageView imageView = findViewById(R.id.imageView);
 
+                // Download directly from StorageReference using Glide
+                //
                 for (DocumentSnapshot snapshot : snapshotList) {
                     if (snapshot.exists()){
-                        //dbQR.document(snapshot.getString("UserName")).collection("QR/");
 
                         GameQRCode newCode = new GameQRCode(snapshot.getString("Hashcode"));
                         codeArrayList.add(newCode);
                         newCode.setLocation(snapshot.getGeoPoint("Location"));
 
+                        // Reference to an image file in Cloud Storage
+                        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+                        StorageReference pathReference = storageReference.child("images/"+snapshot.getString("Hashcode"));
+                        /*
+                        Glide.with(thisContext)
+                            .load(storageReference)
+                            .into(imageView);
+                            */
                     }
                 }
                 TextView noResult = view.findViewById(R.id.no_record);
                 if (codeArrayList.isEmpty()){
-
                     noResult.setVisibility(View.VISIBLE);
                 }
                 else{
@@ -92,7 +103,6 @@ public class GalleryFragment extends Fragment{
                 }
                 codeArrayAdapter = new GameQRList(thisContext, codeArrayList);
                 codeList.setAdapter(codeArrayAdapter);
-
             }});
 
         // Edit comment
@@ -157,6 +167,7 @@ public class GalleryFragment extends Fragment{
         });
 
 
+
         return view;
     }
 
@@ -179,11 +190,8 @@ public class GalleryFragment extends Fragment{
 
         String hash = codeArrayList.get(position).getHashcode();
         //System.out.println(hash);
-
         dbQR.document(hash).delete();
-
         codeArrayList.remove(position);
         codeArrayAdapter.notifyDataSetChanged();
-
     }
 }
