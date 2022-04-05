@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -19,6 +20,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.example.qrhunt1.ui.players.CustomList;
+import com.example.qrhunt1.ui.players.Rank;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -51,6 +54,16 @@ public class MyProfileFragment extends Fragment {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private ArrayList<String> QRStringDataList;
     private ArrayList<Integer> QRIntegerDataList;
+    private ArrayAdapter<Rank> bestQRArrayAdapter;
+    private ArrayList<Rank> bestQRDataList;
+    private ArrayAdapter<Rank> totalQRsArrayAdapter;
+    private ArrayList<Rank> totalQRsDataList;
+    private ArrayAdapter<Rank> totalScoreArrayAdapter;
+    private ArrayList<Rank> totalScoreDataList;
+    private ArrayList<String> userQRStringList;
+    private ArrayList<Integer> userQRIntList;
+    private ArrayList<String> userNameList;
+    CustomList customList;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -183,6 +196,7 @@ public class MyProfileFragment extends Fragment {
                 text13.setText(str1);
 
             }
+
         }) .addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
@@ -190,63 +204,111 @@ public class MyProfileFragment extends Fragment {
             }
         });
 
-////  lowest QR code
-//        Collections.reverse(list);
-//        String b = list.get(list.size() - 1).toString();
-//        text11.setText(b);
-//
-////  Sum of Scores #
-//        int i;
-//        int sum = 0;
-//        for (i = 0; i < list.size(); i++)
-//            sum += list.get(i);
-//        String c = Integer.toString(sum);
-//        text12.setText(c);
-//
-////  Total number of QR codes
-//        Integer num = list.size();
-//        String string = Integer.toString(num);
-//        text13.setText(string);
+        //username list from database
+        userNameList = new ArrayList<>();
 
-////  Ranking in Best QR
-//        ArrayList<Integer> list1 = new ArrayList<>();
-//        list1.add(11);
-//        list1.add(5);
-//        list1.add(18);
-//        list1.add(5);
-//        list1.add(15);
-//        Collections.sort(list1);
-//        Collections.reverse(list1);
-//        Integer index = list1.indexOf(11) + 1;
-//        String j = Integer.toString(index);
-//        text14.setText(j);
+        //three ranking lists with rank objects
+        bestQRDataList = new ArrayList<>();
+        totalQRsDataList = new ArrayList<>();
+        totalScoreDataList = new ArrayList<>();
 
-////  Ranking in Total QRs
-//        ArrayList<Integer> list2 = new ArrayList<>();
-//        list2.add(5);
-//        list2.add(2);
-//        list2.add(2);
-//        list2.add(15);
-//        list2.add(0);
-//        Collections.sort(list2);
-//        Collections.reverse(list2);
-//        Integer index1 = list2.indexOf(5) + 1;
-//        String f = Integer.toString(index1);
-//        text15.setText(f);
-//
-////  Ranking in Total Score
-//        ArrayList<Integer> list3 = new ArrayList<>();
-//        list3.add(27);
-//        list3.add(78);
-//        list3.add(25);
-//        list3.add(67);
-//        list3.add(60);
-//        Collections.sort(list3);
-//        Collections.reverse(list3);
-//        Integer index2 = list3.indexOf(27) + 1;
-//        String g = Integer.toString(index2);
-//        text16.setText(g);
+        //retrieve data from fire store
+        CollectionReference dbQQ = db.collection("users/");
+        String finalCurrentUser1 = currentUser;
+        dbQQ.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                List<DocumentSnapshot> snapshotList = queryDocumentSnapshots.getDocuments();
+                for (DocumentSnapshot snapshot : snapshotList) {
+                    if (snapshot.exists()) {
+                        String currentUser1 = snapshot.getString("UserName");
+                        //String and Integer qr list from database
+                        userQRStringList = new ArrayList<>();
+                        userQRIntList = new ArrayList<>();
+                        //get qr list for each user
+                        CollectionReference dbQR = dbQQ.document(currentUser1).collection("QR/");
+                        dbQR.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                List<DocumentSnapshot> snapshotList = queryDocumentSnapshots.getDocuments();
+                                //add username to userNameList
+                                userNameList.add(currentUser1);
+                                //when this currentUser has QR codes in their gallery
+                                if (!snapshotList.isEmpty()) {
+                                    userQRStringList.clear();
+                                    userQRIntList.clear();
+                                    for (DocumentSnapshot snapshot : snapshotList) {
+                                        if (snapshot.exists()) {
+                                            userQRStringList.add(snapshot.getString("Score"));
+                                        } else {
+                                            Toast.makeText(getActivity().getApplicationContext(), "Not Found", Toast.LENGTH_LONG).show();
+                                        }
+                                    }
 
+                                    Integer currUserTotalScore = 0;
+                                    //sort user QR score in descending order
+                                    for (int i = 0; i < userQRStringList.size(); i++) {
+                                        Integer number = Integer.valueOf(userQRStringList.get(i));
+                                        userQRIntList.add(number);
+                                        currUserTotalScore = currUserTotalScore + number;
+                                    }
+                                    Collections.sort(userQRIntList, Collections.reverseOrder());
+
+                                    //add the best QR data to current user
+                                    bestQRDataList.add(new Rank(currentUser1, userQRIntList.get(0)));
+                                    //add the total number of QR codes the current user scanned
+                                    totalQRsDataList.add(new Rank(currentUser1, userQRIntList.size()));
+                                    //add the total score for current user
+                                    totalScoreDataList.add(new Rank(currentUser1, currUserTotalScore));
+
+                                    //sort the top 5 players by ascending order
+                                    Collections.sort(bestQRDataList);
+                                    Collections.sort(totalQRsDataList);
+                                    Collections.sort(totalScoreDataList);
+
+                                    //set the rank for the top 5 players
+                                    for (int i = 0; i < bestQRDataList.size(); i++) {
+                                        bestQRDataList.get(i).setUserRank(i + 1);
+                                        totalQRsDataList.get(i).setUserRank(i + 1);
+                                        totalScoreDataList.get(i).setUserRank(i + 1);
+                                    }
+                                    for (int i = 0; i < bestQRDataList.size(); i++) {
+                                        String str2 = bestQRDataList.get(i).getUserName();
+                                        if (str2.equals(finalCurrentUser1)){
+                                            text14.setText(bestQRDataList.get(i).getUserRank().toString());
+                                        }
+                                    }
+                                    for (int i = 0; i < totalQRsDataList.size(); i++) {
+                                        String str2 = totalQRsDataList.get(i).getUserName();
+                                        if (str2.equals(finalCurrentUser1)) {
+                                            text15.setText(totalQRsDataList.get(i).getUserRank().toString());
+                                        }
+                                    }
+                                    for (int i = 0; i < totalScoreDataList.size(); i++) {
+                                        String str2 = totalScoreDataList.get(i).getUserName();
+                                        if (str2.equals(finalCurrentUser1)) {
+                                            text16.setText(totalScoreDataList.get(i).getUserRank().toString());
+                                        }
+                                    }
+
+                                }
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    } else {
+                        Toast.makeText(getActivity().getApplicationContext(), "Not Found", Toast.LENGTH_LONG).show();
+                    }
+                }}
+            }) .addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
+                }
+            });
 
 //switch button
         button3.setOnClickListener(new View.OnClickListener() {
@@ -266,10 +328,6 @@ public class MyProfileFragment extends Fragment {
                     QR1.setVisibility(View.INVISIBLE);
                     QR2.setVisibility(View.VISIBLE);
                 }
-//                } else {
-//                    QR1.setVisibility(View.VISIBLE);
-//                    QR2.setVisibility(View.INVISIBLE);
-//                }
             }
         });
 

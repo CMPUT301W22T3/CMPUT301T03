@@ -12,7 +12,7 @@ public class Rank implements Comparable<Rank>{
      * @param userScore
      * This is the user score
      */
-    Rank(String userName, Integer userScore){
+    public Rank(String userName, Integer userScore){
         this.userRank = 0;
         this.userName = userName;
         this.userScore = userScore;
@@ -22,7 +22,7 @@ public class Rank implements Comparable<Rank>{
      * @return
      * Returns ranking of the user
      */
-    Integer getUserRank(){
+    public Integer getUserRank(){
         return this.userRank;
     }
 
@@ -38,7 +38,7 @@ public class Rank implements Comparable<Rank>{
      * @return
      * Returns name of the user
      */
-    String getUserName(){
+    public String getUserName(){
         return this.userName;
     }
 
@@ -47,7 +47,7 @@ public class Rank implements Comparable<Rank>{
      * @return
      * Returns score of the user
      */
-    Integer getUserScore(){
+    public Integer getUserScore(){
         return this.userScore;
     }
 
