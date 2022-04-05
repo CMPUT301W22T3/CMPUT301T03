@@ -13,6 +13,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.qrhunt1.ui.gallery.GalleryFragment;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
@@ -20,7 +23,8 @@ public class GameQRList extends ArrayAdapter<GameQRCode> {
 
     private ArrayList<GameQRCode> codes;
     private Context context;
-
+    FirebaseFirestore db;
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     /**
      *
@@ -37,6 +41,9 @@ public class GameQRList extends ArrayAdapter<GameQRCode> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        db = FirebaseFirestore.getInstance();
+        String currentUser = mAuth.getCurrentUser().getEmail();
+        final CollectionReference dbQR = db.collection("users/").document(currentUser).collection("QR/");
 
         if (convertView == null) {
             LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
@@ -47,7 +54,9 @@ public class GameQRList extends ArrayAdapter<GameQRCode> {
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
                     GalleryFragment.deleteItem(position);
+
                 }
             });
 
@@ -60,7 +69,8 @@ public class GameQRList extends ArrayAdapter<GameQRCode> {
 
 
         gameQRCodeScore.setText("Score: " + code.getScore());
-        gameQRCodeLocation.setText("Location: " + code.getLocation());
+        //"["+snapshot.getGeoPoint("Location").getLatitude()+", "+snapshot.getGeoPoint("Location").getLongitude()+"]"
+        gameQRCodeLocation.setText("Location: [" + code.getLocation().getLatitude()+", "+ code.getLocation().getLongitude()+"]");
 
         return convertView;
     }

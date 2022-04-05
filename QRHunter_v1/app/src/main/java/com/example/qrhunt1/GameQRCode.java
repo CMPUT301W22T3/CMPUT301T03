@@ -3,6 +3,8 @@ package com.example.qrhunt1;
 
 import android.graphics.Bitmap;
 
+import com.google.firebase.firestore.GeoPoint;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +12,7 @@ public class GameQRCode {
     private int score;
     private String hashcode;
     private String comment = "";
-    private String location;
+    private GeoPoint location;
     private Bitmap QRImage;
 
 
@@ -19,6 +21,7 @@ public class GameQRCode {
      */
     public GameQRCode(String hashcode){
         //comment = "A QR code on a store poster";    //testing
+        this.hashcode = hashcode;
         this.score = calculateScore(hashcode);
     }
 
@@ -70,6 +73,12 @@ public class GameQRCode {
         int totalScore = (int) score;
         return totalScore;
     }
+
+
+    public String getHashcode() {
+        return hashcode;
+    }
+
     /**
      * Return the score of the game QR code.
      */
@@ -95,12 +104,12 @@ public class GameQRCode {
      *
      * @param newlocation
      */
-    public void setLocation(String newlocation) { location = newlocation; }
+    public void setLocation(GeoPoint newlocation) { location = newlocation; }
 
     /**
      * return the location of a game QR code.
      */
-    public String getLocation() {
+    public GeoPoint getLocation() {
         return location;
     }
 

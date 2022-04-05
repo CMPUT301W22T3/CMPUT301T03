@@ -19,25 +19,31 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-
 import com.example.qrhunt1.GameQRCode;
 import com.example.qrhunt1.GameQRList;
 import com.example.qrhunt1.R;
 import com.example.qrhunt1.Scan;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class GalleryFragment extends Fragment{
     ListView codeList;
+    TextView geoLocation;
     static ArrayAdapter<GameQRCode> codeArrayAdapter;
     static ArrayList<GameQRCode> codeArrayList = new ArrayList<>();;
     FloatingActionButton scanButton;
-    FirebaseFirestore db;
+    static FirebaseFirestore db;
+    private static FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -49,19 +55,38 @@ public class GalleryFragment extends Fragment{
 
         scanButton = view.findViewById(R.id.fab);
 
-        codeArrayList.add(new GameQRCode("2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824"));
-        codeArrayList.add(new GameQRCode("91e9240f415223982edc345532630710e94a7f52cd5f48f5ee1afc555078f0ab"));
-        codeArrayList.add(new GameQRCode("87298cc2f31fba73181ea2a9e6ef10dce21ed95e98bdac9c4e1504ea16f486e4"));
-
-        // Access a Cloud Firestore instance from the Fragment
-        db = FirebaseFirestore.getInstance();
-        final CollectionReference collectionReference = db.collection("QRCODE");
-
-
+        geoLocation = view.findViewById(R.id.qr_location);
         codeArrayAdapter = new GameQRList(thisContext, codeArrayList);
         codeList.setAdapter(codeArrayAdapter);
 
+        // Access a Cloud Firestore instance from the Fragment
+        db = FirebaseFirestore.getInstance();
 
+        String currentUser = mAuth.getCurrentUser().getEmail();
+        currentUser = currentUser.replace("@gmail.com", "");
+        CollectionReference dbQR = db.collection("users/").document(currentUser).collection("QR/");
+
+        dbQR.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>(){
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                List<DocumentSnapshot> snapshotList = queryDocumentSnapshots.getDocuments();
+
+                for (DocumentSnapshot snapshot : snapshotList) {
+                    if (snapshot.exists()){
+                        //dbQR.document(snapshot.getString("UserName")).collection("QR/");
+
+                        GameQRCode newCode = new GameQRCode(snapshot.getString("Hashcode"));
+                        codeArrayList.add(newCode);
+                        newCode.setLocation(snapshot.getGeoPoint("Location"));
+
+                    }
+                }
+                codeArrayAdapter = new GameQRList(thisContext, codeArrayList);
+                codeList.setAdapter(codeArrayAdapter);
+
+            }});
+
+        // Edit comment
         codeList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
@@ -130,8 +155,31 @@ public class GalleryFragment extends Fragment{
         super.onDestroyView();
     }
     // function to delete an item given its index in the list.
-    public static void deleteItem(int i) {
-        codeArrayList.remove(i);
+    public static void deleteItem(int position) {
+        final String TAG = "Sample";
+        String currentUser = mAuth.getCurrentUser().getEmail();
+        currentUser = currentUser.replace("@gmail.com", "");
+        CollectionReference dbQR = db.collection("users/").document(currentUser).collection("QR/");
+
+        String hash = codeArrayList.get(position).getHashcode();
+        //System.out.println(hash);
+
+        dbQR.document(hash)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "QR Code successfully deleted!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error deleting", e);
+                    }
+                });
+
+        codeArrayList.remove(position);
         codeArrayAdapter.notifyDataSetChanged();
 
     }
