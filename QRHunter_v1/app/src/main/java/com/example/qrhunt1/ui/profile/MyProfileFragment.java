@@ -18,22 +18,17 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 
-import com.example.qrhunt1.MainActivity;
 import com.example.qrhunt1.R;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.google.zxing.BarcodeFormat;
@@ -42,9 +37,6 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -171,9 +163,10 @@ public class MyProfileFragment extends Fragment {
                     QRIntegerDataList.add(number);
                 }
                 Collections.sort(QRIntegerDataList);
-                Integer a = QRIntegerDataList.get(QRIntegerDataList.size() - 1);
-                String d = Integer.toString(a);
-                text10.setText(d);
+                Integer lastInt = QRIntegerDataList.get(QRIntegerDataList.size() - 1);
+                Integer firstInt = QRIntegerDataList.get(0);
+                text10.setText(lastInt.toString());
+                text11.setText(firstInt.toString());
 
             }
         }) .addOnFailureListener(new OnFailureListener() {

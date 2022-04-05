@@ -88,7 +88,7 @@ public class GalleryFragment extends Fragment{
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String comment = commentText.getText().toString();
-                        codeArrayList.get(position).editComment(comment);
+                        //codeArrayList.get(position).editComment(comment);
                         Toast.makeText(thisContext,"Done! You edited your comment.",Toast.LENGTH_SHORT).show();
                     }
                 });
