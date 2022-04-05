@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="300dp"
+    android:layout_width="350dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_gravity="center"
-    android:layout_height="500dp">
+    android:layout_height="550dp">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -29,8 +29,8 @@
                 android:id="@+id/otherPlayerQRCode"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="30dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:visibility="visible" />
@@ -39,13 +39,13 @@
                 android:id="@+id/otherPlayerName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="68dp"
+                android:layout_marginTop="92dp"
                 android:text="username"
                 android:textColor="@color/pink1"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.109"
+                app:layout_constraintHorizontal_bias="0.101"
                 app:layout_constraintStart_toEndOf="@+id/otherPlayerQRCode"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -53,8 +53,8 @@
                 android:id="@+id/otherPlayerContactInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="9dp"
                 android:text="contact info"
                 android:textColor="@color/pink2"
                 android:textSize="16sp"
@@ -72,10 +72,9 @@
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/lowestScoreText"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.38"
+                app:layout_constraintHorizontal_bias="0.263"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/otherPlayerQRCode"
-                app:layout_constraintVertical_bias="0.466" />
+                app:layout_constraintTop_toBottomOf="@+id/otherPlayerQRCode" />
 
             <TextView
                 android:id="@+id/highestScore"
@@ -97,9 +96,10 @@
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/sumScoreText"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.401"
+                app:layout_constraintHorizontal_bias="0.281"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/highestScore" />
+                app:layout_constraintTop_toBottomOf="@+id/highestScore"
+                app:layout_constraintVertical_bias="0.444" />
 
             <TextView
                 android:id="@+id/lowestScore"
@@ -121,7 +121,7 @@
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/sumScore"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.627"
+                app:layout_constraintHorizontal_bias="0.495"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/lowestScore"
                 app:layout_constraintVertical_bias="1.0" />
@@ -146,7 +146,7 @@
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/totalQR"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.323"
+                app:layout_constraintHorizontal_bias="0.225"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/sumScore"
                 app:layout_constraintVertical_bias="1.0" />
@@ -172,10 +172,10 @@
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/bestQR"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.538"
+                app:layout_constraintHorizontal_bias="0.411"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/totalQRText"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintVertical_bias="1.0" />
 
             <TextView
                 android:id="@+id/bestQR"
@@ -198,10 +198,10 @@
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/totalQRs"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.503"
+                app:layout_constraintHorizontal_bias="0.378"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/bestQRText"
-                app:layout_constraintVertical_bias="0.6" />
+                app:layout_constraintVertical_bias="1.0" />
 
             <TextView
                 android:id="@+id/totalQRs"
@@ -217,13 +217,13 @@
                 android:id="@+id/totalScoreText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="20dp"
                 android:text="Ranking in Total Score: "
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.446"
+                app:layout_constraintHorizontal_bias="0.338"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/totalQRsText" />
 
@@ -236,6 +236,17 @@
                 android:textSize="18sp"
                 app:layout_constraintStart_toEndOf="@+id/totalScoreText"
                 app:layout_constraintTop_toBottomOf="@+id/totalQRs" />
+
+            <Button
+                android:id="@+id/deletePlayerButton"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="1dp"
+                android:background="@drawable/icons8_delete_trash_50"
+                android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@+id/otherPlayerName"
+                app:layout_constraintStart_toEndOf="@+id/otherPlayerQRCode" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
