@@ -24,8 +24,10 @@ import androidx.fragment.app.Fragment;
 import com.example.qrhunt1.Owner;
 import com.example.qrhunt1.ui.players.CustomList;
 import com.example.qrhunt1.ui.players.Rank;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -394,20 +396,29 @@ public class MyProfileFragment extends Fragment {
             }
         });
 
-        if(currentUser.equals("wen")) {
-            button4.setVisibility(View.VISIBLE);
-            button4.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(getActivity(), Owner.class);
-                    startActivity(intent);
-                }
-            });
-        }
-        else{
-            button4.setVisibility(View.INVISIBLE);
-        }
+        DocumentReference docRef = db.collection("users").document(currentUser);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    Boolean owner = document.getBoolean("Owner");
 
+                    if (owner == true) {
+                        button4.setVisibility(View.VISIBLE);
+                        button4.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent(getActivity(), Owner.class);
+                                startActivity(intent);
+                            }
+                        });
+                    } else {
+                        button4.setVisibility(View.INVISIBLE);
+                    }
+                }
+            }
+        });
 
         return view;
     }

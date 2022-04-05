@@ -70,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
     String email;
 
 
-
     ActivityResultLauncher<Intent> startForResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
         @Override
@@ -103,17 +102,17 @@ public class MainActivity extends AppCompatActivity {
         login = findViewById(R.id.login_btn);
 
 
-
         /* Get the remember data and write it up automatically */
         SharedPreferences preferences = getSharedPreferences(FILE_NAME, MODE_PRIVATE);
         String username = preferences.getString("username", "");
         String password = preferences.getString("password", "");
         Boolean check = preferences.getBoolean("check", false);
 
-
         loginUsername.setText(username);
         loginPassword.setText(password);
         remember.setChecked(check);
+
+
 
 
         login.setOnClickListener(new View.OnClickListener() {
@@ -184,7 +183,6 @@ public class MainActivity extends AppCompatActivity {
         create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Intent intent = new Intent(MainActivity.this, Sign_up.class);
                 startActivity(intent);
             }
