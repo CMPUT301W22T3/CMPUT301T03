@@ -113,11 +113,14 @@ public class MainActivity extends AppCompatActivity {
         remember.setChecked(check);
 
 
+
+
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String username = loginUsername.getText().toString().trim();
                 String password = loginPassword.getText().toString().trim();
+
 
                 if(remember.isChecked()){
                     Boolean boolIsChecked = remember.isChecked();
@@ -126,11 +129,12 @@ public class MainActivity extends AppCompatActivity {
                     editor.putString("password", password);
                     editor.putBoolean("check", boolIsChecked);
                     editor.apply();
-                    Toast.makeText(MainActivity.this, "Remembered the Username and Password!", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MainActivity.this, "Remembered the Username and Password!", Toast.LENGTH_SHORT).show();
 
                 } else{
                     preferences.edit().clear().apply();
                 }
+
 
                 //Username Conditions
                 if (TextUtils.isEmpty(username)){
