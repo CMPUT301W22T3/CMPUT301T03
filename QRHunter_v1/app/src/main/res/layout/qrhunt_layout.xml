@@ -1,48 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.qrhunt1.Scan"
     android:layout_width="300dp"
-    android:layout_height="300dp"
-    android:background="@drawable/scan_bg">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="center"
+    android:layout_height="wrap_content">
+    
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cardCornerRadius="20dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
 
-    <TextView
-        android:id="@+id/qr_score"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:gravity="center"
-        android:layout_marginTop="20dp"
-        android:textAlignment="center"
-        android:textSize="30dp" />
+            <ImageView
+                android:id="@+id/close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_close" />
 
-    <Button
-        android:id="@+id/takePhoto"
-        android:layout_width="190dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/qr_score"
-        android:layout_marginTop="30dp"
-        android:layout_centerHorizontal="true"
-        android:text="Take A Photo?" />
+            <TextView
+                android:id="@+id/qr_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textColor="@color/pink3"
+                android:textSize="36sp"
+                android:textStyle="bold"
+                android:layout_marginTop="40dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/recordLocation"
-        android:layout_width="190dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/takePhoto"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="17dp"
-        android:text="Record Location?" />
+            <Button
+                android:id="@+id/takePhoto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:text="Take A Photo?"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/qr_score" />
 
-    <Button
-        android:id="@+id/qrInfoAdd"
-        android:layout_width="80dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/recordLocation"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="19dp"
-        android:text="Add" />
+            <Button
+                android:id="@+id/recordLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Record Location?"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/takePhoto" />
+
+            <Button
+                android:id="@+id/qrInfoAdd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="16dp"
+                android:text="Add"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/recordLocation" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-</RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

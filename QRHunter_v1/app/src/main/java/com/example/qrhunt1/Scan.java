@@ -14,7 +14,10 @@ import static android.content.ContentValues.TAG;
         import android.content.Intent;
         import android.content.pm.PackageManager;
         import android.graphics.Bitmap;
-        import android.location.Address;
+import android.graphics.Color;
+import android.graphics.drawable.ClipDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.location.Address;
         import android.location.Geocoder;
         import android.location.Location;
         import android.net.Uri;
@@ -25,7 +28,8 @@ import static android.content.ContentValues.TAG;
         import android.view.View;
         import android.view.WindowManager;
         import android.widget.Button;
-        import android.widget.TextView;
+import android.widget.ImageView;
+import android.widget.TextView;
         import android.widget.Toast;
 
         import com.budiyev.android.codescanner.CodeScanner;
@@ -119,12 +123,23 @@ public class Scan extends AppCompatActivity {
                             qrUploadDialog.getWindow().getAttributes().windowAnimations
                                     = android.R.style.Animation_Dialog;
                             qrUploadDialog.setContentView(R.layout.qrhunt_layout);
+                            qrUploadDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
+                            ImageView close = qrUploadDialog.findViewById(R.id.close);
                             Button takePhoto = qrUploadDialog.findViewById(R.id.takePhoto);
                             Button recordLocation = qrUploadDialog.findViewById(R.id.recordLocation);
                             Button addButton = qrUploadDialog.findViewById(R.id.qrInfoAdd);
                             TextView showScore = qrUploadDialog.findViewById(R.id.qr_score);
+
                             showScore.setText("QR Score: "+qrScore);
+
+                            // Close dialog
+                            close.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    qrUploadDialog.dismiss();
+                                }
+                            });
 
                             String currentUser = mAuth.getCurrentUser().getEmail().replace("@gmail.com","");
                             DocumentReference docRef = db.collection("users")
