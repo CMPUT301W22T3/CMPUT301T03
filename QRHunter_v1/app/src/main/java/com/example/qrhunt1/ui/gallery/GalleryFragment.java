@@ -14,6 +14,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -23,7 +25,10 @@ import com.example.qrhunt1.GameQRCode;
 import com.example.qrhunt1.GameQRList;
 import com.example.qrhunt1.R;
 import com.example.qrhunt1.Scan;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
@@ -31,8 +36,8 @@ public class GalleryFragment extends Fragment{
     ListView codeList;
     ArrayAdapter<GameQRCode> codeArrayAdapter;
     ArrayList<GameQRCode> codeArrayList;
-    Button addCommentButtom;
     FloatingActionButton scanButton;
+    FirebaseFirestore db;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -43,35 +48,67 @@ public class GalleryFragment extends Fragment{
         codeList = view.findViewById(R.id.gallery_list);
 
         scanButton = view.findViewById(R.id.fab);
-
         codeArrayList = new ArrayList<>();
         codeArrayList.add(new GameQRCode("2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824"));
         codeArrayList.add(new GameQRCode("91e9240f415223982edc345532630710e94a7f52cd5f48f5ee1afc555078f0ab"));
         codeArrayList.add(new GameQRCode("87298cc2f31fba73181ea2a9e6ef10dce21ed95e98bdac9c4e1504ea16f486e4"));
 
+        // Access a Cloud Firestore instance from the Fragment
+        db = FirebaseFirestore.getInstance();
+        final CollectionReference collectionReference = db.collection("QRCODE");
 
-        //addCommentButtom = view.findViewById(R.id.add_comment);
+
         codeArrayAdapter = new GameQRList(thisContext, codeArrayList);
         codeList.setAdapter(codeArrayAdapter);
-        View commentEdit = view.findViewById(R.id.add_comment);
+
 
         codeList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                LayoutInflater inflater = requireActivity().getLayoutInflater();
+                AlertDialog alertDialog = new AlertDialog.Builder(requireContext()).create();
 
+                LayoutInflater inflater = requireActivity().getLayoutInflater();
+                View dialogView = inflater.inflate(R.layout.fragment_qr_detail, null);
+
+                alertDialog.setTitle("Edit Comment");
+
+                EditText commentText = (EditText) dialogView.findViewById(R.id.comment_edit);
+                commentText.setText(codeArrayAdapter.getItem(position).getComments(), TextView.BufferType.EDITABLE);
+                commentText.setSelection(0, commentText.getText().toString().length());
                 // Inflate and set the layout for the dialog
                 // Pass null as the parent view because its going in the dialog layout
-                builder.setView(inflater.inflate(R.layout.fragment_qr_detail, null))
-                        // Add action buttons
-                        .setTitle("Edit Comment")
-                        .setView(new EditText(getActivity()))
-                        .setPositiveButton(R.string.ok, null)
-                        .setNegativeButton(R.string.cancel, null);
-                // Create the AlertDialog object and return it
-                builder.create().show();
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+                    /**
+                     * This method will be invoked when a button in the dialog is clicked.
+                     *
+                     * @param dialog the dialog that received the click
+                     * @param which  the button that was clicked (ex.
+                     *               {@link DialogInterface#BUTTON_POSITIVE}) or the position
+                     */
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String comment = commentText.getText().toString();
+                        codeArrayList.get(position).editComment(comment);
+                        Toast.makeText(thisContext,"Done! You edited your comment.",Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+                    /**
+                     * This method will be invoked when a button in the dialog is clicked.
+                     *
+                     * @param dialog the dialog that received the click
+                     * @param which  the button that was clicked
+                     */
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        alertDialog.dismiss();
+                    }
+                });
+                alertDialog.setView(dialogView);
+                alertDialog.show();
                 return false;
+
             }
         });
 
@@ -83,9 +120,6 @@ public class GalleryFragment extends Fragment{
                 startActivity(intent);
             }
         });
-
-
-
 
         return view;
     }
