@@ -18,6 +18,8 @@ public class GameQRCode {
 
     /**
      * Initialize Game QR code class.
+     * @param hashcode The hashcode of the QR code
+     *
      */
     public GameQRCode(String hashcode){
         //comment = "A QR code on a store poster";    //testing
@@ -26,7 +28,9 @@ public class GameQRCode {
     }
 
     /**
-     * Needs to be done: Calculate the score of the game QR code.
+     * Calculate the score of the game QR code.
+     * @param hashcode The hashcode of the QR code
+     * @return totalScore The score of the QR
      */
     private int calculateScore(String hashcode){
         //get a list with repeated digits strings
@@ -81,12 +85,16 @@ public class GameQRCode {
 
     /**
      * Return the score of the game QR code.
+     * @return score The score of the QR
      */
     public int getScore() {
         return score;
     }
+
     /**
-     * Add a comment to a game QR code.
+     * Edit the comment of a game QR code.It includes adding and deleting.
+     * @param theComment The new comment that users input
+     *
      */
     public void editComment(String theComment) {
         comment = theComment;
@@ -94,6 +102,7 @@ public class GameQRCode {
 
     /**
      * return the comment of a game QR code.
+     * @return comment The comment of the QR Code
      */
     public String getComments() {
         return comment;
@@ -101,13 +110,14 @@ public class GameQRCode {
 
 
     /**
-     *
-     * @param newlocation
+     * Setting the geoLocation of a QR Code
+     * @param newlocation The geolocation of a QR Code
      */
     public void setLocation(GeoPoint newlocation) { location = newlocation; }
 
     /**
      * return the location of a game QR code.
+     * @return location The geolocation of a QR Code
      */
     public GeoPoint getLocation() {
         return location;
@@ -115,7 +125,7 @@ public class GameQRCode {
 
 
     /**
-     *
+     * Set the image of a QR code
      * @param newImage
      */
     public void setQRImage(Bitmap newImage) {
@@ -123,8 +133,8 @@ public class GameQRCode {
     }
 
     /**
-     *
-     * @return
+     * Get the image of a QR code
+     * @return QRImage
      */
     public Bitmap getQRImage() {
         return QRImage;

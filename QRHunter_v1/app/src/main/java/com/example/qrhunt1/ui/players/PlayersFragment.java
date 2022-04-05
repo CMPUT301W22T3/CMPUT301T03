@@ -442,7 +442,9 @@ public class PlayersFragment extends Fragment {
                                 if (snapshot.exists()){
                                     userQRStringList.add(snapshot.getString("Score"));
                                 } else {
-                                    Toast.makeText(getActivity().getApplicationContext(), "Not Found", Toast.LENGTH_LONG).show();
+
+
+
                                 }
                             }
                             //sort the list
