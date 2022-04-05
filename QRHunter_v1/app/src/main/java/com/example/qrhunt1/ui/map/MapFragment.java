@@ -97,7 +97,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if (documentSnapshot.get("count") != null) {
                     int count = Integer.parseInt(documentSnapshot.getString("count"));
-                    for (int i=1;i<=count;i++) {
+                    for (int i = 1; i <= count; i++) {
                         GeoPoint geoPoint = documentSnapshot.getGeoPoint("g" + i);
                         LatLng location = new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude());
                         DocumentReference QRScore = db.collection("QRCODE/").document("score");
@@ -119,20 +119,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private void enableMyLocation() {
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                        && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(),new String[] {Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},REQUEST_CODE);
-        }
-        map.setMyLocationEnabled(true);
-        Task<Location> task = client.getLastLocation();
-        task.addOnSuccessListener(new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                if (location != null) {
-                    LatLng latLng = new LatLng(location.getLatitude(),location.getLongitude());
-                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+                && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_CODE);
+        } else {
+            map.setMyLocationEnabled(true);
+            Task<Location> task = client.getLastLocation();
+            task.addOnSuccessListener(new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    if (location != null) {
+                        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                        map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+                    }
                 }
-            }
-        });
-
+            });
+        }
     }
 }

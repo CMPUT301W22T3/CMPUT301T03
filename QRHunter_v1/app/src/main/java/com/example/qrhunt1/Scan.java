@@ -2,18 +2,28 @@ package com.example.qrhunt1;
 
 import static android.content.ContentValues.TAG;
 
-        import androidx.annotation.NonNull;
-        import androidx.appcompat.app.AppCompatActivity;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
         import androidx.core.app.ActivityCompat;
         import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
-        import android.Manifest;
-        import android.app.Activity;
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
         import android.app.Dialog;
-        import android.content.ContentResolver;
-        import android.content.Intent;
+import android.app.ProgressDialog;
+import android.content.ContentResolver;
+import android.content.Context;
+import android.content.Intent;
         import android.content.pm.PackageManager;
-        import android.graphics.Bitmap;
+import android.database.Cursor;
+import android.graphics.Bitmap;
         import android.location.Address;
         import android.location.Geocoder;
         import android.location.Location;
@@ -47,14 +57,22 @@ import static android.content.ContentValues.TAG;
         import com.google.firebase.firestore.QueryDocumentSnapshot;
         import com.google.firebase.firestore.QuerySnapshot;
         import com.google.firebase.firestore.SetOptions;
-        import com.google.zxing.Result;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.google.zxing.Result;
         import com.himanshurawat.hasher.HashType;
         import com.himanshurawat.hasher.Hasher;
 
-        import java.io.File;
-        import java.util.ArrayList;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
         import java.util.Arrays;
-        import java.util.HashMap;
+import java.util.Date;
+import java.util.HashMap;
         import java.util.List;
         import java.util.Locale;
         import java.util.Map;
@@ -69,6 +87,8 @@ public class Scan extends AppCompatActivity {
     String qrScore;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseStorage storage;
+    StorageReference storageReference;
 
 
     @Override
@@ -76,14 +96,15 @@ public class Scan extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
 
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
+
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
-        ActivityCompat.requestPermissions(this,new String[] {Manifest.permission.CAMERA},101);
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 101);
 
         CodeScannerView scannerView = findViewById(R.id.scanner_view);
         mCodeScanner = new CodeScanner(this, scannerView);
-
-        //mCodeScanner.setScanMode(ScanMode.CONTINUOUS);
 
         // Two mode for scan - login - hunt
         String mode = getIntent().getStringExtra("mode");
@@ -102,9 +123,9 @@ public class Scan extends AppCompatActivity {
                             String passWord = loginInfo.get(1);
                             //Toast.makeText(Scan.this, "userName: "+userName+" Password: "+ passWord, Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent();
-                            intent.putExtra("userName",userName);
-                            intent.putExtra("passWord",passWord);
-                            setResult(RESULT_OK,intent);
+                            intent.putExtra("userName", userName);
+                            intent.putExtra("passWord", passWord);
+                            setResult(RESULT_OK, intent);
                             finish();
                         } else if (mode.equals("hunt")) {
                             // TODO - Do something with hunt qr code
@@ -124,9 +145,9 @@ public class Scan extends AppCompatActivity {
                             Button recordLocation = qrUploadDialog.findViewById(R.id.recordLocation);
                             Button addButton = qrUploadDialog.findViewById(R.id.qrInfoAdd);
                             TextView showScore = qrUploadDialog.findViewById(R.id.qr_score);
-                            showScore.setText("QR Score: "+qrScore);
+                            showScore.setText("QR Score: " + qrScore);
 
-                            String currentUser = mAuth.getCurrentUser().getEmail().replace("@gmail.com","");
+                            String currentUser = mAuth.getCurrentUser().getEmail().replace("@gmail.com", "");
                             DocumentReference docRef = db.collection("users")
                                     .document(currentUser)
                                     .collection("QR")
@@ -138,7 +159,7 @@ public class Scan extends AppCompatActivity {
                                         DocumentSnapshot document = task.getResult();
                                         if (document.exists()) {
                                             Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                                            Toast.makeText(Scan.this,"You Already Have This QR CODE!\n   Tap Screen To Keep Hunting!",Toast.LENGTH_LONG).show();
+                                            Toast.makeText(Scan.this, "You Already Have This QR CODE!\n   Tap Screen To Keep Hunting!", Toast.LENGTH_LONG).show();
                                         } else {
                                             Log.d(TAG, "No such document");
 
@@ -146,7 +167,7 @@ public class Scan extends AppCompatActivity {
                                                 @Override
                                                 public void onClick(View view) {
                                                     // TODO
-                                                    takePhotoFunction(view);
+                                                    askCameraPermission();
                                                 }
                                             });
 
@@ -163,14 +184,14 @@ public class Scan extends AppCompatActivity {
                                                                         if (location != null) {
                                                                             lat = location.getLatitude();
                                                                             longitude = location.getLongitude();
-                                                                            Toast.makeText(Scan.this,String.valueOf(lat) + ", "+String.valueOf(longitude), Toast.LENGTH_SHORT).show();
+                                                                            Toast.makeText(Scan.this, String.valueOf(lat) + ", " + String.valueOf(longitude), Toast.LENGTH_SHORT).show();
 
                                                                         }
                                                                     }
                                                                 });
                                                     } else {
-                                                        ActivityCompat.requestPermissions(Scan.this,new String[] {Manifest.permission.ACCESS_FINE_LOCATION,
-                                                                Manifest.permission.ACCESS_COARSE_LOCATION},101);
+                                                        ActivityCompat.requestPermissions(Scan.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                                                                Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
                                                     }
                                                 }
                                             });
@@ -183,12 +204,13 @@ public class Scan extends AppCompatActivity {
                                                     if (lat != 0 && longitude != 0) {
                                                         uploadToMap();
                                                     }
+                                                    Toast.makeText(Scan.this,"Upload successful!",Toast.LENGTH_LONG).show();
                                                     finish();
                                                 }
                                             });
                                             qrUploadDialog.show();
                                         }
-                                    }else{
+                                    } else {
                                         Log.d(TAG, "get failed with ", task.getException());
                                     }
                                 }
@@ -206,6 +228,20 @@ public class Scan extends AppCompatActivity {
         });
     }
 
+    private void askCameraPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 101);
+        } else {
+            openCamera();
+
+        }
+    }
+
+    private void openCamera() {
+        Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Toast.makeText(this,"Function Not Available Now.",Toast.LENGTH_LONG).show();
+    }
+
     private void uploadToMap() {
         GeoPoint geoPoint = new GeoPoint(lat, longitude);
         DocumentReference docRef = db.collection("QRCODE")
@@ -217,7 +253,6 @@ public class Scan extends AppCompatActivity {
                     DocumentSnapshot document = task.getResult();
                     if (document.get("count") != null) {
                         String count = String.valueOf(Integer.parseInt(document.get("count").toString()) + 1);
-                        Toast.makeText(Scan.this, count, Toast.LENGTH_LONG).show();
                         Map<String, Object> location = new HashMap<>();
                         location.put("g" + count, geoPoint);
                         location.put("count", count);
@@ -250,7 +285,7 @@ public class Scan extends AppCompatActivity {
         qr.put("Hashcode",hash);
         qr.put("Score",qrScore);
         qr.put("Location",geoPoint);
-        qr.put("Image",imageUri);
+        //qr.put("Image",imageUri);
 
         db.collection("users")
                 .document(currentUser)
@@ -261,58 +296,14 @@ public class Scan extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void unused) {
                         Log.d(TAG, "DocumentSnapshot successfully written!");
-                        Toast.makeText(Scan.this,"Successful!", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.w(TAG, "Error writing document", e);
-                        Toast.makeText(Scan.this,"Fail! "+e, Toast.LENGTH_SHORT).show();
                     }
                 });
-    }
-
-    // From Stackoverflow
-    // Source: https://stackoverflow.com/questions/2729267/android-camera-intent
-    // By: Alexander Oleynikov https://stackoverflow.com/users/218783/alexander-oleynikov
-
-    private static final int TAKE_PICTURE = 1;
-    private Uri imageUri;
-    public void takePhotoFunction(View view) {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        ActivityCompat.requestPermissions(Scan.this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, 101);
-        File photo = new File(Environment.getExternalStorageDirectory(),  "Pic.jpg");
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
-        imageUri = Uri.fromFile(photo);
-        startActivityForResult(intent, TAKE_PICTURE);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case TAKE_PICTURE:
-                if (resultCode == Activity.RESULT_OK) {
-                    Uri selectedImage = imageUri;
-                    getContentResolver().notifyChange(selectedImage, null);
-                    //ImageView imageView = (ImageView) findViewById(R.id.ImageView);
-                    ContentResolver cr = getContentResolver();
-                    Bitmap bitmap;
-                    try {
-                        bitmap = android.provider.MediaStore.Images.Media
-                                .getBitmap(cr, selectedImage);
-
-                        //imageView.setImageBitmap(bitmap);
-                        Toast.makeText(this, selectedImage.toString(),
-                                Toast.LENGTH_LONG).show();
-                    } catch (Exception e) {
-                        Toast.makeText(this, "Failed to load", Toast.LENGTH_SHORT)
-                                .show();
-                        Log.e("Camera", e.toString());
-                    }
-                }
-        }
     }
 
     private int calculateScore(String hash) {
