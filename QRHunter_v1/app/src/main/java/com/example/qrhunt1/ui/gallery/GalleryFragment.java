@@ -81,6 +81,15 @@ public class GalleryFragment extends Fragment{
 
                     }
                 }
+                TextView noResult = view.findViewById(R.id.no_record);
+                if (codeArrayList.isEmpty()){
+
+                    noResult.setVisibility(View.VISIBLE);
+                }
+                else{
+                    noResult.setVisibility(View.INVISIBLE);
+
+                }
                 codeArrayAdapter = new GameQRList(thisContext, codeArrayList);
                 codeList.setAdapter(codeArrayAdapter);
 
@@ -147,6 +156,7 @@ public class GalleryFragment extends Fragment{
             }
         });
 
+
         return view;
     }
 
@@ -154,7 +164,13 @@ public class GalleryFragment extends Fragment{
     public void onDestroyView() {
         super.onDestroyView();
     }
-    // function to delete an item given its index in the list.
+
+    /**
+     * Delete a QR code from the list
+     * @param position The position of the QR code that the user clicked
+     *
+     */
+    // delete an item given its index in the list.
     public static void deleteItem(int position) {
         final String TAG = "Sample";
         String currentUser = mAuth.getCurrentUser().getEmail();
