@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
     String string = "@gmail.com";
     String email;
 
+
     ActivityResultLauncher<Intent> startForResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
         @Override
@@ -100,12 +101,16 @@ public class MainActivity extends AppCompatActivity {
         create = findViewById(R.id.createnew);
         login = findViewById(R.id.login_btn);
 
+
+        /* Get the remember data and write it up automatically */
         SharedPreferences preferences = getSharedPreferences(FILE_NAME, MODE_PRIVATE);
         String username = preferences.getString("username", "");
         String password = preferences.getString("password", "");
+        Boolean check = preferences.getBoolean("check", false);
 
         loginUsername.setText(username);
         loginPassword.setText(password);
+        remember.setChecked(check);
 
 
         login.setOnClickListener(new View.OnClickListener() {
@@ -115,12 +120,17 @@ public class MainActivity extends AppCompatActivity {
                 String password = loginPassword.getText().toString().trim();
 
                 if(remember.isChecked()){
-                    StoredDataUsingSharedPref(username, password);
+                    Boolean boolIsChecked = remember.isChecked();
+                    SharedPreferences.Editor editor = getSharedPreferences(FILE_NAME, MODE_PRIVATE).edit();
+                    editor.putString("username", username);
+                    editor.putString("password", password);
+                    editor.putBoolean("check", boolIsChecked);
+                    editor.apply();
                     Toast.makeText(MainActivity.this, "Remembered the Username and Password!", Toast.LENGTH_SHORT).show();
 
+                } else{
+                    preferences.edit().clear().apply();
                 }
-
-
 
                 //Username Conditions
                 if (TextUtils.isEmpty(username)){
@@ -132,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Username can not contain space, @, and .!!", Toast.LENGTH_SHORT).show();
                     loginUsername.setError("Username can not contain space!");
                     return;
+
                 }else if(username.indexOf("@") != -1){
                     Toast.makeText(MainActivity.this, "Username can not contain @!!", Toast.LENGTH_SHORT).show();
                     loginUsername.setError("Username can not contain @!");
@@ -157,39 +168,13 @@ public class MainActivity extends AppCompatActivity {
                 }
 
 
-
-
                 // authenticate the user
                 startLogin(email,password);
-//                mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<AuthResult> task) {
-//                        if (task.isSuccessful()){
-//                            Toast.makeText(MainActivity.this, "Login Successful!", Toast.LENGTH_SHORT).show();
-//                            startActivity(new Intent(getApplicationContext(), NaviTest.class));
-//                            finish();
-//
-//                        }else{
-//                            Toast.makeText(MainActivity.this, "Error!" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                });
 
-                remember.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                        if(compoundButton.isChecked()){
-                            SharedPreferences preferences = getSharedPreferences("checkbox", MODE_PRIVATE);
-                            SharedPreferences.Editor editor = preferences.edit();
-                            editor.putString("remember", "ture");
-                            editor.apply();
-                            Toast.makeText(MainActivity.this, "Remembered the Username and Password!", Toast.LENGTH_SHORT).show();
-
-                        }
-                    }
-                });
             }
         });
+
+
 
         create.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -211,13 +196,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void StoredDataUsingSharedPref(String username, String password) {
-        SharedPreferences.Editor editor = getSharedPreferences(FILE_NAME, MODE_PRIVATE).edit();
-        editor.putString("username", username);
-        editor.putString("password", password);
-        editor.apply();
-        
-    }
 
     private void startLogin(String userName, String passWord) {
         mAuth.signInWithEmailAndPassword(userName,passWord).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -234,8 +212,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-
+    
 }
 
 
