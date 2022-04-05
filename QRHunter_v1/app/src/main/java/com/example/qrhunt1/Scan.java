@@ -1,8 +1,6 @@
-
-
 package com.example.qrhunt1;
 
-        import static android.content.ContentValues.TAG;
+import static android.content.ContentValues.TAG;
 
         import androidx.annotation.NonNull;
         import androidx.appcompat.app.AppCompatActivity;
@@ -182,6 +180,10 @@ public class Scan extends AppCompatActivity {
                                                 public void onClick(View view) {
                                                     // TODO
                                                     uploadToUser();
+                                                    if (lat != 0 && longitude != 0) {
+                                                        uploadToMap();
+                                                    }
+                                                    finish();
                                                 }
                                             });
                                             qrUploadDialog.show();
@@ -205,10 +207,41 @@ public class Scan extends AppCompatActivity {
     }
 
     private void uploadToMap() {
-        GeoPoint geoPoint = new GeoPoint(lat,longitude);
-        Map<String, Object> qr = new HashMap<>();
-
+        GeoPoint geoPoint = new GeoPoint(lat, longitude);
+        DocumentReference docRef = db.collection("QRCODE")
+                .document("location");
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.get("count") != null) {
+                        String count = String.valueOf(Integer.parseInt(document.get("count").toString()) + 1);
+                        Toast.makeText(Scan.this, count, Toast.LENGTH_LONG).show();
+                        Map<String, Object> location = new HashMap<>();
+                        location.put("g" + count, geoPoint);
+                        location.put("count", count);
+                        Map<String, Object> score = new HashMap<>();
+                        score.put("g" + count, qrScore);
+                        db.collection("QRCODE")
+                                .document("location")
+                                .set(location, SetOptions.merge());
+                        db.collection("QRCODE")
+                                .document("score")
+                                .set(score, SetOptions.merge());
+                    } else {
+                        Map<String, Object> setCount = new HashMap<>();
+                        setCount.put("count", "0");
+                        db.collection("QRCODE")
+                                .document("location")
+                                .set(setCount);
+                        uploadToMap();
+                    }
+                }
+            }
+        });
     }
+
 
     private void uploadToUser() {
         String currentUser = mAuth.getCurrentUser().getEmail().replace("@gmail.com","");
@@ -238,8 +271,6 @@ public class Scan extends AppCompatActivity {
                         Toast.makeText(Scan.this,"Fail! "+e, Toast.LENGTH_SHORT).show();
                     }
                 });
-        lat = 0;
-        longitude = 0;
     }
 
     // From Stackoverflow

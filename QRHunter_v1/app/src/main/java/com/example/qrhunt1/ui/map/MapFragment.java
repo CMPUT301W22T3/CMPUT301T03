@@ -95,7 +95,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         QRLocation.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()) {
+                if (documentSnapshot.get("count") != null) {
                     int count = Integer.parseInt(documentSnapshot.getString("count"));
                     for (int i=1;i<=count;i++) {
                         GeoPoint geoPoint = documentSnapshot.getGeoPoint("g" + i);
