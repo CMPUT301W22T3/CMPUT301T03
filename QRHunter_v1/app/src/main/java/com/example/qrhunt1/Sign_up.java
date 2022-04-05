@@ -130,12 +130,16 @@ public class Sign_up extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
+
                                 Toast.makeText(Sign_up.this, "User Create Successful!", Toast.LENGTH_SHORT).show();
 
-                                Map<String, String> user = new HashMap<>();
+                                Map<String, Object> user = new HashMap<>();
                                 user.put("UserName", username);
                                 user.put("PassWord", password);
                                 user.put("ContactInfo", "No Contact Info");
+                                user.put("Owner",false);
+                                user.put("UID",mAuth.getCurrentUser().getUid());
+
                                 collectionReference.document(username).set(user);
                                 db.collection("users").document(username)
                                         .set(user)
