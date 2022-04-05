@@ -1,9 +1,9 @@
 package com.example.qrhunt1.ui.players;
 
 public class Rank implements Comparable<Rank>{
-    private int userRank;
+    private Integer userRank;
     private String userName;
-    private int userScore;
+    private Integer userScore;
 
     /**
      * This is the constructor of the Rank class
@@ -12,7 +12,7 @@ public class Rank implements Comparable<Rank>{
      * @param userScore
      * This is the user score
      */
-    Rank(String userName, int userScore){
+    Rank(String userName, Integer userScore){
         this.userRank = 0;
         this.userName = userName;
         this.userScore = userScore;
@@ -22,7 +22,7 @@ public class Rank implements Comparable<Rank>{
      * @return
      * Returns ranking of the user
      */
-    int getUserRank(){
+    Integer getUserRank(){
         return this.userRank;
     }
 
@@ -47,7 +47,7 @@ public class Rank implements Comparable<Rank>{
      * @return
      * Returns score of the user
      */
-    int getUserScore(){
+    Integer getUserScore(){
         return this.userScore;
     }
 
