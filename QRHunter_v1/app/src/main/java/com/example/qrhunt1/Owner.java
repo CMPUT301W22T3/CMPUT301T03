@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 
 import com.example.qrhunt1.ui.profile.MyProfileFragment;
 
@@ -17,6 +18,8 @@ public class Owner extends AppCompatActivity {
         setContentView(R.layout.activity_owner);
 
         Button exit = findViewById(R.id.exit);
+        Button photo = findViewById(R.id.photo);
+        ListView photoList = findViewById(R.id.photoList);
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -25,6 +28,14 @@ public class Owner extends AppCompatActivity {
 
             }
         });
+        photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+            }
+        });
+
 
     }
 }
