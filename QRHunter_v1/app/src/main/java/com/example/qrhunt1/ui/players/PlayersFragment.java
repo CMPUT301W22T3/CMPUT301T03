@@ -25,8 +25,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.qrhunt1.R;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -324,30 +326,65 @@ public class PlayersFragment extends Fragment {
 
                 otherPlayerName.setText(username);
 
-                //if the current user is the owner
-                if (currentUser.equals("wen")) {
-                    deletePlayerButton.setVisibility(View.VISIBLE);
+                DocumentReference docRef = db.collection("users").document(currentUser);
+                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            Boolean owner = document.getBoolean("Owner");
+                            if (owner == true) {
+                                deletePlayerButton.setVisibility(View.VISIBLE);
 
-                    //when the owner want to delete a user
-                    deletePlayerButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            DocumentReference dbDeleteCertainPlayer = db.collection("users/").document(username);
-                            dbDeleteCertainPlayer.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void unused) {
-                                    Toast.makeText(getActivity(), "Successfully delete this user!", Toast.LENGTH_SHORT).show();
-                                    otherPlayerProfile.dismiss();
-                                }
-                            }) .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(getActivity(), "Delete user error!", Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                                //when the owner want to delete a user
+                                deletePlayerButton.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        DocumentReference dbDeleteCertainPlayer = db.collection("users/").document(username);
+                                        dbDeleteCertainPlayer.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+                                                Toast.makeText(getActivity(), "Successfully delete this user!", Toast.LENGTH_SHORT).show();
+                                                otherPlayerProfile.dismiss();
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Toast.makeText(getActivity(), "Delete user error!", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }
+                                });
+                            }
                         }
-                    });
-                }
+                    }
+                });
+
+
+                //if the current user is the owner
+//                if (owner == true){
+//                    deletePlayerButton.setVisibility(View.VISIBLE);
+//
+//                    //when the owner want to delete a user
+//                    deletePlayerButton.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            DocumentReference dbDeleteCertainPlayer = db.collection("users/").document(username);
+//                            dbDeleteCertainPlayer.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                @Override
+//                                public void onSuccess(Void unused) {
+//                                    Toast.makeText(getActivity(), "Successfully delete this user!", Toast.LENGTH_SHORT).show();
+//                                    otherPlayerProfile.dismiss();
+//                                }
+//                            }) .addOnFailureListener(new OnFailureListener() {
+//                                @Override
+//                                public void onFailure(@NonNull Exception e) {
+//                                    Toast.makeText(getActivity(), "Delete user error!", Toast.LENGTH_SHORT).show();
+//                                }
+//                            });
+//                        }
+//                    });
+//                }
 
                 //generate QR code base on username (use for Profile)
                 String sText = username.trim();

@@ -59,7 +59,9 @@ import com.google.firebase.auth.FirebaseAuth;
         import com.google.firebase.firestore.QuerySnapshot;
         import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.zxing.Result;
         import com.himanshurawat.hasher.HashType;
         import com.himanshurawat.hasher.Hasher;
@@ -362,7 +364,13 @@ public class Scan extends AppCompatActivity {
 
         if (currentPhotoPath != null) {
             StorageReference image = storageRef.child(currentUser+"/"+hash);
-            image.putFile(photoURI);
+            image.putFile(photoURI).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                    double progress = (100.0 * snapshot.getBytesTransferred()) / snapshot.getTotalByteCount();
+                    Log.d(TAG, "Upload is " + progress + "% done");
+                }
+            });
         }
     }
 
