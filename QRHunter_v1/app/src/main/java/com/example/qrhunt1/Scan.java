@@ -2,18 +2,24 @@ package com.example.qrhunt1;
 
 import static android.content.ContentValues.TAG;
 
-        import androidx.annotation.NonNull;
-        import androidx.appcompat.app.AppCompatActivity;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
         import androidx.core.app.ActivityCompat;
         import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
-        import android.Manifest;
+import android.Manifest;
         import android.app.Activity;
         import android.app.Dialog;
         import android.content.ContentResolver;
         import android.content.Intent;
         import android.content.pm.PackageManager;
         import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ClipDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -42,7 +48,8 @@ import android.widget.TextView;
         import com.google.android.gms.tasks.OnFailureListener;
         import com.google.android.gms.tasks.OnSuccessListener;
         import com.google.android.gms.tasks.Task;
-        import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.BuildConfig;
+import com.google.firebase.auth.FirebaseAuth;
         import com.google.firebase.firestore.CollectionReference;
         import com.google.firebase.firestore.DocumentReference;
         import com.google.firebase.firestore.DocumentSnapshot;
@@ -51,14 +58,23 @@ import android.widget.TextView;
         import com.google.firebase.firestore.QueryDocumentSnapshot;
         import com.google.firebase.firestore.QuerySnapshot;
         import com.google.firebase.firestore.SetOptions;
-        import com.google.zxing.Result;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.zxing.Result;
         import com.himanshurawat.hasher.HashType;
         import com.himanshurawat.hasher.Hasher;
 
         import java.io.File;
-        import java.util.ArrayList;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
         import java.util.Arrays;
-        import java.util.HashMap;
+import java.util.Date;
+import java.util.HashMap;
         import java.util.List;
         import java.util.Locale;
         import java.util.Map;
@@ -73,6 +89,10 @@ public class Scan extends AppCompatActivity {
     String qrScore;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference storageRef = storage.getReference();
+    String mCurrentPhotoPath;
+
 
 
     @Override
@@ -161,7 +181,12 @@ public class Scan extends AppCompatActivity {
                                                 @Override
                                                 public void onClick(View view) {
                                                     // TODO
-                                                    takePhotoFunction(view);
+                                                    try {
+                                                        takingPhoto();
+                                                    } catch (IOException e) {
+                                                        e.printStackTrace();
+                                                    }
+
                                                 }
                                             });
 
@@ -220,6 +245,54 @@ public class Scan extends AppCompatActivity {
             }
         });
     }
+    Uri photoURI;
+
+    private void takingPhoto() throws IOException {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                photoURI = FileProvider.getUriForFile(this,
+                        "com.example.android.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, 1);
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult ( int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            // TODO- Somethings
+        }
+    }
+
+    String currentPhotoPath;
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
 
     private void uploadToMap() {
         GeoPoint geoPoint = new GeoPoint(lat, longitude);
@@ -265,7 +338,7 @@ public class Scan extends AppCompatActivity {
         qr.put("Hashcode",hash);
         qr.put("Score",qrScore);
         qr.put("Location",geoPoint);
-        qr.put("Image",imageUri);
+        //qr.put("Image",imageUri);
 
         db.collection("users")
                 .document(currentUser)
@@ -286,52 +359,10 @@ public class Scan extends AppCompatActivity {
                         Toast.makeText(Scan.this,"Fail! "+e, Toast.LENGTH_SHORT).show();
                     }
                 });
-    }
 
-    // From Stackoverflow
-    // Source: https://stackoverflow.com/questions/2729267/android-camera-intent
-    // By: Alexander Oleynikov https://stackoverflow.com/users/218783/alexander-oleynikov
-
-    private static final int TAKE_PICTURE = 1;
-    private Uri imageUri;
-
-    /**
-     *
-     * @param view
-     */
-    public void takePhotoFunction(View view) {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        ActivityCompat.requestPermissions(Scan.this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, 101);
-        File photo = new File(Environment.getExternalStorageDirectory(),  "Pic.jpg");
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
-        imageUri = Uri.fromFile(photo);
-        startActivityForResult(intent, TAKE_PICTURE);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case TAKE_PICTURE:
-                if (resultCode == Activity.RESULT_OK) {
-                    Uri selectedImage = imageUri;
-                    getContentResolver().notifyChange(selectedImage, null);
-                    //ImageView imageView = (ImageView) findViewById(R.id.ImageView);
-                    ContentResolver cr = getContentResolver();
-                    Bitmap bitmap;
-                    try {
-                        bitmap = android.provider.MediaStore.Images.Media
-                                .getBitmap(cr, selectedImage);
-
-                        //imageView.setImageBitmap(bitmap);
-                        Toast.makeText(this, selectedImage.toString(),
-                                Toast.LENGTH_LONG).show();
-                    } catch (Exception e) {
-                        Toast.makeText(this, "Failed to load", Toast.LENGTH_SHORT)
-                                .show();
-                        Log.e("Camera", e.toString());
-                    }
-                }
+        if (currentPhotoPath != null) {
+            StorageReference image = storageRef.child(currentUser+"/"+hash);
+            image.putFile(photoURI);
         }
     }
 

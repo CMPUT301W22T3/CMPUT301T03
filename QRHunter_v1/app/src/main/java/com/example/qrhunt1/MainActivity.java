@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
                 if (username.indexOf(" ") != -1){
-                    Toast.makeText(MainActivity.this, "Username can not contain space, @, and .!!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Username can not contain space!!", Toast.LENGTH_SHORT).show();
                     loginUsername.setError("Username can not contain space!");
                     return;
 
