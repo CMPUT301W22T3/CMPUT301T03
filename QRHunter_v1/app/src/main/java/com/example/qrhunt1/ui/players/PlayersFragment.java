@@ -588,9 +588,6 @@ public class PlayersFragment extends Fragment {
 
     }
 
-
-
-
 }
 
 

@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -40,6 +41,12 @@ public class Sign_up extends AppCompatActivity {
     String email;
     ImageView back;
 
+    EditText loginUsername;
+    EditText loginPassword;
+    CheckBox remember;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +63,12 @@ public class Sign_up extends AppCompatActivity {
         signupButton = findViewById(R.id.signup_btn);
         back = findViewById(R.id.iv_signup_icon);
 
+        loginUsername = findViewById(R.id.input_username);
+        loginPassword = findViewById(R.id.input_password);
+        remember = findViewById(R.id.rememberme);
+
+
+
 
 //        if(mAuth.getCurrentUser() != null){
 //            startActivity(new Intent(getApplicationContext(), MainActivity.class));
@@ -69,7 +82,6 @@ public class Sign_up extends AppCompatActivity {
                 String username = su_username.getText().toString().trim();
                 String password = su_password.getText().toString().trim();
                 String passwordAgain = conf_password.getText().toString().trim();
-
 
 
                 if (TextUtils.isEmpty(username)){
@@ -133,6 +145,9 @@ public class Sign_up extends AppCompatActivity {
                                                 Log.w(TAG, "Error adding document", e);
                                             }
                                         });
+
+
+
 
                                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
 
