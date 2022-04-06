@@ -72,7 +72,7 @@ public class GameQRList extends ArrayAdapter<GameQRCode> {
             gameQRCodeLocation.setText("Location: Null");
 
         }else{
-            gameQRCodeLocation.setText("Location: [" + code.getLocation().getLatitude()+", "+ code.getLocation().getLongitude()+"]");
+            gameQRCodeLocation.setText("Location: [" + String.format("%.2f",code.getLocation().getLatitude())+", "+ String.format("%.2f",code.getLocation().getLongitude()) +"]");
         }
 
         return convertView;

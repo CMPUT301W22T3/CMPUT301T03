@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class GameQRCode {
     private int score;
@@ -132,12 +131,6 @@ public class GameQRCode {
         QRImage = newImage;
     }
 
-    /**
-     * Get the image of a QR code
-     * @return QRImage
-     */
-    public Bitmap getQRImage() {
-        return QRImage;
-    }
+
 
 }

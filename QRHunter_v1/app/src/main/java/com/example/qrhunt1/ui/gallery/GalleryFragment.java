@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,6 +53,7 @@ public class GalleryFragment extends Fragment{
     static FirebaseFirestore db;
     private boolean resume = false;
     private static FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    FirebaseStorage storage;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -67,18 +70,21 @@ public class GalleryFragment extends Fragment{
         db = FirebaseFirestore.getInstance();
 
         codeArrayList = new ArrayList<>();
+
+        codeArrayAdapter = new GameQRList(thisContext, codeArrayList);
+        codeList.setAdapter(codeArrayAdapter)                                                                                                                                      ;
+
         String currentUser = mAuth.getCurrentUser().getEmail();
         currentUser = currentUser.replace("@gmail.com", "");
         CollectionReference dbQR = db.collection("users/").document(currentUser).collection("QR/");
+
+        String finalCurrentUser = currentUser;
+
         dbQR.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>(){
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 List<DocumentSnapshot> snapshotList = queryDocumentSnapshots.getDocuments();
-                // ImageView in your Activity
-                //ImageView imageView = findViewById(R.id.imageView);
 
-                // Download directly from StorageReference using Glide
-                //
                 for (DocumentSnapshot snapshot : snapshotList) {
                     if (snapshot.exists()){
 
@@ -86,14 +92,6 @@ public class GalleryFragment extends Fragment{
                         codeArrayList.add(newCode);
                         newCode.setLocation(snapshot.getGeoPoint("Location"));
 
-                        // Reference to an image file in Cloud Storage
-                        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-                        StorageReference pathReference = storageReference.child("images/"+snapshot.getString("Hashcode"));
-                        /*
-                        Glide.with(thisContext)
-                            .load(storageReference)
-                            .into(imageView);
-                            */
                     }
                 }
                 TextView noResult = view.findViewById(R.id.no_record);
