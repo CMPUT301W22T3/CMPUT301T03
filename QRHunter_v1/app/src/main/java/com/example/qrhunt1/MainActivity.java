@@ -100,7 +100,6 @@ public class MainActivity extends AppCompatActivity {
         create = findViewById(R.id.createnew);
         login = findViewById(R.id.login_btn);
 
-
         /* Get the remember data and write it up automatically */
         SharedPreferences preferences = getSharedPreferences(FILE_NAME, MODE_PRIVATE);
         String username = preferences.getString("username", "");
@@ -110,9 +109,6 @@ public class MainActivity extends AppCompatActivity {
         loginUsername.setText(username);
         loginPassword.setText(password);
         remember.setChecked(check);
-
-
-
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,7 +129,6 @@ public class MainActivity extends AppCompatActivity {
                 } else{
                     preferences.edit().clear().apply();
                 }
-
 
                 //Username Conditions
                 if (TextUtils.isEmpty(username)){
@@ -170,14 +165,10 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
 
-
                 // authenticate the user
                 startLogin(email,password);
-
             }
         });
-
-
 
         create.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -186,7 +177,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
 
         scan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -220,7 +210,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    
 }
 
 
