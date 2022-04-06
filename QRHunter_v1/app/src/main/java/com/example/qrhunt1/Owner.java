@@ -26,37 +26,33 @@ import java.util.List;
 
 public class Owner extends AppCompatActivity {
 
-    private ArrayList<Uri> photoDataList;
-    private ArrayAdapter<Uri> photoListAdapter;
+    private ArrayList<String> urlDataList;
+    private ArrayAdapter<String> urlAdapter;
     private ArrayList<String> userNameDataList;
     private ArrayAdapter<String> userNameAdapter;
     // Reference to an image file in Cloud Storage
     // Create a storage reference from our app
 
+    Button exit;
+    Button photo;
+    ListView photoList;
 
     //StorageReference storageRef = "gs://qrhunter-344119.appspot.com/";
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_owner);
 
-        Button exit = findViewById(R.id.exit);
-        Button photo = findViewById(R.id.photo);
-        ListView photoList = findViewById(R.id.photoList);
-
+        exit = findViewById(R.id.exit);
+        photo = findViewById(R.id.photo);
+        photoList = findViewById(R.id.photoList);
 
         userNameDataList = new ArrayList<>();
+        urlDataList = new ArrayList<>();
 
-        exit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                Intent intent = new Intent(Owner.this, MyProfileFragment.class);
-                finish();
+        urlAdapter = new ArrayAdapter<>(this, R.layout.photo_row, urlDataList);
+        photoList.setAdapter(urlAdapter);
 
-            }
-        });
         photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -66,5 +62,14 @@ public class Owner extends AppCompatActivity {
         });
 
 
+        //click exit button to exit this page
+        exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                Intent intent = new Intent(Owner.this, MyProfileFragment.class);
+                finish();
+
+            }
+        });
     }
 }
