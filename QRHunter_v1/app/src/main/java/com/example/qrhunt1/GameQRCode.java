@@ -23,11 +23,13 @@ public class GameQRCode {
         this.hashcode = hashcode;
     }
 
+    /*
     /**
      * Calculate the score of the game QR code.
      * @param hashcode The hashcode of the QR code
      * @return totalScore The score of the QR
      */
+    /*
     private int calculateScore(String hashcode){
         //get a list with repeated digits strings
         ArrayList<String> repeatedDigitsList = new ArrayList<>();
@@ -74,9 +76,11 @@ public class GameQRCode {
         return totalScore;
     }
 
+     */
+
 
     public String getHashcode() {
-        return hashcode;
+        return this.hashcode;
     }
 
     /**
@@ -84,11 +88,11 @@ public class GameQRCode {
      * @return score The score of the QR
      */
     public String getScore() {
-        return score;
+        return this.score;
     }
 
     public void setScore(String Ascore) {
-        score = Ascore;
+        this.score = Ascore;
     }
 
     /**
@@ -105,7 +109,7 @@ public class GameQRCode {
      * @return comment The comment of the QR Code
      */
     public String getComments() {
-        return comment;
+        return this.comment;
     }
 
 
@@ -113,14 +117,14 @@ public class GameQRCode {
      * Setting the geoLocation of a QR Code
      * @param newlocation The geolocation of a QR Code
      */
-    public void setLocation(GeoPoint newlocation) { location = newlocation; }
+    public void setLocation(GeoPoint newlocation) { this.location = newlocation; }
 
     /**
      * return the location of a game QR code.
      * @return location The geolocation of a QR Code
      */
     public GeoPoint getLocation() {
-        return location;
+        return this.location;
     }
 
 
@@ -129,7 +133,7 @@ public class GameQRCode {
      * @param url
      */
     public void setURL(String url) {
-        QRImageURL = url;
+        this.QRImageURL = url;
 
     }
 
@@ -138,7 +142,7 @@ public class GameQRCode {
      * @return QRImageURL
      */
     public String getURL() {
-        return QRImageURL;
+        return this.QRImageURL;
 
     }
 

@@ -47,14 +47,12 @@ import java.util.List;
 
 public class GalleryFragment extends Fragment{
     ListView codeList;
-    TextView geoLocation;
     static ArrayAdapter<GameQRCode> codeArrayAdapter;
     static ArrayList<GameQRCode> codeArrayList;
     FloatingActionButton scanButton;
     static FirebaseFirestore db;
     private boolean resume = false;
     private static FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    FirebaseStorage storage;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -66,22 +64,14 @@ public class GalleryFragment extends Fragment{
         resume = false;
         codeList = view.findViewById(R.id.gallery_list);
         scanButton = view.findViewById(R.id.fab);
-        geoLocation = view.findViewById(R.id.qr_location);
 
         // Access a Cloud Firestore instance from the Fragment
         db = FirebaseFirestore.getInstance();
 
         codeArrayList = new ArrayList<>();
-
-        codeArrayAdapter = new GameQRList(thisContext, codeArrayList);
-        codeList.setAdapter(codeArrayAdapter)                                                                                                                                      ;
-
         String currentUser = mAuth.getCurrentUser().getEmail();
         currentUser = currentUser.replace("@gmail.com", "");
         CollectionReference dbQR = db.collection("users/").document(currentUser).collection("QR/");
-
-        String finalCurrentUser = currentUser;
-
         dbQR.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>(){
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -94,24 +84,18 @@ public class GalleryFragment extends Fragment{
                         codeArrayList.add(newCode);
                         newCode.setScore(snapshot.getString("Score"));
                         newCode.setLocation(snapshot.getGeoPoint("Location"));
-                        if(snapshot.getString("URL")!=null){
+                        if (snapshot.getString("URL")!=null) {
                             newCode.setURL(snapshot.getString("URL"));
-
-                            codeArrayAdapter = new GameQRList(thisContext, codeArrayList);
-                            codeList.setAdapter(codeArrayAdapter);
                         }
-
-
-
                     }
                 }
+
                 TextView noResult = view.findViewById(R.id.no_record);
                 if (codeArrayList.isEmpty()){
                     noResult.setVisibility(View.VISIBLE);
                 }
                 else{
                     noResult.setVisibility(View.INVISIBLE);
-
                 }
                 codeArrayAdapter = new GameQRList(thisContext, codeArrayList);
                 codeList.setAdapter(codeArrayAdapter);
@@ -198,31 +182,21 @@ public class GalleryFragment extends Fragment{
                 @Override
                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                     List<DocumentSnapshot> snapshotList = queryDocumentSnapshots.getDocuments();
-
                     for (DocumentSnapshot snapshot : snapshotList) {
                         if (snapshot.exists()){
-
                             GameQRCode newCode = new GameQRCode(snapshot.getString("Hashcode"));
                             codeArrayList.add(newCode);
                             newCode.setScore(snapshot.getString("Score"));
                             newCode.setLocation(snapshot.getGeoPoint("Location"));
-                            if(snapshot.getString("URL")!=null){
+                            if (snapshot.getString("URL")!=null) {
                                 newCode.setURL(snapshot.getString("URL"));
-
-                                codeArrayAdapter = new GameQRList(getActivity(), codeArrayList);
-                                codeList.setAdapter(codeArrayAdapter);
                             }
-
                         }
                     }
                     codeArrayAdapter = new GameQRList(getActivity(), codeArrayList);
                     codeList.setAdapter(codeArrayAdapter);
                 }});
         }
-
-
-        //update the gallery list
-
     }
 
     @Override

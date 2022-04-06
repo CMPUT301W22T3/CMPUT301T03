@@ -77,6 +77,7 @@ public class GameQRList extends ArrayAdapter<GameQRCode> {
 
         //Update the Image of a QR code
         ImageView QRImage = convertView.findViewById(R.id.qr_code_image);
+
         if(code.getURL()!= null){
             Picasso.get().load(code.getURL()).into(QRImage);
         }
