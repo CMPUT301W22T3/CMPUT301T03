@@ -60,23 +60,23 @@ public class GameQRList extends ArrayAdapter<GameQRCode> {
 
             GameQRCode code = codes.get(position);
 
-            TextView gameQRCodeScore = convertView.findViewById(R.id.qr_score);
-            TextView gameQRCodeLocation = convertView.findViewById(R.id.qr_location);
-            //Update the Image of a QR code
-            ImageView QRImage = convertView.findViewById(R.id.qr_code_image);
+        TextView gameQRCodeScore = convertView.findViewById(R.id.qr_score);
+        TextView gameQRCodeLocation = convertView.findViewById(R.id.qr_location);
+        //Update the Image of a QR code
+        ImageView QRImage = convertView.findViewById(R.id.qr_code_image);
 
-            gameQRCodeScore.setText("Score: " + code.getScore());
+        gameQRCodeScore.setText("Score: " + code.getScore());
 
-            if (code.getLocation().getLatitude()==0 && (code.getLocation().getLongitude()==0)){
-                gameQRCodeLocation.setText("Location: Null");
+        if (code.getLocation().getLatitude()==0 && (code.getLocation().getLongitude()==0)){
+            gameQRCodeLocation.setText("Location: Null");
 
-            }else{
-                gameQRCodeLocation.setText("Location: [" + String.format("%.2f",code.getLocation().getLatitude())+", "+ String.format("%.2f",code.getLocation().getLongitude()) +"]");
-            }
+        }else{
+            gameQRCodeLocation.setText("Location: [" + String.format("%.2f",code.getLocation().getLatitude())+", "+ String.format("%.2f",code.getLocation().getLongitude()) +"]");
+        }
 
-            if(code.getURL()!= null){
-                Picasso.get().load(code.getURL()).into(QRImage);
-            }
+        if(code.getURL()!= null){
+            Picasso.get().load(code.getURL()).resize(90,90).centerCrop().into(QRImage);
+        }
 
         }
         return convertView;

@@ -96,9 +96,6 @@ public class Scan extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef = storage.getReference();
-    String mCurrentPhotoPath;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -305,7 +302,6 @@ public class Scan extends AppCompatActivity {
         return image;
     }
 
-
     private void uploadToMap() {
         GeoPoint geoPoint = new GeoPoint(lat, longitude);
         DocumentReference docRef = db.collection("QRCODE")
@@ -340,7 +336,6 @@ public class Scan extends AppCompatActivity {
             }
         });
     }
-
 
     private void uploadToUser() {
         String currentUser = mAuth.getCurrentUser().getEmail().replace("@gmail.com","");

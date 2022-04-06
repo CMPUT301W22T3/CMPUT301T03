@@ -40,12 +40,9 @@ public class Sign_up extends AppCompatActivity {
     String string = "@gmail.com";
     String email;
     ImageView back;
-
     EditText loginUsername;
     EditText loginPassword;
     CheckBox remember;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,15 +64,6 @@ public class Sign_up extends AppCompatActivity {
         loginPassword = findViewById(R.id.input_password);
         remember = findViewById(R.id.rememberme);
 
-
-
-
-//        if(mAuth.getCurrentUser() != null){
-//            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-//            finish();
-//        }
-
-
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,13 +71,11 @@ public class Sign_up extends AppCompatActivity {
                 String password = su_password.getText().toString().trim();
                 String passwordAgain = conf_password.getText().toString().trim();
 
-
                 if (TextUtils.isEmpty(username)){
                     Toast.makeText(Sign_up.this, "Username can not be Empty!", Toast.LENGTH_SHORT).show();
                     su_username.setError("Username can not be Empty!");
                     return;
                 }
-
                 if (username.indexOf(" ") != -1){
                     Toast.makeText(Sign_up.this, "Username can not contain space!!", Toast.LENGTH_SHORT).show();
                     su_username.setError("Username can not contain space!");
@@ -108,7 +94,6 @@ public class Sign_up extends AppCompatActivity {
                     email = username.concat(string);
                     //username = username + string;
                 }
-
                 if (TextUtils.isEmpty(password)){
                     Toast.makeText(Sign_up.this, "Password can not be Empty!", Toast.LENGTH_SHORT).show();
                     su_password.setError("Password can not be Empty!");
@@ -122,7 +107,6 @@ public class Sign_up extends AppCompatActivity {
                     conf_password.setError("Confirm Password does not same as Password!");
                     return;
                 }
-
 
                 //register the user in firebase
                 if (password.equals(passwordAgain)) {
@@ -150,22 +134,11 @@ public class Sign_up extends AppCompatActivity {
                                             }
                                         });
 
-
-
-
                                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
-
+                                finish();
 
                             }else {
                                 Toast.makeText(Sign_up.this, "Error! The username is already in use by another account!", Toast.LENGTH_SHORT).show();
-
-                                //Intent intent = new Intent(Sign_up.this, MainActivity.class);
-                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-
-
-//                            } else {
-//                                Toast.makeText(Sign_up.this, "Error!" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-
                             }
                         }
                     });
