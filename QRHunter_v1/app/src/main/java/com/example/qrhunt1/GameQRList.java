@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -26,6 +27,7 @@ public class GameQRList extends ArrayAdapter<GameQRCode> {
     private Context context;
     FirebaseFirestore db;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    ImageView imageView;
 
     /**
      *
@@ -63,6 +65,7 @@ public class GameQRList extends ArrayAdapter<GameQRCode> {
 
         TextView gameQRCodeScore = convertView.findViewById(R.id.qr_score);
         TextView gameQRCodeLocation = convertView.findViewById(R.id.qr_location);
+        ImageView imageView = convertView.findViewById(R.id.default_qr_code);
 
 
         gameQRCodeScore.setText("Score: " + code.getScore());
@@ -74,6 +77,7 @@ public class GameQRList extends ArrayAdapter<GameQRCode> {
         }else{
             gameQRCodeLocation.setText("Location: [" + String.format("%.2f",code.getLocation().getLatitude())+", "+ String.format("%.2f",code.getLocation().getLongitude()) +"]");
         }
+        Picasso.get().load("https://i.imgur.com/DvpvklR.png").into(imageView);
 
         return convertView;
     }

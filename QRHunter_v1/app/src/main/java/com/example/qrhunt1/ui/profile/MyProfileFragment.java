@@ -21,6 +21,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.example.qrhunt1.MainActivity2;
 import com.example.qrhunt1.Owner;
 import com.example.qrhunt1.ui.players.CustomList;
 import com.example.qrhunt1.ui.players.Rank;

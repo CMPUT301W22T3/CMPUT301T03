@@ -21,6 +21,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.QRHunt1">
         <activity
+            android:name=".MainActivity2"
+            android:exported="false" />
+        <activity
             android:name=".photoList"
             android:exported="false"
             tools:ignore="Instantiatable" />

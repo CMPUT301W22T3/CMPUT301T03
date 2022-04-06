@@ -373,11 +373,34 @@ public class Scan extends AppCompatActivity {
 
         if (currentPhotoPath != null) {
             StorageReference image = storageRef.child(currentUser+"/"+hash);
-            image.putFile(photoURI).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+            image.putFile(photoURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
-                public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
-                    double progress = (100.0 * snapshot.getBytesTransferred()) / snapshot.getTotalByteCount();
-                    Log.d(TAG, "Upload is " + progress + "% done");
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    image.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            Uri downloadUrl = uri;
+                            Map<String, Object> URL = new HashMap<>();
+                            URL.put("URL",downloadUrl.toString());
+                            db.collection("users")
+                                    .document(currentUser)
+                                    .collection("QR")
+                                    .document(hash)
+                                    .set(URL,SetOptions.merge())
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            Log.d(TAG, "URL successfully written!");
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.d(TAG, "URL fail to written!");
+                                        }
+                                    });
+                        }
+                    });
                 }
             });
         }
