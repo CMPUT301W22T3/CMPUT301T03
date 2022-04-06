@@ -7,7 +7,7 @@
     android:background="@color/white">
 
     <ImageView
-        android:id="@+id/default_qr_code"
+        android:id="@+id/qr_code_image"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:src="@drawable/ic_default_qr_code_24" />

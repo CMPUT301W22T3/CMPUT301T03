@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 
 import com.google.firebase.firestore.GeoPoint;
 
+import java.net.URL;
 import java.util.ArrayList;
 
 public class GameQRCode {
@@ -12,7 +13,7 @@ public class GameQRCode {
     private String hashcode;
     private String comment = "";
     private GeoPoint location;
-    private Bitmap QRImage;
+    private String QRImageURL;
 
 
     /**
@@ -124,12 +125,24 @@ public class GameQRCode {
 
 
     /**
-     * Set the image of a QR code
-     * @param newImage
+     * Set the URL of a QR code
+     * @param url
      */
-    public void setQRImage(Bitmap newImage) {
-        QRImage = newImage;
+    public void setURL(String url) {
+        QRImageURL = url;
+
     }
+
+    /**
+     * Get the URL of a QR code
+     * @return QRImageURL
+     */
+    public String getURL() {
+        return QRImageURL;
+
+    }
+
+
 
 
 

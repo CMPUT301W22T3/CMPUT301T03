@@ -40,7 +40,6 @@ public class GameQRList extends ArrayAdapter<GameQRCode> {
         this.context = context;
     }
 
-
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -67,10 +66,8 @@ public class GameQRList extends ArrayAdapter<GameQRCode> {
         TextView gameQRCodeLocation = convertView.findViewById(R.id.qr_location);
         ImageView imageView = convertView.findViewById(R.id.default_qr_code);
 
-
         gameQRCodeScore.setText("Score: " + code.getScore());
 
-        //"["+snapshot.getGeoPoint("Location").getLatitude()+", "+snapshot.getGeoPoint("Location").getLongitude()+"]"
         if (code.getLocation().getLatitude()==0 && (code.getLocation().getLongitude()==0)){
             gameQRCodeLocation.setText("Location: Null");
 
@@ -78,6 +75,18 @@ public class GameQRList extends ArrayAdapter<GameQRCode> {
             gameQRCodeLocation.setText("Location: [" + String.format("%.2f",code.getLocation().getLatitude())+", "+ String.format("%.2f",code.getLocation().getLongitude()) +"]");
         }
         Picasso.get().load("https://i.imgur.com/DvpvklR.png").into(imageView);
+
+        //Update the Image of a QR code
+        if(code.getURL()!= null){
+            ImageView QRImage = convertView.findViewById(R.id.qr_code_image);
+            Picasso.get().load(code.getURL()).into(QRImage);
+
+
+        }
+
+
+
+
 
         return convertView;
     }

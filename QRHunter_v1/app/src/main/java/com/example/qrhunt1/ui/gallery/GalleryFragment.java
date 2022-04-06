@@ -93,6 +93,11 @@ public class GalleryFragment extends Fragment{
                         GameQRCode newCode = new GameQRCode(snapshot.getString("Hashcode"));
                         codeArrayList.add(newCode);
                         newCode.setLocation(snapshot.getGeoPoint("Location"));
+                        if(snapshot.getString("URL")!=null){
+
+                            newCode.setURL(snapshot.getString("URL"));
+                        }
+
 
                     }
                 }
