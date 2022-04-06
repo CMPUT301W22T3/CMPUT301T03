@@ -62,6 +62,7 @@ public class GalleryFragment extends Fragment{
         View view = inflater.inflate(R.layout.fragment_gallery,container,false);
         Context thisContext = container.getContext();
 
+        resume = false;
         codeList = view.findViewById(R.id.gallery_list);
         scanButton = view.findViewById(R.id.fab);
         geoLocation = view.findViewById(R.id.qr_location);
