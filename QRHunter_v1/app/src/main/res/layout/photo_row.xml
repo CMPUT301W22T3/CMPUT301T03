@@ -20,6 +20,7 @@
         android:layout_columnWeight="1"
         android:layout_marginLeft="0dp"
         android:text="photo taken by user"
+        android:gravity="center"
         android:textAlignment="center"
         android:textSize="30sp" />
 

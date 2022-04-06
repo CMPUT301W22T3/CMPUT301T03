@@ -34,7 +34,7 @@ public class photoList extends ArrayAdapter {
     @Override
     public View getView(int position, @Nullable View convertView,@Nullable ViewGroup parent){
         View view = convertView;
-        LayoutInflater inflater = context.getLayoutInflater();
+//        LayoutInflater inflater = context.getLayoutInflater();
         if(convertView == null){
             view = LayoutInflater.from(context).inflate(R.layout.photo_row,parent,false);
         }
