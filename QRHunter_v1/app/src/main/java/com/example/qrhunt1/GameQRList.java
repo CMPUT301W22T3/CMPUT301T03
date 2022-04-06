@@ -64,7 +64,7 @@ public class GameQRList extends ArrayAdapter<GameQRCode> {
 
         TextView gameQRCodeScore = convertView.findViewById(R.id.qr_score);
         TextView gameQRCodeLocation = convertView.findViewById(R.id.qr_location);
-        ImageView imageView = convertView.findViewById(R.id.default_qr_code);
+
 
         gameQRCodeScore.setText("Score: " + code.getScore());
 
@@ -80,8 +80,6 @@ public class GameQRList extends ArrayAdapter<GameQRCode> {
         if(code.getURL()!= null){
             ImageView QRImage = convertView.findViewById(R.id.qr_code_image);
             Picasso.get().load(code.getURL()).into(QRImage);
-
-
         }
 
 
