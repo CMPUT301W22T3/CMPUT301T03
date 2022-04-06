@@ -191,6 +191,13 @@ public class GalleryFragment extends Fragment{
                             codeArrayList.add(newCode);
                         }
                     }
+                    TextView noResult = getView().findViewById(R.id.no_record);
+                    if (codeArrayList.isEmpty()){
+                        noResult.setVisibility(View.VISIBLE);
+                    }
+                    else{
+                        noResult.setVisibility(View.INVISIBLE);
+                    }
                     codeArrayAdapter = new GameQRList(getActivity(), codeArrayList);
                     codeList.setAdapter(codeArrayAdapter);
                 }});
