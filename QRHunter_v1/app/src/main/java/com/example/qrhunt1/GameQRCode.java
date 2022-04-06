@@ -3,7 +3,6 @@ package com.example.qrhunt1;
 
 import com.google.firebase.firestore.GeoPoint;
 
-import java.util.ArrayList;
 
 public class GameQRCode {
     private String score;

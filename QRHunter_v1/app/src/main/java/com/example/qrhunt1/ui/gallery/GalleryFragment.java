@@ -59,7 +59,6 @@ public class GalleryFragment extends Fragment{
                              ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_gallery,container,false);
-        Context thisContext = container.getContext();
 
         resume = false;
         codeList = view.findViewById(R.id.gallery_list);
@@ -97,7 +96,7 @@ public class GalleryFragment extends Fragment{
                 else{
                     noResult.setVisibility(View.INVISIBLE);
                 }
-                codeArrayAdapter = new GameQRList(thisContext, codeArrayList);
+                codeArrayAdapter = new GameQRList(getActivity(), codeArrayList);
                 codeList.setAdapter(codeArrayAdapter);
             }});
 
@@ -130,7 +129,7 @@ public class GalleryFragment extends Fragment{
                         String comment = commentText.getText().toString();
                         codeArrayList.get(position).editComment(comment);
                         codeArrayAdapter.notifyDataSetChanged();
-                        Toast.makeText(thisContext,"Done! You edited your comment.",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(),"Done! You edited your comment.",Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -185,12 +184,12 @@ public class GalleryFragment extends Fragment{
                     for (DocumentSnapshot snapshot : snapshotList) {
                         if (snapshot.exists()){
                             GameQRCode newCode = new GameQRCode(snapshot.getString("Hashcode"));
-                            codeArrayList.add(newCode);
                             newCode.setScore(snapshot.getString("Score"));
                             newCode.setLocation(snapshot.getGeoPoint("Location"));
                             if (snapshot.getString("URL")!=null) {
                                 newCode.setURL(snapshot.getString("URL"));
                             }
+                            codeArrayList.add(newCode);
                         }
                     }
                     codeArrayAdapter = new GameQRList(getActivity(), codeArrayList);
