@@ -1,15 +1,12 @@
 package com.example.qrhunt1;
 
 
-import android.graphics.Bitmap;
-
 import com.google.firebase.firestore.GeoPoint;
 
-import java.net.URL;
 import java.util.ArrayList;
 
 public class GameQRCode {
-    private int score;
+    private String score;
     private String hashcode;
     private String comment = "";
     private GeoPoint location;
@@ -24,7 +21,6 @@ public class GameQRCode {
     public GameQRCode(String hashcode){
         //comment = "A QR code on a store poster";    //testing
         this.hashcode = hashcode;
-        this.score = calculateScore(hashcode);
     }
 
     /**
@@ -87,8 +83,12 @@ public class GameQRCode {
      * Return the score of the game QR code.
      * @return score The score of the QR
      */
-    public int getScore() {
+    public String getScore() {
         return score;
+    }
+
+    public void setScore(String Ascore) {
+        score = Ascore;
     }
 
     /**

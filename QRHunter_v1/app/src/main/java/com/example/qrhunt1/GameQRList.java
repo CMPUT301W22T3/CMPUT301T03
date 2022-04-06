@@ -74,17 +74,12 @@ public class GameQRList extends ArrayAdapter<GameQRCode> {
         }else{
             gameQRCodeLocation.setText("Location: [" + String.format("%.2f",code.getLocation().getLatitude())+", "+ String.format("%.2f",code.getLocation().getLongitude()) +"]");
         }
-        Picasso.get().load("https://i.imgur.com/DvpvklR.png").into(imageView);
 
         //Update the Image of a QR code
+        ImageView QRImage = convertView.findViewById(R.id.qr_code_image);
         if(code.getURL()!= null){
-            ImageView QRImage = convertView.findViewById(R.id.qr_code_image);
             Picasso.get().load(code.getURL()).into(QRImage);
         }
-
-
-
-
 
         return convertView;
     }

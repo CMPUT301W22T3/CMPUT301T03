@@ -92,10 +92,15 @@ public class GalleryFragment extends Fragment{
 
                         GameQRCode newCode = new GameQRCode(snapshot.getString("Hashcode"));
                         codeArrayList.add(newCode);
+                        newCode.setScore(snapshot.getString("Score"));
                         newCode.setLocation(snapshot.getGeoPoint("Location"));
                         if(snapshot.getString("URL")!=null){
                             newCode.setURL(snapshot.getString("URL"));
+
+                            codeArrayAdapter = new GameQRList(thisContext, codeArrayList);
+                            codeList.setAdapter(codeArrayAdapter);
                         }
+
 
 
                     }
@@ -193,26 +198,21 @@ public class GalleryFragment extends Fragment{
                 @Override
                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                     List<DocumentSnapshot> snapshotList = queryDocumentSnapshots.getDocuments();
-                    // ImageView in your Activity
-                    //ImageView imageView = findViewById(R.id.imageView);
 
-                    // Download directly from StorageReference using Glide
-                    //
                     for (DocumentSnapshot snapshot : snapshotList) {
                         if (snapshot.exists()){
 
                             GameQRCode newCode = new GameQRCode(snapshot.getString("Hashcode"));
                             codeArrayList.add(newCode);
+                            newCode.setScore(snapshot.getString("Score"));
                             newCode.setLocation(snapshot.getGeoPoint("Location"));
+                            if(snapshot.getString("URL")!=null){
+                                newCode.setURL(snapshot.getString("URL"));
 
-                            // Reference to an image file in Cloud Storage
-                            StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-                            StorageReference pathReference = storageReference.child("images/"+snapshot.getString("Hashcode"));
-                        /*
-                        Glide.with(thisContext)
-                            .load(storageReference)
-                            .into(imageView);
-                            */
+                                codeArrayAdapter = new GameQRList(getActivity(), codeArrayList);
+                                codeList.setAdapter(codeArrayAdapter);
+                            }
+
                         }
                     }
                     codeArrayAdapter = new GameQRList(getActivity(), codeArrayList);
