@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
         import androidx.core.app.ActivityCompat;
         import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.Manifest;
         import android.app.Activity;
@@ -42,7 +44,8 @@ import android.widget.TextView;
         import com.budiyev.android.codescanner.CodeScannerView;
         import com.budiyev.android.codescanner.DecodeCallback;
         import com.budiyev.android.codescanner.ScanMode;
-        import com.google.android.gms.location.FusedLocationProviderClient;
+import com.example.qrhunt1.ui.gallery.GalleryFragment;
+import com.google.android.gms.location.FusedLocationProviderClient;
         import com.google.android.gms.location.LocationServices;
         import com.google.android.gms.tasks.OnCompleteListener;
         import com.google.android.gms.tasks.OnFailureListener;
@@ -226,6 +229,12 @@ public class Scan extends AppCompatActivity {
                                                         uploadToMap();
                                                     }
                                                     finish();
+                                                    /*
+                                                    Fragment fragment = new GalleryFragment();
+                                                    FragmentManager fragmentManager = getSupportFragmentManager();
+                                                    fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+
+                                                     */
                                                 }
                                             });
                                             qrUploadDialog.show();
@@ -296,6 +305,7 @@ public class Scan extends AppCompatActivity {
         return image;
     }
 
+
     private void uploadToMap() {
         GeoPoint geoPoint = new GeoPoint(lat, longitude);
         DocumentReference docRef = db.collection("QRCODE")
@@ -307,7 +317,6 @@ public class Scan extends AppCompatActivity {
                     DocumentSnapshot document = task.getResult();
                     if (document.get("count") != null) {
                         String count = String.valueOf(Integer.parseInt(document.get("count").toString()) + 1);
-                        Toast.makeText(Scan.this, count, Toast.LENGTH_LONG).show();
                         Map<String, Object> location = new HashMap<>();
                         location.put("g" + count, geoPoint);
                         location.put("count", count);

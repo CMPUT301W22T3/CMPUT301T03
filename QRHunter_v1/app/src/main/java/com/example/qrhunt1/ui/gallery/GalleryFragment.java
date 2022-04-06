@@ -1,5 +1,7 @@
 package com.example.qrhunt1.ui.gallery;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -47,6 +49,7 @@ public class GalleryFragment extends Fragment{
     static ArrayList<GameQRCode> codeArrayList;
     FloatingActionButton scanButton;
     static FirebaseFirestore db;
+    private boolean resume = false;
     private static FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     @Override
@@ -163,12 +166,59 @@ public class GalleryFragment extends Fragment{
                 Intent intent = new Intent(getActivity(), Scan.class);
                 intent.putExtra("mode","hunt");
                 startActivity(intent);
+                resume = true;
             }
         });
 
-
-
         return view;
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (resume){
+            // Access a Cloud Firestore instance from the Fragment
+            db = FirebaseFirestore.getInstance();
+
+            codeArrayList = new ArrayList<>();
+            String currentUser = mAuth.getCurrentUser().getEmail();
+            currentUser = currentUser.replace("@gmail.com", "");
+            CollectionReference dbQR = db.collection("users/").document(currentUser).collection("QR/");
+            dbQR.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>(){
+                @Override
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    List<DocumentSnapshot> snapshotList = queryDocumentSnapshots.getDocuments();
+                    // ImageView in your Activity
+                    //ImageView imageView = findViewById(R.id.imageView);
+
+                    // Download directly from StorageReference using Glide
+                    //
+                    for (DocumentSnapshot snapshot : snapshotList) {
+                        if (snapshot.exists()){
+
+                            GameQRCode newCode = new GameQRCode(snapshot.getString("Hashcode"));
+                            codeArrayList.add(newCode);
+                            newCode.setLocation(snapshot.getGeoPoint("Location"));
+
+                            // Reference to an image file in Cloud Storage
+                            StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+                            StorageReference pathReference = storageReference.child("images/"+snapshot.getString("Hashcode"));
+                        /*
+                        Glide.with(thisContext)
+                            .load(storageReference)
+                            .into(imageView);
+                            */
+                        }
+                    }
+                    codeArrayAdapter = new GameQRList(getActivity(), codeArrayList);
+                    codeList.setAdapter(codeArrayAdapter);
+                }});
+        }
+
+
+        //update the gallery list
+
     }
 
     @Override
