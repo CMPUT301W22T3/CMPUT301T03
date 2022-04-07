@@ -1,26 +1,16 @@
 package com.example.qrhunt1;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import android.app.Activity;
+import android.widget.EditText;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
-import android.app.Activity;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-
-
-import com.example.qrhunt1.ui.Login.SignupFragment;
-import com.example.qrhunt1.ui.gallery.GalleryFragment;
-import com.example.qrhunt1.ui.profile.MyProfileFragment;
 import com.robotium.solo.Solo;
 
-import org.junit.Rule;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
 public class LoginTest{
@@ -48,7 +38,7 @@ public class LoginTest{
 
     @Test
     public void checkSignUp(){
-        // Asserts that the current activity is the MainActivity. Otherwise, show “Wrong Activity”
+        // Asserts that the current activity is the MainActivity. Otherwise, show "Wrong Activity"
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
         solo.clickOnText("Create Here");
         solo.assertCurrentActivity("Wrong Activity",Sign_up.class);

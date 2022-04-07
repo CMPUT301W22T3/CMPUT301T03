@@ -10,6 +10,7 @@
         android:id="@+id/deleteButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="DELETE"
         app:layout_constraintBottom_toTopOf="@+id/relativeLayout"
         app:layout_constraintEnd_toEndOf="parent"
@@ -20,6 +21,7 @@
         android:id="@+id/showPhoto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="PHOTO"
         app:layout_constraintBottom_toTopOf="@+id/relativeLayout"
         app:layout_constraintEnd_toStartOf="@+id/deleteButton"
@@ -30,6 +32,7 @@
         android:id="@+id/exit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="EXIT"
         app:layout_constraintBottom_toTopOf="@+id/relativeLayout"
         app:layout_constraintEnd_toStartOf="@+id/showPhoto"
@@ -47,13 +50,14 @@
         <ListView
             android:id="@+id/list"
             android:layout_width="409dp"
-            android:layout_height="665dp"
+            android:layout_height="600dp"
             android:layout_marginBottom="0dp"
+            android:choiceMode="singleChoice"
             android:visibility="invisible"
+            android:paddingTop="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:choiceMode="singleChoice"/>
+            app:layout_constraintStart_toStartOf="parent" />
 
     </RelativeLayout>
 
