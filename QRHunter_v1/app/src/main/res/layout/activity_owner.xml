@@ -7,26 +7,37 @@
     tools:context=".Owner">
 
     <Button
-        android:id="@+id/photo"
+        android:id="@+id/deleteButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="56dp"
-        android:text="PHOTO"
+        android:text="DELETE"
+        app:layout_constraintBottom_toTopOf="@+id/relativeLayout"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/showPhoto"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/showPhoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PHOTO"
+        app:layout_constraintBottom_toTopOf="@+id/relativeLayout"
+        app:layout_constraintEnd_toStartOf="@+id/deleteButton"
+        app:layout_constraintStart_toEndOf="@+id/exit"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/exit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:text="EXIT"
-        app:layout_constraintEnd_toStartOf="@+id/photo"
-        app:layout_constraintHorizontal_bias="0.484"
+        app:layout_constraintBottom_toTopOf="@+id/relativeLayout"
+        app:layout_constraintEnd_toStartOf="@+id/showPhoto"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
     <RelativeLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -34,14 +45,15 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <ListView
-            android:id="@+id/photoList"
+            android:id="@+id/list"
             android:layout_width="409dp"
             android:layout_height="665dp"
             android:layout_marginBottom="0dp"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            android:choiceMode="singleChoice"/>
 
     </RelativeLayout>
 
