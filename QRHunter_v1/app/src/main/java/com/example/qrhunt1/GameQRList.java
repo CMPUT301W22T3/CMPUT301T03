@@ -14,9 +14,7 @@ import androidx.annotation.Nullable;
 
 import com.example.qrhunt1.ui.gallery.GalleryFragment;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.GeoPoint;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -57,8 +55,9 @@ public class GameQRList extends ArrayAdapter<GameQRCode> {
 
                 }
             });
+        }
 
-            GameQRCode code = codes.get(position);
+        GameQRCode code = codes.get(position);
 
         TextView gameQRCodeScore = convertView.findViewById(R.id.qr_score);
         TextView gameQRCodeLocation = convertView.findViewById(R.id.qr_location);
@@ -78,7 +77,6 @@ public class GameQRList extends ArrayAdapter<GameQRCode> {
             Picasso.get().load(code.getURL()).resize(90,90).centerCrop().into(QRImage);
         }
 
-        }
         return convertView;
     }
 
