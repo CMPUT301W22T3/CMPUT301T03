@@ -116,17 +116,19 @@ public class Owner extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 int selectedPhoto = photoList.getCheckedItemPosition();
-                String usernameToSelectedPhoto = userPhotoDataList.get(selectedPhoto).getUserName();
-                String QRHashcode = userPhotoDataList.get(selectedPhoto).getHashcode();
-                DocumentReference dbQR = db.collection("users/").document(usernameToSelectedPhoto).collection("QR/").document(QRHashcode);
-                Map<String, Object> note = new HashMap<>();
-                note.put("URL", FieldValue.delete());
-                dbQR.update(note);
+                if (selectedPhoto != -1) {
+                    String usernameToSelectedPhoto = userPhotoDataList.get(selectedPhoto).getUserName();
+                    String QRHashcode = userPhotoDataList.get(selectedPhoto).getHashcode();
+                    DocumentReference dbQR = db.collection("users/").document(usernameToSelectedPhoto).collection("QR/").document(QRHashcode);
+                    Map<String, Object> note = new HashMap<>();
+                    note.put("URL", FieldValue.delete());
+                    dbQR.update(note);
 
-                //update the listview
-                userPhotoDataList.remove(selectedPhoto);
-                userPhotoAdapter = new photoList(getApplicationContext(),userPhotoDataList);
-                photoList.setAdapter(userPhotoAdapter);
+                    //update the listview
+                    userPhotoDataList.remove(selectedPhoto);
+                    userPhotoAdapter = new photoList(getApplicationContext(),userPhotoDataList);
+                    photoList.setAdapter(userPhotoAdapter);
+                }
             }
         });
 
